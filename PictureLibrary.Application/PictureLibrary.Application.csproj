@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PictureLibrary.Contracts\PictureLibrary.Contracts.csproj" />
+    <ProjectReference Include="..\PictureLibrary.Domain\PictureLibrary.Domain.csproj" />
+    <ProjectReference Include="..\PictureLibrary.Infrastructure\PictureLibrary.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
