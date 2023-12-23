@@ -10,4 +10,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PictureLibrary.Domain\PictureLibrary.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
