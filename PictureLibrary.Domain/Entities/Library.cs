@@ -2,7 +2,7 @@
 
 namespace PictureLibrary.Domain.Entities
 {
-    public class Library
+    public class Library : IEntity
     {
         public ObjectId Id { get; set; }
         public required string Name { get; set; }
