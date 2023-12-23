@@ -2,8 +2,7 @@
 
 namespace PictureLibrary.Domain.Repositories
 {
-    public interface IRepository<TEntity>
-        where TEntity : IEntity
+    public interface ILibraryRepository : IRepository<Library>
     {
     }
 }

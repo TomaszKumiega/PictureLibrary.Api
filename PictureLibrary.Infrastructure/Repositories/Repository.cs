@@ -6,7 +6,7 @@ using PictureLibrary.Domain.Repositories;
 namespace PictureLibrary.Infrastructure.Repositories
 {
     public abstract class Repository<TEntity> : IRepository<TEntity>
-        where TEntity : IEntity, new()
+        where TEntity : IEntity
     {
         private readonly IMongoCollection<TEntity> _collection;
         
