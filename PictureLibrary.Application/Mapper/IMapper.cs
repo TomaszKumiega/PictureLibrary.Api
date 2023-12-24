@@ -1,4 +1,4 @@
-﻿using PictureLibrary.Application.Dto;
+﻿using PictureLibrary.Contracts;
 using PictureLibrary.Domain.Entities;
 
 namespace PictureLibrary.Application.Mapper

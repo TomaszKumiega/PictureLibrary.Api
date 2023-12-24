@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using PictureLibrary.Application.Dto;
+using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Application.Query
 {

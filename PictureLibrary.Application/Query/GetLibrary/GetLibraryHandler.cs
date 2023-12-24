@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MongoDB.Bson;
-using PictureLibrary.Application.Dto;
 using PictureLibrary.Application.Mapper;
+using PictureLibrary.Contracts;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;

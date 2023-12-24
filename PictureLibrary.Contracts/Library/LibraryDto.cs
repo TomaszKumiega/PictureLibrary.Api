@@ -1,4 +1,4 @@
-﻿namespace PictureLibrary.Application.Dto
+﻿namespace PictureLibrary.Contracts
 {
     public class LibraryDto
     {
