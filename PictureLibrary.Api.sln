@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureLibrary.Api", "PictureLibrary.Api\PictureLibrary.Api.csproj", "{5053E1A5-2647-4EED-AEA4-006F065B398F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PictureLibrary.Api", "PictureLibrary.Api\PictureLibrary.Api.csproj", "{5053E1A5-2647-4EED-AEA4-006F065B398F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureLibrary.Domain", "PictureLibrary.Domain\PictureLibrary.Domain.csproj", "{D17D3586-E34D-4862-8372-769F28587B87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PictureLibrary.Domain", "PictureLibrary.Domain\PictureLibrary.Domain.csproj", "{D17D3586-E34D-4862-8372-769F28587B87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureLibrary.Infrastructure", "PictureLibrary.Infrastructure\PictureLibrary.Infrastructure.csproj", "{7CFE2A68-AFA8-40B2-815F-00AEA7443D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PictureLibrary.Infrastructure", "PictureLibrary.Infrastructure\PictureLibrary.Infrastructure.csproj", "{7CFE2A68-AFA8-40B2-815F-00AEA7443D0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureLibrary.Contracts", "PictureLibrary.Contracts\PictureLibrary.Contracts.csproj", "{2E307985-D0B9-4625-9C66-B381A16679CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PictureLibrary.Contracts", "PictureLibrary.Contracts\PictureLibrary.Contracts.csproj", "{2E307985-D0B9-4625-9C66-B381A16679CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureLibrary.Application", "PictureLibrary.Application\PictureLibrary.Application.csproj", "{903B157D-D17E-45AA-A91E-A7E81BEE57A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PictureLibrary.Application", "PictureLibrary.Application\PictureLibrary.Application.csproj", "{903B157D-D17E-45AA-A91E-A7E81BEE57A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureLibrary.Application.Test", "PictureLibrary.Application.Test\PictureLibrary.Application.Test.csproj", "{A4873C00-01CE-4037-BC45-ED6FD172780B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{903B157D-D17E-45AA-A91E-A7E81BEE57A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{903B157D-D17E-45AA-A91E-A7E81BEE57A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{903B157D-D17E-45AA-A91E-A7E81BEE57A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4873C00-01CE-4037-BC45-ED6FD172780B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4873C00-01CE-4037-BC45-ED6FD172780B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4873C00-01CE-4037-BC45-ED6FD172780B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4873C00-01CE-4037-BC45-ED6FD172780B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
