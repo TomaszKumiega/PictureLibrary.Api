@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PictureLibrary.Application\PictureLibrary.Application.csproj" />
+  </ItemGroup>
+
 </Project>

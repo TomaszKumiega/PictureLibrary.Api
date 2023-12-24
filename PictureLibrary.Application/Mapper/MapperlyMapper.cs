@@ -3,7 +3,7 @@
 namespace PictureLibrary.Application.Mapper
 {
     [Mapper]
-    public class MapperlyMapper : IMapper
+    public partial class MapperlyMapper : IMapper
     {
     }
 }
