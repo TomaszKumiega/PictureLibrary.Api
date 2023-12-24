@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using PictureLibrary.Application.Query;
 
 namespace PictureLibrary.Api.Controllers
 {
-    [Route("/library")]
+    [Route("library")]
     [ApiController]
-    public class LibraryController : ControllerBase
+    public class LibraryController(IMediator mediator) : ControllerBase(mediator)
     {
-        public LibraryController()
-        {
-            
-        }
-
         [Route("get")]
         public async Task<IActionResult> Get([FromQuery] string id)
         {
@@ -26,9 +23,11 @@ namespace PictureLibrary.Api.Controllers
                 return BadRequest();
             }
 
-            //TODO: get library
+            var query = new GetLibraryQuery(userId, id);
 
-            return Ok();
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
     }
 }

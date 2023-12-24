@@ -3,6 +3,7 @@ using PictureLibrary.Api.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegisterServices();
+builder.Services.AddMediatR(new MediatRServiceConfiguration());
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
