@@ -1,4 +1,6 @@
-﻿using PictureLibrary.Domain.Repositories;
+﻿using FluentValidation;
+using PictureLibrary.Application.Configuration;
+using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Api.Configuration
 {
@@ -7,6 +9,8 @@ namespace PictureLibrary.Api.Configuration
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             return services
+                .AddMediatR(new MediatRServiceConfiguration())
+                .AddValidatorsFromAssembly(typeof(ApplicationEntrypoint).Assembly)
                 .RegisterRepositories();
         }
 
@@ -14,5 +18,6 @@ namespace PictureLibrary.Api.Configuration
         {
             return services.AddTransient<ILibraryRepository, ILibraryRepository>();
         }
+        
     }
 }
