@@ -19,5 +19,10 @@ namespace PictureLibrary.Infrastructure.Repositories
             var database = mongoClient.GetDatabase(appSettings.DatabaseName);
             _collection = database.GetCollection<TEntity>(CollectionName);
         }
+
+        public IQueryable<TEntity> Query()
+        {
+            return _collection.AsQueryable();
+        }
     }
 }
