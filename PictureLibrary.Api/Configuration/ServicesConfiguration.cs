@@ -19,7 +19,9 @@ namespace PictureLibrary.Api.Configuration
 
         private static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            return services.AddTransient<ILibraryRepository, LibraryRepository>();
+            return services
+                .AddTransient<ILibraryRepository, LibraryRepository>()
+                .AddTransient<IUserRepository, UserRepository>();
         }
 
         private static IServiceCollection RegisterServicesPrivate(this IServiceCollection services, IConfiguration configuration)
