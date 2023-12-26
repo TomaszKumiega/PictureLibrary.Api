@@ -23,5 +23,10 @@ namespace PictureLibrary.Infrastructure.Repositories
              Query().
              FirstOrDefault(l => l.Id == libraryId && l.OwnerId == userId));
         }
+
+        public async Task Add(Library library)
+        {
+            await _collection.InsertOneAsync(library);
+        }   
     }
 }

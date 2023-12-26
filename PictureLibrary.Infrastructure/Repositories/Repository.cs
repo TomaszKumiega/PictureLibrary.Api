@@ -8,7 +8,7 @@ namespace PictureLibrary.Infrastructure.Repositories
     public abstract class Repository<TEntity> : IRepository<TEntity>
         where TEntity : IEntity
     {
-        private readonly IMongoCollection<TEntity> _collection;
+        protected readonly IMongoCollection<TEntity> _collection;
         
         protected abstract string CollectionName { get; }
 
