@@ -37,6 +37,7 @@ namespace PictureLibrary.Application.Command.CreateLibrary
             Library library = new()
             {
                 Id = ObjectId.GenerateNewId(),
+                OwnerId = userId,
                 Name = request.NewLibrary.Name,
                 Description = request.NewLibrary.Description,
             };
