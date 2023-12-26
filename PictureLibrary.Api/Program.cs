@@ -2,7 +2,7 @@ using PictureLibrary.Api.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.RegisterServices();
+builder.Services.RegisterServices(builder.Configuration);
 
 builder.Services.AddControllers();
 

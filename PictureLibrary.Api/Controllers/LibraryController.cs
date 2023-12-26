@@ -10,7 +10,7 @@ namespace PictureLibrary.Api.Controllers
     [ApiController]
     public class LibraryController(IMediator mediator) : ControllerBase(mediator)
     {
-        [Route("get")]
+        [HttpGet("get")]
         public async Task<IActionResult> Get([FromQuery] string id)
         {
             string? userId = GetUserId();
@@ -32,7 +32,7 @@ namespace PictureLibrary.Api.Controllers
             return Ok(result);
         }
 
-        [Route("create")]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] NewLibraryDto newLibrary)
         {
             string? userId = GetUserId();
