@@ -6,7 +6,7 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command.CreateLibrary
+namespace PictureLibrary.Application.Command
 {
     public class CreateLibraryHandler : IRequestHandler<CreateLibraryCommand, LibraryDto>
     {
