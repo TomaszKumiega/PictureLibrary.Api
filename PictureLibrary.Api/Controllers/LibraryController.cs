@@ -32,6 +32,23 @@ namespace PictureLibrary.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAll()
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var query = new GetAllLibrariesQuery(userId);
+
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] NewLibraryDto newLibrary)
         {
