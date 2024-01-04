@@ -27,6 +27,13 @@ namespace PictureLibrary.Infrastructure.Repositories
         public async Task Add(Library library)
         {
             await _collection.InsertOneAsync(library);
-        }   
+        }
+
+        public async Task<IEnumerable<Library>> GetAll(ObjectId userId)
+        {
+            return await Task.Run(() =>
+                Query().
+                Where(l => l.OwnerId == userId));
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Query.GetAllLibraries
+namespace PictureLibrary.Application.Query
 {
     public class GetAllLibrariesQueryValidator : AbstractValidator<GetAllLibrariesQuery>
     {
