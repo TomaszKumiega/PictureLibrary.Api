@@ -69,10 +69,10 @@ namespace PictureLibrary.Api.Controllers
 
             var result = await _mediator.Send(command);
 
-            return Ok(result);
+            return Created("create", result);
         }
 
-        [HttpPut("update")]
+        [HttpPatch("update")]
         public async Task<IActionResult> Update(
             [FromQuery] string libraryId,
             [FromBody] UpdateLibraryDto library)
@@ -94,6 +94,28 @@ namespace PictureLibrary.Api.Controllers
             var result = await _mediator.Send(command);
 
             return Ok(result);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromQuery] string id)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest();
+            }
+
+            var command = new DeleteLibraryCommand(userId, id);
+
+            await _mediator.Send(command);
+
+            return Ok();
         }
     }
 }
