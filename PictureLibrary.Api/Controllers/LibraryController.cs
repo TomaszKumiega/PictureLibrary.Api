@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Contracts;
 using PictureLibrary.Contracts.Library;
 
 namespace PictureLibrary.Api.Controllers
@@ -65,6 +66,28 @@ namespace PictureLibrary.Api.Controllers
             }
 
             var command = new CreateLibraryCommand(userId, newLibrary);
+
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromBody] LibraryDto library)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (library is null)
+            {
+                return BadRequest();
+            }
+
+            var command = new UpdateLibraryCommand(userId, library);
 
             var result = await _mediator.Send(command);
 
