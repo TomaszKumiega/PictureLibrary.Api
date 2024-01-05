@@ -61,5 +61,31 @@ namespace PictureLibrary.Api.Controllers
 
             return Ok();
         }
+
+        [HttpPatch("update")]
+        public async Task<IActionResult> Update(
+            [FromQuery] string tagId,
+            [FromBody] UpdateTagDto tagDto)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (string.IsNullOrEmpty(tagId)
+                || tagDto == null)
+            {
+                return BadRequest();
+            }
+
+            var command = new UpdateTagCommand(userId, tagId, tagDto);
+
+            await _mediator.Send(command);
+
+            return Ok();
+        }
+
     }
 }
