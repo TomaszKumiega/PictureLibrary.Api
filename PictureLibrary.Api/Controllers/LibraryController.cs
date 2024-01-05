@@ -73,7 +73,9 @@ namespace PictureLibrary.Api.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] LibraryDto library)
+        public async Task<IActionResult> Update(
+            [FromQuery] string libraryId,
+            [FromBody] UpdateLibraryDto library)
         {
             string? userId = GetUserId();
 
@@ -87,7 +89,7 @@ namespace PictureLibrary.Api.Controllers
                 return BadRequest();
             }
 
-            var command = new UpdateLibraryCommand(userId, library);
+            var command = new UpdateLibraryCommand(userId, libraryId, library);
 
             var result = await _mediator.Send(command);
 
