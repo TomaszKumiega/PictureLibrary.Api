@@ -57,9 +57,9 @@ namespace PictureLibrary.Api.Controllers
 
             var command = new CreateTagCommand(userId, libraryId, newTagDto);
 
-            await _mediator.Send(command);
+            var tagDto = await _mediator.Send(command);
 
-            return Ok();
+            return Created("create", tagDto);
         }
 
         [HttpPatch("update")]
@@ -82,9 +82,9 @@ namespace PictureLibrary.Api.Controllers
 
             var command = new UpdateTagCommand(userId, tagId, tagDto);
 
-            await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return Ok();
+            return Ok(response);
         }
 
         [HttpDelete("delete")]  
