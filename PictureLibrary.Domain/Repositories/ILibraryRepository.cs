@@ -8,5 +8,6 @@ namespace PictureLibrary.Domain.Repositories
         Task<Library?> Get(ObjectId userId, ObjectId libraryId);
         Task<IEnumerable<Library>> GetAll(ObjectId userId);
         Task Add(Library library);
+        Task Update(Library library);
     }
 }
