@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PictureLibrary.Application.Command;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Api.Controllers
 {
@@ -33,6 +35,31 @@ namespace PictureLibrary.Api.Controllers
             var result = await _mediator.Send(query);
 
             return Ok(result);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(
+            [FromQuery] string libraryId,
+            [FromBody] NewTagDto newTagDto)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (string.IsNullOrEmpty(libraryId)
+                || newTagDto == null)
+            {
+                return BadRequest();
+            }
+
+            var command = new CreateTagCommand(userId, libraryId, newTagDto);
+
+            await _mediator.Send(command);
+
+            return Ok();
         }
     }
 }
