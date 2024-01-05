@@ -87,5 +87,28 @@ namespace PictureLibrary.Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("delete")]  
+        public async Task<IActionResult> Delete(
+            [FromQuery] string tagId)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (string.IsNullOrEmpty(tagId))
+            {
+                return BadRequest();
+            }
+
+            var command = new DeleteTagCommand(userId, tagId);
+
+            await _mediator.Send(command);
+
+            return Ok();
+        }
+
     }
 }
