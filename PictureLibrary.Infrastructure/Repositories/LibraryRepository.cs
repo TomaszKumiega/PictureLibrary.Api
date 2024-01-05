@@ -30,5 +30,12 @@ namespace PictureLibrary.Infrastructure.Repositories
                 Query().
                 Where(l => l.OwnerId == userId));
         }
+
+        public async Task<bool> IsOwner(ObjectId userId, ObjectId libraryId)
+        {
+            return await Task.Run(() =>
+                Query().
+                Any(l => l.Id == libraryId && l.OwnerId == userId));
+        }
     }
 }

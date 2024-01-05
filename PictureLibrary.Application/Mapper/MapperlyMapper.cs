@@ -8,5 +8,6 @@ namespace PictureLibrary.Application.Mapper
     public partial class MapperlyMapper : IMapper
     {
         public partial LibraryDto MapToDto(Library library);
+        public partial TagDto MapToDto(Tag tag);
     }
 }

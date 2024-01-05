@@ -7,5 +7,6 @@ namespace PictureLibrary.Domain.Repositories
     {
         Task<Library?> Get(ObjectId userId, ObjectId libraryId);
         Task<IEnumerable<Library>> GetAll(ObjectId userId);
+        Task<bool> IsOwner(ObjectId userId, ObjectId libraryId);
     }
 }
