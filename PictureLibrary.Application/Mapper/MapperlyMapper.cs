@@ -9,5 +9,6 @@ namespace PictureLibrary.Application.Mapper
     {
         public partial LibraryDto MapToDto(Library library);
         public partial TagDto MapToDto(Tag tag);
+        public partial UserDto MapToDto(User user);
     }
 }
