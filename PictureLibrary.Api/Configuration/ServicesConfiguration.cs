@@ -4,7 +4,9 @@ using PictureLibrary.Application.Configuration;
 using PictureLibrary.Application.Mapper;
 using PictureLibrary.Domain.Configuration;
 using PictureLibrary.Domain.Repositories;
+using PictureLibrary.Domain.Services;
 using PictureLibrary.Infrastructure.Repositories;
+using PictureLibrary.Infrastructure.Services;
 
 namespace PictureLibrary.Api.Configuration
 {
@@ -32,7 +34,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddMediatR(new MediatRServiceConfiguration().RegisterServicesFromAssembly(typeof(ApplicationEntrypoint).Assembly))
                 .AddValidatorsFromAssembly(typeof(ApplicationEntrypoint).Assembly)
                 .AddSingleton<IMapper, MapperlyMapper>()
-                .AddTransient<IMongoClient, MongoClient>((provider) => new MongoClient(configuration["DbConnectionString"]));
+                .AddTransient<IMongoClient, MongoClient>((provider) => new MongoClient(configuration["DbConnectionString"]))
+                .AddSingleton<IHashAndSaltService, HashAndSaltService>();
         }
     }
 }
