@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MongoDB.Bson;
 
 namespace PictureLibrary.Application.Query
 {
@@ -6,7 +7,7 @@ namespace PictureLibrary.Application.Query
     {
         public GetUserQueryValidator()
         {
-            RuleFor(x => x.UserId).NotEmpty();
+            RuleFor(x => x.UserId).NotEmpty().Must((userId) => ObjectId.TryParse(userId, out _));
         }
     }
 }
