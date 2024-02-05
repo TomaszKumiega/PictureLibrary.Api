@@ -70,5 +70,22 @@ namespace PictureLibrary.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete()
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var command = new DeleteUserCommand(userId);
+
+            await _mediator.Send(command);
+
+            return Ok();
+        }
     }
 }
