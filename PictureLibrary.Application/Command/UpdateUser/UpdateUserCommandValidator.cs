@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MongoDB.Bson;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Application.Command
@@ -7,6 +8,7 @@ namespace PictureLibrary.Application.Command
     {
         public UpdateUserCommandValidator(AbstractValidator<UpdateUserDto> dtoValidator)
         {
+            RuleFor(x => x.UserId).NotEmpty().Must(x => ObjectId.TryParse(x, out _));
             RuleFor(x => x.UserDto).NotNull().SetValidator(dtoValidator);
         }
     }

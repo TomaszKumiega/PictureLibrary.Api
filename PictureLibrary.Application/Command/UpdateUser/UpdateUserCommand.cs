@@ -3,5 +3,5 @@ using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Application.Command
 {
-    public record UpdateUserCommand(UpdateUserDto UserDto) : IRequest<UserDto>;
+    public record UpdateUserCommand(string UserId, UpdateUserDto UserDto) : IRequest<UserDto>;
 }

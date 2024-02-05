@@ -64,7 +64,7 @@ namespace PictureLibrary.Api.Controllers
                 return BadRequest();
             }
 
-            var command = new UpdateUserCommand(user);
+            var command = new UpdateUserCommand(userId, user);
 
             var result = await _mediator.Send(command);
 
