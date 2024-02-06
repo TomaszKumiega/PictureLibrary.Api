@@ -17,5 +17,31 @@ namespace PictureLibrary.Infrastructure.Services
                 Salt = hmac.Key
             };
         }
+
+        public bool Verify(HashAndSalt hashAndSalt)
+        {
+            if (hashAndSalt == null ||
+                string.IsNullOrEmpty(hashAndSalt.Text) ||
+                hashAndSalt.Hash == null ||
+                hashAndSalt.Salt == null ||
+                hashAndSalt.Hash.Length == 0 ||
+                hashAndSalt.Salt.Length == 0)
+            {
+                throw new ArgumentException("Invalid hash and salt parameter." , nameof(hashAndSalt));
+            }
+
+            using var hmac = new System.Security.Cryptography.HMACSHA512(hashAndSalt.Salt);
+            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(hashAndSalt.Text));
+
+            for (int i = 0; i < computedHash.Length; i++)
+            {
+                if (computedHash[i] != hashAndSalt.Hash[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
