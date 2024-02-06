@@ -24,5 +24,10 @@ namespace PictureLibrary.Infrastructure.Repositories
                 return Query().FirstOrDefault(u => u.Id == id);
             });
         }
+
+        public User? GetByUsername(string username)
+        {
+            return Query().FirstOrDefault(u => u.Username == username);
+        }
     }
 }
