@@ -10,7 +10,7 @@ namespace PictureLibrary.Domain.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        AuthorizationData GenerateAuthorizationData(User user, string privateKey);
+        AuthorizationData GenerateAuthorizationData(User user);
 
         /// <summary>
         /// Generates new tokens.
@@ -18,8 +18,7 @@ namespace PictureLibrary.Domain.Services
         /// <param name="tokenValidationParams"></param>
         /// <param name="accessToken">Expired access token</param>
         /// <param name="refreshToken">Refresh token</param>
-        /// <param name="privateKey"></param>
         /// <returns></returns>
-        Task<AuthorizationData> RefreshAuthorizationData(TokenValidationParameters tokenValidationParams, string accessToken, string refreshToken, string privateKey);
+        Task<AuthorizationData> RefreshAuthorizationData(TokenValidationParameters tokenValidationParams, string accessToken, string refreshToken);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
+using PictureLibrary.Domain.Configuration;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
@@ -13,21 +14,23 @@ namespace PictureLibrary.Infrastructure.Services
 {
     public class AuthorizationDataService : IAuthorizationDataService
     {
+        private readonly IAppSettings _appSettings;
         private readonly IUserRepository _userRepository;
         private readonly IAuthorizationDataRepository _authorizationDataRepository;
 
         public AuthorizationDataService(
+            IAppSettings appSettings,
             IUserRepository userRepository,
             IAuthorizationDataRepository authorizationDataRepository)
         {
-
+            _appSettings = appSettings;
             _userRepository = userRepository;
             _authorizationDataRepository = authorizationDataRepository;
         }
 
-        public AuthorizationData GenerateAuthorizationData(User user, string privateKey)
+        public AuthorizationData GenerateAuthorizationData(User user)
         {
-            var (accessToken, expiryDate) = GenerateAccessToken(user, privateKey);
+            var (accessToken, expiryDate) = GenerateAccessToken(user, _appSettings.TokenPrivateKey);
 
             return new()
             {
@@ -42,8 +45,7 @@ namespace PictureLibrary.Infrastructure.Services
         public async Task<AuthorizationData> RefreshAuthorizationData(
             TokenValidationParameters tokenValidationParams, 
             string accessToken, 
-            string refreshToken, 
-            string privateKey)
+            string refreshToken)
         {
             var handler = new JwtSecurityTokenHandler();
             var validationResult = await handler.ValidateTokenAsync(accessToken, tokenValidationParams);
@@ -60,7 +62,7 @@ namespace PictureLibrary.Infrastructure.Services
             if (tokens?.RefreshToken != refreshToken || user == null)
                 throw new InvalidTokenException();
 
-            return GenerateAuthorizationData(user, privateKey);
+            return GenerateAuthorizationData(user);
         }
 
         private static (string accessToken, DateTime expiryDate) GenerateAccessToken(User user, string privateKey)
