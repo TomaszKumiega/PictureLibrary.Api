@@ -21,5 +21,27 @@ namespace PictureLibrary.Infrastructure.Repositories
         {
             return Query().FirstOrDefault(x => x.UserId == userId);
         }
+
+        public async Task<AuthorizationData> UpsertForUser(AuthorizationData entity)
+        {
+            var authorizationData = Query().FirstOrDefault(x => x.UserId == entity.UserId);
+
+            if (authorizationData == null)
+            {
+                await Add(entity);
+                
+                return entity;
+            }
+            else
+            {
+                authorizationData.AccessToken = entity.AccessToken;
+                authorizationData.RefreshToken = entity.RefreshToken;
+                authorizationData.ExpiryDate = entity.ExpiryDate;
+
+                await Update(authorizationData);
+
+                return authorizationData;
+            }
+        }
     }
 }

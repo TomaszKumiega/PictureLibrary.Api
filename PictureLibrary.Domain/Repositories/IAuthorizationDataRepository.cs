@@ -5,6 +5,7 @@ namespace PictureLibrary.Domain.Repositories
 {
     public interface IAuthorizationDataRepository : IRepository<AuthorizationData>
     {
+        public Task<AuthorizationData> UpsertForUser(AuthorizationData entity);
         public AuthorizationData? GetByUserId(ObjectId userId);
     }
 }
