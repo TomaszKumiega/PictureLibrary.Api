@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Query;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Api.Controllers
@@ -26,6 +27,16 @@ namespace PictureLibrary.Api.Controllers
             var command = new LoginUserCommand(loginUser);
 
             var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpGet("refreshTokens")]
+        public async Task<IActionResult> RefreshTokens([FromBody] RefreshAuthorizationDataDto userAuthorizationDataDto)
+        {
+            var query = new RefreshTokensQuery(userAuthorizationDataDto);
+
+            var result = await _mediator.Send(query);
 
             return Ok(result);
         }
