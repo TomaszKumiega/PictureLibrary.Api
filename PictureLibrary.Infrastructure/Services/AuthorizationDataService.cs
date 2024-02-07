@@ -42,13 +42,10 @@ namespace PictureLibrary.Infrastructure.Services
             };
         }
 
-        public async Task<AuthorizationData> RefreshAuthorizationData(
-            TokenValidationParameters tokenValidationParams, 
-            string accessToken, 
-            string refreshToken)
+        public async Task<AuthorizationData> RefreshAuthorizationData(string accessToken, string refreshToken)
         {
             var handler = new JwtSecurityTokenHandler();
-            var validationResult = await handler.ValidateTokenAsync(accessToken, tokenValidationParams);
+            var validationResult = await handler.ValidateTokenAsync(accessToken, GetTokenValidationParameters());
 
             if (!validationResult.IsValid)
                 throw new InvalidTokenException();
@@ -63,6 +60,20 @@ namespace PictureLibrary.Infrastructure.Services
                 throw new InvalidTokenException();
 
             return GenerateAuthorizationData(user);
+        }
+
+        private TokenValidationParameters GetTokenValidationParameters()
+        {
+            return new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _appSettings.JwtIssuer,
+                ValidAudience = _appSettings.JwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.TokenPrivateKey)),
+            };
         }
 
         private static (string accessToken, DateTime expiryDate) GenerateAccessToken(User user, string privateKey)

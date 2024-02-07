@@ -15,10 +15,9 @@ namespace PictureLibrary.Domain.Services
         /// <summary>
         /// Generates new tokens.
         /// </summary>
-        /// <param name="tokenValidationParams"></param>
         /// <param name="accessToken">Expired access token</param>
         /// <param name="refreshToken">Refresh token</param>
         /// <returns></returns>
-        Task<AuthorizationData> RefreshAuthorizationData(TokenValidationParameters tokenValidationParams, string accessToken, string refreshToken);
+        Task<AuthorizationData> RefreshAuthorizationData(string accessToken, string refreshToken);
     }
 }

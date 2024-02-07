@@ -27,7 +27,7 @@ namespace PictureLibrary.Application.Test.Validators
         [Fact]
         public void Validate_Should_Return_False_When_AuthorizationDataDto_Is_Null()
         {
-            var result = _validator.TestValidate(new RefreshTokensQuery(null));
+            var result = _validator.TestValidate(new RefreshTokensQuery(null!));
 
             result.ShouldHaveValidationErrorFor(x => x.AuthorizationDataDto);
         }

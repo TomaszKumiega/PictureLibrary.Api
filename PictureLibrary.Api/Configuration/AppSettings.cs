@@ -4,7 +4,9 @@ namespace PictureLibrary.Api.Configuration
 {
     public class AppSettings : IAppSettings
     {
-        public string DatabaseName { get; set; }
-        public string TokenPrivateKey { get; set; }
+        public required string DatabaseName { get; set; }
+        public required string TokenPrivateKey { get; set; }
+        public required string JwtIssuer { get; set; }
+        public required string JwtAudience { get; set; }
     }
 }
