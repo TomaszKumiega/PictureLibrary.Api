@@ -2,5 +2,6 @@
 {
     public class CreateImageUploadSessionResult
     {
+        public required string UploadSessionId { get; set; }
     }
 }
