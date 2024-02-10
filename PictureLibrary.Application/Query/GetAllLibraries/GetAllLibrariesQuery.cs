@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using PictureLibrary.Contracts.Results;
+using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Application.Query
 {
-    public record GetAllLibrariesQuery(string UserId) : IRequest<GetAllLibrariesResult>;
+    public record GetAllLibrariesQuery(string UserId) : IRequest<LibrariesDto>;
 }

@@ -6,5 +6,8 @@ namespace PictureLibrary.Application.Mapper
     public interface IMapper
     {
         public LibraryDto MapToDto(Library library);
+        public TagDto MapToDto(Tag tag);
+        public UserDto MapToDto(User user);
+        public UserAuthorizationDataDto MapToDto(AuthorizationData authorizationData);
     }
 }

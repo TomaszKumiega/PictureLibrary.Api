@@ -20,6 +20,21 @@ namespace PictureLibrary.Infrastructure.Repositories
             _collection = database.GetCollection<TEntity>(CollectionName);
         }
 
+        public async Task Add(TEntity entity)
+        {
+            await _collection.InsertOneAsync(entity);
+        }
+
+        public async Task Update(TEntity entity)
+        {
+            await _collection.ReplaceOneAsync(e => e.Id == entity.Id, entity);
+        }
+
+        public async Task Delete(TEntity entity)
+        {
+            await _collection.DeleteOneAsync(e => e.Id == entity.Id);
+        }
+
         public IQueryable<TEntity> Query()
         {
             return _collection.AsQueryable();
