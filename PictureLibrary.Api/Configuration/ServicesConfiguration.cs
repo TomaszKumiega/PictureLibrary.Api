@@ -36,7 +36,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddValidatorsFromAssembly(typeof(ApplicationEntrypoint).Assembly)
                 .AddSingleton<IMapper, MapperlyMapper>()
                 .AddTransient<IMongoClient, MongoClient>((provider) => new MongoClient(configuration["DbConnectionString"]))
-                .AddSingleton<IHashAndSaltService, HashAndSaltService>();
+                .AddSingleton<IHashAndSaltService, HashAndSaltService>()
+                .AddSingleton<IAuthorizationDataService, AuthorizationDataService>();
         }
     }
 }
