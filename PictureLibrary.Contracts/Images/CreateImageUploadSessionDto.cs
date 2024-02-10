@@ -1,8 +1,8 @@
 ﻿namespace PictureLibrary.Contracts
 {
-    public class CreateUploadSessionDto
+    public class CreateImageUploadSessionDto
     {
         public required string FileName { get; set; }
-        public required string FileLength { get; set; }
+        public required int FileLength { get; set; }
     }
 }

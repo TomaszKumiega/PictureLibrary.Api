@@ -15,7 +15,7 @@ namespace PictureLibrary.Api.Controllers
 
         [HttpPost("createUploadSession")]
         public async Task<IActionResult> CreateUploadSession(
-            [FromBody] CreateUploadSessionDto createUploadSessionDto)
+            [FromBody] CreateImageUploadSessionDto createUploadSessionDto)
         {
             string? userId = GetUserId();
 

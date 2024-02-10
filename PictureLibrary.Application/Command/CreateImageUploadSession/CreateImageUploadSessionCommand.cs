@@ -4,5 +4,5 @@ using PictureLibrary.Contracts.Results;
 
 namespace PictureLibrary.Application.Command
 {
-    public record CreateImageUploadSessionCommand(string UserId, CreateUploadSessionDto CreateUploadSessionDto) : IRequest<CreateImageUploadSessionResult>;
+    public record CreateImageUploadSessionCommand(string UserId, CreateImageUploadSessionDto CreateUploadSessionDto) : IRequest<CreateImageUploadSessionResult>;
 }
