@@ -8,7 +8,7 @@ namespace PictureLibrary.Application.Test.Fakers
         public CreateImageUploadSessionDtoFaker()
         {
             RuleFor(x => x.FileName, x => x.Random.String());
-            RuleFor(x => x.FileLength, x => x.Random.Number());
+            RuleFor(x => x.FileLength, x => 1000);
         }
     }
 }
