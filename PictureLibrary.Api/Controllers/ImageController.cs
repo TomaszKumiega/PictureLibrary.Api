@@ -48,7 +48,7 @@ namespace PictureLibrary.Api.Controllers
                 return BadRequest();
             }
 
-            var command = new UploadFileCommand(userId, contentRange);
+            var command = new UploadFileCommand(userId, contentRange, Request.Body);
 
             var result = await _mediator.Send(command);
 
