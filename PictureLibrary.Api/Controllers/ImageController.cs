@@ -53,8 +53,8 @@ namespace PictureLibrary.Api.Controllers
             var result = await _mediator.Send(command);
 
             return result.IsUploadFinished
-                ? Created("/image/get", result)
-                : Accepted(result);
+                ? Created("/image/get", result.Value)
+                : Accepted(result.Value);
         }
     }
 }
