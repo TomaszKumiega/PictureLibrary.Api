@@ -24,7 +24,7 @@ namespace PictureLibrary.Application.Command
                 UserId = ObjectId.Parse(request.UserId),
                 FileName = request.CreateUploadSessionDto.FileName,
                 FileLength = request.CreateUploadSessionDto.FileLength,
-                MissingRanges = string.Empty,
+                MissingRanges = $"1-{request.CreateUploadSessionDto.FileLength}",
             };
 
             await _uploadSessionRepository.Add(uploadSession);
