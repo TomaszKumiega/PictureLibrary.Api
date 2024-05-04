@@ -32,7 +32,7 @@ namespace PictureLibrary.Api.Controllers
         }
 
         [HttpPost("uploadFile")]
-        public async Task<IActionResult> UploadFile()
+        public async Task<IActionResult> UploadFile([FromQuery] string uploadSessionId)
         {
             string? userId = GetUserId();
 
@@ -48,7 +48,7 @@ namespace PictureLibrary.Api.Controllers
                 return BadRequest();
             }
 
-            var command = new UploadFileCommand(userId, contentRange, Request.Body);
+            var command = new UploadFileCommand(userId, uploadSessionId, contentRange, Request.Body);
 
             var result = await _mediator.Send(command);
 
