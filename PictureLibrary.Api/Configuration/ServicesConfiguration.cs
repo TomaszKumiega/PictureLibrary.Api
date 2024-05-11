@@ -39,7 +39,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddTransient<IMongoClient, MongoClient>((provider) => new MongoClient(configuration["DbConnectionString"]))
                 .AddSingleton<IHashAndSaltService, HashAndSaltService>()
                 .AddSingleton<IAuthorizationDataService, AuthorizationDataService>()
-                .AddTransient<IMissingRangesParser, MissingRangesParser>();
+                .AddTransient<IMissingRangesParser, MissingRangesParser>()
+                .AddTransient<IByteRangesService, ByteRangesService>();
         }
     }
 }
