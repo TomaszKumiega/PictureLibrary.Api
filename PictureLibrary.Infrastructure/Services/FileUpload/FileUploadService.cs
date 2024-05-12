@@ -77,7 +77,7 @@ namespace PictureLibrary.Infrastructure.Services
             return string.IsNullOrEmpty(uploadSession.MissingRanges);
         }
 
-        public async Task AddFileMetadata(UploadSession uploadSession)
+        public async Task<FileMetadata> AddFileMetadata(UploadSession uploadSession)
         {
             ArgumentNullException.ThrowIfNull(uploadSession, nameof(uploadSession));
 
@@ -89,6 +89,8 @@ namespace PictureLibrary.Infrastructure.Services
             };
             
             await _fileMetadataRepository.Add(fileMetadata);
+
+            return fileMetadata;
         }
 
         private bool IsContentRangeMatchingLastRange(MissingRanges missingRanges, ContentRangeHeaderValue range)

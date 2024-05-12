@@ -305,7 +305,11 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            await fileUploadService.AddFileMetadata(uploadSession);
+            var result = await fileUploadService.AddFileMetadata(uploadSession);
+
+            result.Should().NotBeNull();
+            result.FilePath.Should().Be(uploadSession.FileName);
+            result.OwnerId.Should().Be(uploadSession.UserId);
 
             _fileMetadataRepositoryMock.Verify();
         }

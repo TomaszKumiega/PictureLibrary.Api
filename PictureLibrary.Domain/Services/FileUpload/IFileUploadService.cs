@@ -10,6 +10,6 @@ namespace PictureLibrary.Domain.Services
         Task InsertBytesToFile(UploadSession uploadSession, Stream contentStream, long startingPosition);
         Task UpdateUploadSession(UploadSession uploadSession, MissingRanges missingRanges, ContentRangeHeaderValue range);
         bool IsUploadFinished(UploadSession uploadSession);
-        Task AddFileMetadata(UploadSession uploadSession);
+        Task<FileMetadata> AddFileMetadata(UploadSession uploadSession);
     }
 }
