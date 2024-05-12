@@ -42,7 +42,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddSingleton<IAuthorizationDataService, AuthorizationDataService>()
                 .AddTransient<IMissingRangesParser, MissingRangesParser>()
                 .AddTransient<IByteRangesService, ByteRangesService>()
-                .AddTransient<IMissingRangesService, MissingRangesService>();
+                .AddTransient<IMissingRangesService, MissingRangesService>()
+                .AddTransient<IFileUploadService, FileUploadService>();
         }
     }
 }
