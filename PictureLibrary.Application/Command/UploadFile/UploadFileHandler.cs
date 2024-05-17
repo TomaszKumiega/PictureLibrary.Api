@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MongoDB.Bson;
 using PictureLibrary.Contracts;
+using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;
@@ -9,17 +10,17 @@ namespace PictureLibrary.Application.Command
 {
     public class UploadFileHandler : IRequestHandler<UploadFileCommand, UploadFileResult>
     {
-        private readonly IFileService _fileService;
-        private readonly IMissingRangesService _missingRangesService;
+        private readonly IFileUploadService _fileUploadService;
+        private readonly IMissingRangesParser _missingRangesParser;
         private readonly IUploadSessionRepository _uploadSessionRepository;
 
         public UploadFileHandler(
-            IFileService fileService,
-            IMissingRangesService missingRangesService,
+            IFileUploadService fileUploadService,
+            IMissingRangesParser missingRangesParser,
             IUploadSessionRepository uploadSessionRepository)
         {
-            _fileService = fileService;
-            _missingRangesService = missingRangesService;
+            _fileUploadService = fileUploadService;
+            _missingRangesParser = missingRangesParser;
             _uploadSessionRepository = uploadSessionRepository;
         }
 
@@ -37,45 +38,34 @@ namespace PictureLibrary.Application.Command
                 throw new NotFoundException();
             }
 
-            if (request.ContentRange.From == null || request.ContentRange.To == null)
-            {
-                throw new ArgumentException("Invalid range", nameof(request));
-            }
+            MissingRanges missingRanges = _missingRangesParser.Parse(uploadSession.MissingRanges);
 
-            string requestRange = request.ContentRange.ToString();
-
-            (bool isRangeValid, bool isLastRange) = _missingRangesService.IsIncludedInMissingRanges(uploadSession.MissingRanges, requestRange);
-
-            if (!isRangeValid)
-            {
-                throw new ArgumentException("Invalid range", nameof(request));
-            }
-
-            if (isLastRange)
-            {
-                _fileService.AppendFile(uploadSession.FileName, request.ContentStream);
-            }
-            else
-            {
-                _fileService.Insert(uploadSession.FileName, request.ContentStream, request.ContentRange.From.Value);
-            }
-
-            uploadSession.MissingRanges = _missingRangesService.RemoveRangeFromMissingRanges(uploadSession.MissingRanges, requestRange);
+            bool shouldFileBeAppended = _fileUploadService.ShouldFileBeAppended(missingRanges, request.ContentRange);
             
-            bool isUploadFinished = string.IsNullOrEmpty(uploadSession.MissingRanges);
-
-            if (isUploadFinished)
+            if (shouldFileBeAppended)
             {
-                await _uploadSessionRepository.Delete(uploadSession);
-
-                var result = new FileCreatedResult()
-                {
-                    
-                };
+                await _fileUploadService.AppendBytesToFile(uploadSession, request.ContentStream);
             }
             else
             {
-                await _uploadSessionRepository.Update(uploadSession);
+                await _fileUploadService.InsertBytesToFile(uploadSession, request.ContentStream, request.ContentRange.From!.Value);
+            }
+
+            await _fileUploadService.UpdateUploadSession(uploadSession, missingRanges, request.ContentRange);
+
+            FileMetadata fileMetadata = await _fileUploadService.AddFileMetadata(uploadSession);
+
+            if (_fileUploadService.IsUploadFinished(uploadSession))
+            {
+                var fileCreatedResult = new FileCreatedResult();
+
+                return new UploadFileResult(fileCreatedResult);
+            }
+            else
+            {
+                var fileContentAcceptedResult = new FileContentAcceptedResult();
+
+                return new UploadFileResult(fileContentAcceptedResult);
             }
         }
     }

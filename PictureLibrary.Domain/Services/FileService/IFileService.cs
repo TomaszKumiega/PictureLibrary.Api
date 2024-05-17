@@ -2,7 +2,7 @@
 {
     public interface IFileService
     {
-        bool Exists(string path);
-        Stream OpenFile(string path);
+        void AppendFile(string fileName, Stream contentStream);
+        void Insert(string fileName, Stream contentStream, long position);
     }
 }
