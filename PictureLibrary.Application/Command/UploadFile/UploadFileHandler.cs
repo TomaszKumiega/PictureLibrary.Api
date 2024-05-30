@@ -12,15 +12,18 @@ namespace PictureLibrary.Application.Command
     {
         private readonly IFileUploadService _fileUploadService;
         private readonly IMissingRangesParser _missingRangesParser;
+        private readonly IImageFileRepository _imageFileRepository;
         private readonly IUploadSessionRepository _uploadSessionRepository;
 
         public UploadFileHandler(
             IFileUploadService fileUploadService,
             IMissingRangesParser missingRangesParser,
+            IImageFileRepository imageFileRepository,
             IUploadSessionRepository uploadSessionRepository)
         {
             _fileUploadService = fileUploadService;
             _missingRangesParser = missingRangesParser;
+            _imageFileRepository = imageFileRepository;
             _uploadSessionRepository = uploadSessionRepository;
         }
 
@@ -53,20 +56,39 @@ namespace PictureLibrary.Application.Command
 
             await _fileUploadService.UpdateUploadSession(uploadSession, missingRanges, request.ContentRange);
 
-            FileMetadata fileMetadata = await _fileUploadService.AddFileMetadata(uploadSession);
-
             if (_fileUploadService.IsUploadFinished(uploadSession))
             {
-                var fileCreatedResult = new FileCreatedResult();
+                await _uploadSessionRepository.Delete(uploadSession);
 
+                FileMetadata fileMetadata = await _fileUploadService.AddFileMetadata(uploadSession);
+
+                ImageFile imageFile = GetImageFile(uploadSessionId);
+                await UpdateImageFile(fileMetadata, imageFile);
+
+                var fileCreatedResult = new FileCreatedResult(imageFile.Id.ToString());
                 return new UploadFileResult(fileCreatedResult);
             }
             else
             {
-                var fileContentAcceptedResult = new FileContentAcceptedResult();
-
+                var fileContentAcceptedResult = new FileContentAcceptedResult(uploadSession.Id.ToString(), uploadSession.MissingRanges);
                 return new UploadFileResult(fileContentAcceptedResult);
             }
         }
+
+        private ImageFile GetImageFile(ObjectId uploadSessionId)
+        {
+            return _imageFileRepository.Query().Single(x => x.UploadSessionId == uploadSessionId);
+        }
+
+        private async Task<ImageFile> UpdateImageFile(FileMetadata fileMetadata, ImageFile imageFile)
+        {
+            imageFile.FileId = fileMetadata.Id;
+            imageFile.UploadSessionId = ObjectId.Empty;
+
+            await _imageFileRepository.Update(imageFile);
+
+            return imageFile;
+        }
+
     }
 }
