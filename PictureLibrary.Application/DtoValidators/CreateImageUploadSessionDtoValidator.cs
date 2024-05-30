@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MongoDB.Bson;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Application.DtoValidators
@@ -9,6 +10,7 @@ namespace PictureLibrary.Application.DtoValidators
         {
             RuleFor(x => x.FileName).NotEmpty();
             RuleFor(x => x.FileLength).NotEmpty();
+            RuleFor(x => x.LibraryId).NotEmpty().Must(libraryId => ObjectId.TryParse(libraryId, out _));
         }
     }
 }
