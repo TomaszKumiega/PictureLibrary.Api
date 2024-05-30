@@ -45,7 +45,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddTransient<IByteRangesService, ByteRangesService>()
                 .AddTransient<IMissingRangesService, MissingRangesService>()
                 .AddTransient<IFileUploadService, FileUploadService>()
-                .AddTransient<IFileService, FileService>();
+                .AddTransient<IFileService, FileService>()
+                .AddTransient<IFileWrapper, FileWrapper>();
         }
     }
 }
