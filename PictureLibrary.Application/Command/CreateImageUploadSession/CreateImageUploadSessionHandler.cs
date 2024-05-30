@@ -8,11 +8,14 @@ namespace PictureLibrary.Application.Command
 {
     public class CreateImageUploadSessionHandler : IRequestHandler<CreateImageUploadSessionCommand, CreateImageUploadSessionResult>
     {
+        private readonly IImageFileRepository _imageFileRepository;
         private readonly IUploadSessionRepository _uploadSessionRepository;
 
         public CreateImageUploadSessionHandler(
+            IImageFileRepository imageFileRepository,
             IUploadSessionRepository uploadSessionRepository)
         {
+            _imageFileRepository = imageFileRepository;
             _uploadSessionRepository = uploadSessionRepository;
         }
 
@@ -27,8 +30,17 @@ namespace PictureLibrary.Application.Command
                 MissingRanges = $"1-{request.CreateUploadSessionDto.FileLength}",
             };
 
-            await _uploadSessionRepository.Add(uploadSession);
+            ImageFile imageFile = new()
+            {
+                Id = ObjectId.GenerateNewId(),
+                UploadSessionId = uploadSession.Id,
+                LibraryId = ObjectId.Parse(request.CreateUploadSessionDto.LibraryId),
+                TagIds = request.CreateUploadSessionDto.TagIds.Select(ObjectId.Parse),
+            };
 
+            await _uploadSessionRepository.Add(uploadSession);
+            await _imageFileRepository.Add(imageFile);
+            
             return new CreateImageUploadSessionResult
             {
                 UploadSessionId = uploadSession.Id.ToString(),
