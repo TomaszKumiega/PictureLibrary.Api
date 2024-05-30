@@ -24,7 +24,7 @@ namespace PictureLibrary.Application.Query
         public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             ObjectId userId = ObjectId.Parse(request.UserId);
-            User user = await _userRepository.GetById(userId) ?? throw new NotFoundException();
+            User user = _userRepository.FindById(userId) ?? throw new NotFoundException();
         
             return _mapper.MapToDto(user);
         }

@@ -36,8 +36,8 @@ namespace PictureLibrary.Application.Test.Command
             var command = new UpdateTagCommand(userId.ToString(), libraryId.ToString(), new UpdateTagDtoFaker().Generate());
             var tag = new TagFaker().Generate();
 
-            _tagRepositoryMock.Setup(x => x.Get(It.IsAny<ObjectId>()))
-                .ReturnsAsync(tag);
+            _tagRepositoryMock.Setup(x => x.FindById(It.IsAny<ObjectId>()))
+                .Returns(tag);
 
             _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
                 .ReturnsAsync(false)
@@ -55,8 +55,8 @@ namespace PictureLibrary.Application.Test.Command
             var libraryId = ObjectId.GenerateNewId();
             var command = new UpdateTagCommand(userId.ToString(), libraryId.ToString(), new UpdateTagDtoFaker().Generate());
 
-            _tagRepositoryMock.Setup(x => x.Get(It.IsAny<ObjectId>()))
-                .ReturnsAsync((Tag?)null)
+            _tagRepositoryMock.Setup(x => x.FindById(It.IsAny<ObjectId>()))
+                .Returns((Tag?)null)
                 .Verifiable();
 
             await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
@@ -79,8 +79,8 @@ namespace PictureLibrary.Application.Test.Command
                 .ReturnsAsync(true)
                 .Verifiable();
 
-            _tagRepositoryMock.Setup(x => x.Get(tagId))
-                .ReturnsAsync(tag)
+            _tagRepositoryMock.Setup(x => x.FindById(tagId))
+                .Returns(tag)
                 .Verifiable();
 
             _tagRepositoryMock.Setup(x => x.Update(It.IsAny<Tag>()))

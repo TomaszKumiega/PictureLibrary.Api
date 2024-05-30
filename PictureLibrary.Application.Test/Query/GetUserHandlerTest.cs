@@ -35,8 +35,8 @@ namespace PictureLibrary.Application.Test.Query
 
             var query = new GetUserQuery(userId);
 
-            _userRepository.Setup(x => x.GetById(ObjectId.Parse(userId)))
-                .ReturnsAsync(user)
+            _userRepository.Setup(x => x.FindById(ObjectId.Parse(userId)))
+                .Returns(user)
                 .Verifiable();
 
             _mapper.Setup(x => x.MapToDto(user))
@@ -57,8 +57,8 @@ namespace PictureLibrary.Application.Test.Query
         {
             var userId = ObjectId.GenerateNewId().ToString();
 
-            _userRepository.Setup(x => x.GetById(ObjectId.Parse(userId)))
-                .ReturnsAsync((User?)null)
+            _userRepository.Setup(x => x.FindById(ObjectId.Parse(userId)))
+                .Returns((User?)null)
                 .Verifiable();
 
             await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(new GetUserQuery(userId), CancellationToken.None));

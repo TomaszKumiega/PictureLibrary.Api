@@ -33,8 +33,8 @@ namespace PictureLibrary.Application.Test.Command
 
             var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
 
-            _tagRepositoryMock.Setup(x => x.Get(tagId))
-                .ReturnsAsync(tag)
+            _tagRepositoryMock.Setup(x => x.FindById(tagId))
+                .Returns(tag)
                 .Verifiable();
 
             _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
@@ -63,8 +63,8 @@ namespace PictureLibrary.Application.Test.Command
 
             var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
 
-            _tagRepositoryMock.Setup(x => x.Get(tagId))
-                .ReturnsAsync((Tag?)null)
+            _tagRepositoryMock.Setup(x => x.FindById(tagId))
+                .Returns((Tag?)null)
                 .Verifiable();
 
             await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
@@ -81,8 +81,8 @@ namespace PictureLibrary.Application.Test.Command
 
             var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
 
-            _tagRepositoryMock.Setup(x => x.Get(tagId))
-                .ReturnsAsync(tag)
+            _tagRepositoryMock.Setup(x => x.FindById(tagId))
+                .Returns(tag)
                 .Verifiable();
 
             _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))

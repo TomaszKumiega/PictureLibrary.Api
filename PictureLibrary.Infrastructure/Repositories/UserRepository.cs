@@ -17,14 +17,6 @@ namespace PictureLibrary.Infrastructure.Repositories
 
         protected override string CollectionName => "Users";
 
-        public async Task<User?> GetById(ObjectId id)
-        {
-            return await Task.Run(() =>
-            {
-                return Query().FirstOrDefault(u => u.Id == id);
-            });
-        }
-
         public User? GetByUsername(string username)
         {
             return Query().FirstOrDefault(u => u.Username == username);

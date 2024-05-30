@@ -28,7 +28,7 @@ namespace PictureLibrary.Application.Command
             ObjectId userId = ObjectId.Parse(request.UserId);
             ObjectId tagId = ObjectId.Parse(request.TagId);
 
-            var tag = await _tagRepository.Get(tagId) ?? throw new NotFoundException();
+            var tag = _tagRepository.FindById(tagId) ?? throw new NotFoundException();
 
             bool userOwnsTheLibrary = await _libraryRepository.IsOwner(userId, tag.LibraryId);
 

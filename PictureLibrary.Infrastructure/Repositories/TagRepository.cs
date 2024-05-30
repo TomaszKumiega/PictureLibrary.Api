@@ -16,15 +16,6 @@ namespace PictureLibrary.Infrastructure.Repositories
         }
 
         protected override string CollectionName => "Tags";
-
-        public async Task<Tag?> Get(ObjectId id)
-        {
-            return await Task.Run(() =>
-            {
-                return Query().FirstOrDefault(x => x.Id == id);
-            });
-        }
-
         public async Task<IEnumerable<Tag>> GetAll(ObjectId libraryId)
         {
             return await Task.Run(() =>

@@ -25,7 +25,7 @@ namespace PictureLibrary.Application.Command
         {
             ObjectId userId = ObjectId.Parse(request.UserId);
 
-            User user = await _userRepository.GetById(userId) ?? throw new NotFoundException();
+            User user = _userRepository.FindById(userId) ?? throw new NotFoundException();
 
             user = UpdateUser(user, request.UserDto);
 

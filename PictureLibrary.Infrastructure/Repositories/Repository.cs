@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using PictureLibrary.Domain.Configuration;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
@@ -18,6 +19,11 @@ namespace PictureLibrary.Infrastructure.Repositories
         {
             var database = mongoClient.GetDatabase(appSettings.DatabaseName);
             _collection = database.GetCollection<TEntity>(CollectionName);
+        }
+
+        public TEntity? FindById(ObjectId id)
+        {
+            return Query().FirstOrDefault(x => x.Id == id);
         }
 
         public async Task Add(TEntity entity)

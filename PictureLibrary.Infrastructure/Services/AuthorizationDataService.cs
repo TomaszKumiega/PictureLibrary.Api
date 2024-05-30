@@ -54,7 +54,7 @@ namespace PictureLibrary.Infrastructure.Services
             ObjectId userId = ObjectId.Parse(id);
 
             var tokens = _authorizationDataRepository.GetByUserId(userId);
-            var user = await _userRepository.GetById(userId);
+            var user = _userRepository.FindById(userId);
 
             if (tokens?.RefreshToken != refreshToken || user == null)
                 throw new InvalidTokenException();

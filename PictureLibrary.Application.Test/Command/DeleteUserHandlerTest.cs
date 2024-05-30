@@ -30,8 +30,8 @@ namespace PictureLibrary.Application.Test.Command
 
             var command = new DeleteUserCommand(userId.ToString());
 
-            _userRepositoryMock.Setup(x => x.GetById(userId))
-                .ReturnsAsync(user)
+            _userRepositoryMock.Setup(x => x.FindById(userId))
+                .Returns(user)
                 .Verifiable();
 
             _userRepositoryMock.Setup(x => x.Delete(user))
@@ -51,8 +51,8 @@ namespace PictureLibrary.Application.Test.Command
 
             var command = new DeleteUserCommand(userId.ToString());
 
-            _userRepositoryMock.Setup(x => x.GetById(userId))
-                .ReturnsAsync((User?)null)
+            _userRepositoryMock.Setup(x => x.FindById(userId))
+                .Returns((User?)null)
                 .Verifiable();
 
             await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
