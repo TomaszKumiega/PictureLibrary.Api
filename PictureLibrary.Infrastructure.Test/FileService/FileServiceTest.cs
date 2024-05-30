@@ -23,8 +23,11 @@ namespace PictureLibrary.Infrastructure.Test
             var fileBytes = new byte[] { 1, 2, 3, 4, 5 };
             var newbytes = new byte[] { 6, 7, 8, 9, 10 };
 
-            var contentStream = new MemoryStream(newbytes);
-            var fileStream = new MemoryStream(fileBytes);
+            var contentStream = new MemoryStream();
+            var fileStream = new MemoryStream();
+
+            contentStream.Write(newbytes, 0, newbytes.Length);
+            fileStream.Write(fileBytes, 0, fileBytes.Length);
 
             _fileWrapperMock.Setup(f => f.Open(fileName, FileMode.Append))
                 .Returns(fileStream)

@@ -17,13 +17,20 @@ namespace PictureLibrary.Infrastructure.Services
 
         public void AppendFile(string fileName, Stream contentStream)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+            ArgumentNullException.ThrowIfNull(contentStream);
+
             using var fileStream = _fileWrapper.Open(fileName, FileMode.Append);
 
+            contentStream.Position = 0;
             contentStream.CopyTo(fileStream);
         }
 
         public void Insert(string fileName, Stream contentStream, long position)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+            ArgumentNullException.ThrowIfNull(contentStream);
+
             string tempDirectoryPath = _pathsProvider.GetTempDirectoryPath();
             string tempFilePath = Path.Combine(tempDirectoryPath, Path.GetRandomFileName());
 
