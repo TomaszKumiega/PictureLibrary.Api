@@ -27,7 +27,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddTransient<ITagRepository, TagRepository>()
                 .AddTransient<IAuthorizationDataRepository, AuthorizationDataRepository>()
                 .AddTransient<IUploadSessionRepository, UploadSessionRepository>()
-                .AddTransient<IFileMetadataRepository, FileMetadataRepository>();
+                .AddTransient<IFileMetadataRepository, FileMetadataRepository>()
+                .AddTransient<IImageFileRepository, ImageFileRepository>();
         }
 
         private static IServiceCollection RegisterServicesPrivate(this IServiceCollection services, IConfiguration configuration)
