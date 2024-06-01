@@ -78,5 +78,24 @@ namespace PictureLibrary.Api.Controllers
 
             return Ok();
         }
+
+        [HttpPatch("update")]
+        public async Task<IActionResult> Update(
+            [FromQuery] string imageFileId,
+            [FromBody] UpdateImageFileDto updateImageFileDto)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var command = new UpdateImageFileCommand(userId, imageFileId, updateImageFileDto);
+
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
     }
 }
