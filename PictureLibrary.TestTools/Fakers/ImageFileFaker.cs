@@ -8,10 +8,11 @@ namespace PictureLibrary.TestTools.Fakers
     {
         public ImageFileFaker()
         {
-            RuleFor(x => x.Id, x => ObjectId.GenerateNewId());
-            RuleFor(x => x.LibraryId, x => ObjectId.GenerateNewId());
-            RuleFor(x => x.FileId, x => ObjectId.GenerateNewId());
-            RuleFor(x => x.TagIds, x => [ObjectId.GenerateNewId()]);
+            RuleFor(x => x.Id, f => ObjectId.GenerateNewId());
+            RuleFor(x => x.LibraryId, f => ObjectId.GenerateNewId());
+            RuleFor(x => x.FileId, f => ObjectId.GenerateNewId());
+            RuleFor(x => x.TagIds, f => [ObjectId.GenerateNewId()]);
+            RuleFor(x => x.UploadSessionId, f => ObjectId.GenerateNewId());
         }
     }
 }

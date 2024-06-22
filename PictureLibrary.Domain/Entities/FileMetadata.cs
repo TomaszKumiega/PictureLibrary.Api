@@ -7,5 +7,6 @@ namespace PictureLibrary.Domain.Entities
         public ObjectId Id { get; set; }
         public ObjectId OwnerId { get; set; }
         public required string FilePath { get; set; }
+        public required string FileName { get; set; }
     }
 }
