@@ -12,18 +12,24 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
     public class FileUploadServiceTest
     {
         private readonly Mock<IFileService> _fileServiceMock;
+        private readonly Mock<IPathsProvider> _pathsProviderMock;
         private readonly Mock<IMissingRangesParser> _missingRangesParserMock;
         private readonly Mock<IMissingRangesService> _missingRangesServiceMock;
         private readonly Mock<IFileMetadataRepository> _fileMetadataRepositoryMock;
         private readonly Mock<IUploadSessionRepository> _uploadSessionRepositoryMock;
 
+        private readonly IFileUploadService _fileUploadService;
+
         public FileUploadServiceTest()
         {
             _fileServiceMock = new Mock<IFileService>(MockBehavior.Strict);
+            _pathsProviderMock = new Mock<IPathsProvider>(MockBehavior.Strict);
             _missingRangesParserMock = new Mock<IMissingRangesParser>(MockBehavior.Strict);
             _missingRangesServiceMock = new Mock<IMissingRangesService>(MockBehavior.Strict);
             _fileMetadataRepositoryMock = new Mock<IFileMetadataRepository>(MockBehavior.Strict);
             _uploadSessionRepositoryMock = new Mock<IUploadSessionRepository>(MockBehavior.Strict);
+
+            _fileUploadService = new FileUploadService(_fileServiceMock.Object, _pathsProviderMock.Object, _missingRangesParserMock.Object, _missingRangesServiceMock.Object, _fileMetadataRepositoryMock.Object, _uploadSessionRepositoryMock.Object);
         }
 
         [Fact]
@@ -36,9 +42,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 .Returns(2)
                 .Verifiable();
 
-            var fileUploadService = GetFileUploadService();
-
-            var result = fileUploadService.ShouldFileBeAppended(missingRanges, range);
+            var result = _fileUploadService.ShouldFileBeAppended(missingRanges, range);
 
             result.Should().BeTrue();
         }
@@ -53,9 +57,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 .Returns(0)
                 .Verifiable();
 
-            var fileUploadService = GetFileUploadService();
-
-            var result = fileUploadService.ShouldFileBeAppended(missingRanges, range);
+            var result = _fileUploadService.ShouldFileBeAppended(missingRanges, range);
 
             result.Should().BeFalse();
         }
@@ -65,10 +67,8 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
         {
             var missingRanges = new MissingRanges([new ByteRange(1, 2), new ByteRange(5, 7), new ByteRange(12, 15)]);
 
-            var fileUploadService = GetFileUploadService();
-
-            Assert.Throws<ArgumentNullException>(() => fileUploadService.ShouldFileBeAppended(missingRanges, null));
-            Assert.Throws<ArgumentNullException>(() => fileUploadService.ShouldFileBeAppended(missingRanges, new ContentRangeHeaderValue(20)));
+            Assert.Throws<ArgumentNullException>(() => _fileUploadService.ShouldFileBeAppended(missingRanges, null));
+            Assert.Throws<ArgumentNullException>(() => _fileUploadService.ShouldFileBeAppended(missingRanges, new ContentRangeHeaderValue(20)));
         }
 
         [Fact]
@@ -85,9 +85,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             _fileServiceMock.Setup(x => x.AppendFile(uploadSession.FileName, stream))
                 .Verifiable();
 
-            var fileUploadService = GetFileUploadService();
-
-            await fileUploadService.AppendBytesToFile(uploadSession, stream);
+            await _fileUploadService.AppendBytesToFile(uploadSession, stream);
 
             _fileServiceMock.Verify();
         }
@@ -103,10 +101,8 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             };
             using var stream = new MemoryStream();
 
-            var fileUploadService = GetFileUploadService();
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.AppendBytesToFile(null, stream));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.AppendBytesToFile(uploadSession, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AppendBytesToFile(null, stream));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AppendBytesToFile(uploadSession, null));
         }
 
         [Fact]
@@ -124,9 +120,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             _fileServiceMock.Setup(x => x.Insert(uploadSession.FileName, stream, position))
                 .Verifiable();
 
-            var fileUploadService = GetFileUploadService();
-
-            await fileUploadService.InsertBytesToFile(uploadSession, stream, position);
+            await _fileUploadService.InsertBytesToFile(uploadSession, stream, position);
 
             _fileServiceMock.Verify();
         }
@@ -140,12 +134,11 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 FileName = string.Empty,
                 MissingRanges = string.Empty
             };
+
             using var stream = new MemoryStream();
 
-            var fileUploadService = GetFileUploadService();
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.InsertBytesToFile(null, stream, 5));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.InsertBytesToFile(uploadSession, null, 5));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.InsertBytesToFile(null, stream, 5));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.InsertBytesToFile(uploadSession, null, 5));
         }
 
         [Fact]
@@ -176,9 +169,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            var fileUploadService = GetFileUploadService();
-
-            await fileUploadService.UpdateUploadSession(uploadSession, missingRange, header);
+            await _fileUploadService.UpdateUploadSession(uploadSession, missingRange, header);
 
             _uploadSessionRepositoryMock.Verify();
             _missingRangesServiceMock.Verify();
@@ -212,9 +203,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            var fileUploadService = GetFileUploadService();
-
-            await fileUploadService.UpdateUploadSession(uploadSession, missingRange, header);
+            await _fileUploadService.UpdateUploadSession(uploadSession, missingRange, header);
 
             _uploadSessionRepositoryMock.Verify();
             _missingRangesServiceMock.Verify();
@@ -234,11 +223,9 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             var header = new ContentRangeHeaderValue(1, 2);
             var headerWithNullFrom = new ContentRangeHeaderValue(2);
 
-            var fileUploadService = GetFileUploadService();
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.UpdateUploadSession(null, missingRange, header));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.UpdateUploadSession(uploadSession, missingRange, null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.UpdateUploadSession(uploadSession, missingRange, headerWithNullFrom));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(null, missingRange, header));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(uploadSession, missingRange, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(uploadSession, missingRange, headerWithNullFrom));
         }
 
         [Fact]
@@ -251,9 +238,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 MissingRanges = string.Empty 
             };
 
-            var fileUploadService = GetFileUploadService();
-
-            var result = fileUploadService.IsUploadFinished(uploadSession);
+            var result = _fileUploadService.IsUploadFinished(uploadSession);
 
             result.Should().BeTrue();
         }
@@ -268,9 +253,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
                 MissingRanges = "1-2, 5-7, 12-15" 
             };
 
-            var fileUploadService = GetFileUploadService();
-
-            var result = fileUploadService.IsUploadFinished(uploadSession);
+            var result = _fileUploadService.IsUploadFinished(uploadSession);
 
             result.Should().BeFalse();
         }
@@ -278,53 +261,50 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
         [Fact]
         public void IsUploadFinished_ThrowsArgumentNullException()
         {
-            var fileUploadService = GetFileUploadService();
-
-            Assert.Throws<ArgumentNullException>(() => fileUploadService.IsUploadFinished(null));
+            Assert.Throws<ArgumentNullException>(() => _fileUploadService.IsUploadFinished(null));
         }   
 
         [Fact]
         public async Task AddFileMetadata_ShouldAddFileMetadata()
         {
+            string storagePath = "C:\\storage";
             var uploadSession = new UploadSession()
             {
                 UserId = ObjectId.GenerateNewId(),
                 FileLength = default,
-                FileName = string.Empty,
+                FileName = "testName",
                 MissingRanges = "1-2, 5-7, 12-15"
             };
-
-            var fileUploadService = GetFileUploadService();
 
             _fileMetadataRepositoryMock.Setup(x => x.Add(It.IsAny<FileMetadata>()))
                 .Callback((FileMetadata fileMetadata) =>
                 {
                     fileMetadata.OwnerId.Should().Be(uploadSession.UserId);
-                    fileMetadata.FilePath.Should().Be(uploadSession.FileName);
+                    fileMetadata.FileName.Should().Be(uploadSession.FileName);
+                    fileMetadata.FilePath.Should().Be(Path.Combine(storagePath, uploadSession.FileName));
                 })
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            var result = await fileUploadService.AddFileMetadata(uploadSession);
+            _pathsProviderMock.Setup(x => x.GetStoragePath())
+                .Returns(storagePath)
+                .Verifiable();
+
+            var result = await _fileUploadService.AddFileMetadata(uploadSession);
 
             result.Should().NotBeNull();
-            result.FilePath.Should().Be(uploadSession.FileName);
+            result.FilePath.Should().Be(Path.Combine(storagePath, uploadSession.FileName));
+            result.FileName.Should().Be(uploadSession.FileName);
             result.OwnerId.Should().Be(uploadSession.UserId);
 
             _fileMetadataRepositoryMock.Verify();
+            _pathsProviderMock.Verify();
         }
 
         [Fact]
         public async Task AddFileMetadata_ThrowsArgumentNullException()
         {
-            var fileUploadService = GetFileUploadService();
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => fileUploadService.AddFileMetadata(null));
-        }
-
-        private IFileUploadService GetFileUploadService()
-        {
-            return new FileUploadService(_fileServiceMock.Object, _missingRangesParserMock.Object, _missingRangesServiceMock.Object, _fileMetadataRepositoryMock.Object, _uploadSessionRepositoryMock.Object);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AddFileMetadata(null));
         }
     }
 }

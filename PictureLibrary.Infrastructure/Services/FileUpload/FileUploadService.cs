@@ -9,6 +9,7 @@ namespace PictureLibrary.Infrastructure.Services
     public class FileUploadService : IFileUploadService
     {
         private readonly IFileService _fileService;
+        private readonly IPathsProvider _pathsProvider;
         private readonly IMissingRangesParser _missingRangesParser;
         private readonly IMissingRangesService _missingRangesService;
         private readonly IFileMetadataRepository _fileMetadataRepository;
@@ -16,12 +17,14 @@ namespace PictureLibrary.Infrastructure.Services
 
         public FileUploadService(
             IFileService fileService,
+            IPathsProvider pathsProvider,
             IMissingRangesParser missingRangesParser,
             IMissingRangesService missingRangesService,
             IFileMetadataRepository fileMetadataRepository,
             IUploadSessionRepository uploadSessionRepository)
         {
             _fileService = fileService;
+            _pathsProvider = pathsProvider;
             _missingRangesParser = missingRangesParser;
             _missingRangesService = missingRangesService;
             _fileMetadataRepository = fileMetadataRepository;
@@ -85,7 +88,8 @@ namespace PictureLibrary.Infrastructure.Services
             {
                 Id = ObjectId.GenerateNewId(),
                 OwnerId = uploadSession.UserId,
-                FilePath = uploadSession.FileName,
+                FilePath = Path.Combine(_pathsProvider.GetStoragePath(), uploadSession.FileName),
+                FileName = uploadSession.FileName
             };
             
             await _fileMetadataRepository.Add(fileMetadata);
