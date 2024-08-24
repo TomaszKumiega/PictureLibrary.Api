@@ -14,7 +14,5 @@ namespace PictureLibrary.Domain.Services
         /// <param name="newFileName">New file name</param>
         /// <returns></returns>
         string ChangeFileName(string filePath, string newFileName);
-
-        Icon GetFileIcon(string filePath);
     }
 }
