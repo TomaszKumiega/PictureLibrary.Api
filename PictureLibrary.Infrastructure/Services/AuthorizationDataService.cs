@@ -12,25 +12,14 @@ using System.Text;
 
 namespace PictureLibrary.Infrastructure.Services
 {
-    public class AuthorizationDataService : IAuthorizationDataService
+    public class AuthorizationDataService(
+        IAppSettings appSettings,
+        IUserRepository userRepository,
+        IAuthorizationDataRepository authorizationDataRepository) : IAuthorizationDataService
     {
-        private readonly IAppSettings _appSettings;
-        private readonly IUserRepository _userRepository;
-        private readonly IAuthorizationDataRepository _authorizationDataRepository;
-
-        public AuthorizationDataService(
-            IAppSettings appSettings,
-            IUserRepository userRepository,
-            IAuthorizationDataRepository authorizationDataRepository)
-        {
-            _appSettings = appSettings;
-            _userRepository = userRepository;
-            _authorizationDataRepository = authorizationDataRepository;
-        }
-
         public AuthorizationData GenerateAuthorizationData(User user)
         {
-            var (accessToken, expiryDate) = GenerateAccessToken(user, _appSettings.TokenPrivateKey);
+            var (accessToken, expiryDate) = GenerateAccessToken(user, appSettings.TokenPrivateKey);
 
             return new()
             {
@@ -48,16 +37,20 @@ namespace PictureLibrary.Infrastructure.Services
             var validationResult = await handler.ValidateTokenAsync(accessToken, GetTokenValidationParameters());
 
             if (!validationResult.IsValid)
+            {
                 throw new InvalidTokenException();
+            }
 
             var id = (string)validationResult.Claims[ClaimTypes.NameIdentifier];
             ObjectId userId = ObjectId.Parse(id);
 
-            var tokens = _authorizationDataRepository.GetByUserId(userId);
-            var user = _userRepository.FindById(userId);
+            var tokens = authorizationDataRepository.GetByUserId(userId);
+            var user = userRepository.FindById(userId);
 
             if (tokens?.RefreshToken != refreshToken || user == null)
+            {
                 throw new InvalidTokenException();
+            }
 
             return GenerateAuthorizationData(user);
         }
@@ -70,9 +63,9 @@ namespace PictureLibrary.Infrastructure.Services
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = _appSettings.JwtIssuer,
-                ValidAudience = _appSettings.JwtAudience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.TokenPrivateKey)),
+                ValidIssuer = appSettings.JwtIssuer,
+                ValidAudience = appSettings.JwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.TokenPrivateKey)),
             };
         }
 
@@ -83,12 +76,12 @@ namespace PictureLibrary.Infrastructure.Services
             var key = Encoding.ASCII.GetBytes(privateKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
+                Subject = new ClaimsIdentity(
+                [
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new(ClaimTypes.Email, user.Email ?? string.Empty),
                     new(ClaimTypes.Name, user.Username),
-                }),
+                ]),
 
                 Expires = expires,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

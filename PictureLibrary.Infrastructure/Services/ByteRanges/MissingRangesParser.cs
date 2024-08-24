@@ -7,7 +7,7 @@ namespace PictureLibrary.Infrastructure.Services
     {
         public MissingRanges Parse(string ranges)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(ranges, nameof(ranges));
+            ArgumentException.ThrowIfNullOrWhiteSpace(ranges);
 
             List<ByteRange> rangesList = [];
             string[] rangesArray = ranges.Split(',', StringSplitOptions.RemoveEmptyEntries);

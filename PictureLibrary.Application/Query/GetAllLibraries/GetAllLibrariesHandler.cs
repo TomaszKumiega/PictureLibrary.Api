@@ -7,26 +7,18 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Query
 {
-    public class GetAllLibrariesHandler : IRequestHandler<GetAllLibrariesQuery, LibrariesDto>
+    public class GetAllLibrariesHandler(
+        IMapper mapper,
+        ILibraryRepository libraryRepository) 
+        : IRequestHandler<GetAllLibrariesQuery, LibrariesDto>
     {
-        private readonly IMapper _mapper;
-        private readonly ILibraryRepository _libraryRepository;
-
-        public GetAllLibrariesHandler(
-            IMapper mapper,
-            ILibraryRepository libraryRepository)
-        {
-            _mapper = mapper;
-            _libraryRepository = libraryRepository;
-        }
-
         public async Task<LibrariesDto> Handle(GetAllLibrariesQuery request, CancellationToken cancellationToken)
         {
             ObjectId userId = ObjectId.Parse(request.UserId);
 
-            IEnumerable<Library> libraries = await _libraryRepository.GetAll(userId);
+            IEnumerable<Library> libraries = await libraryRepository.GetAll(userId);
 
-            var libraryDtos = libraries.Select(x => _mapper.MapToDto(x));
+            var libraryDtos = libraries.Select(x => mapper.MapToDto(x));
 
             return new LibrariesDto(libraryDtos);
         }

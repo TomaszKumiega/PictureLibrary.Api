@@ -8,31 +8,18 @@ using PictureLibrary.Domain.Services;
 
 namespace PictureLibrary.Application.Command
 {
-    public class UploadFileHandler : IRequestHandler<UploadFileCommand, UploadFileResult>
+    public class UploadFileHandler(
+        IFileUploadService fileUploadService,
+        IMissingRangesParser missingRangesParser,
+        IImageFileRepository imageFileRepository,
+        IUploadSessionRepository uploadSessionRepository) : IRequestHandler<UploadFileCommand, UploadFileResult>
     {
-        private readonly IFileUploadService _fileUploadService;
-        private readonly IMissingRangesParser _missingRangesParser;
-        private readonly IImageFileRepository _imageFileRepository;
-        private readonly IUploadSessionRepository _uploadSessionRepository;
-
-        public UploadFileHandler(
-            IFileUploadService fileUploadService,
-            IMissingRangesParser missingRangesParser,
-            IImageFileRepository imageFileRepository,
-            IUploadSessionRepository uploadSessionRepository)
-        {
-            _fileUploadService = fileUploadService;
-            _missingRangesParser = missingRangesParser;
-            _imageFileRepository = imageFileRepository;
-            _uploadSessionRepository = uploadSessionRepository;
-        }
-
         public async Task<UploadFileResult> Handle(UploadFileCommand request, CancellationToken cancellationToken)
         {
             ObjectId userId = ObjectId.Parse(request.UserId);
             ObjectId uploadSessionId = ObjectId.Parse(request.UploadSessionId);
 
-            var uploadSession = _uploadSessionRepository
+            var uploadSession = uploadSessionRepository
                 .Query()
                 .SingleOrDefault(x => x.Id == uploadSessionId) ?? throw new NotFoundException();
 
@@ -41,26 +28,26 @@ namespace PictureLibrary.Application.Command
                 throw new NotFoundException();
             }
 
-            MissingRanges missingRanges = _missingRangesParser.Parse(uploadSession.MissingRanges);
+            MissingRanges missingRanges = missingRangesParser.Parse(uploadSession.MissingRanges);
 
-            bool shouldFileBeAppended = _fileUploadService.ShouldFileBeAppended(missingRanges, request.ContentRange);
+            bool shouldFileBeAppended = fileUploadService.ShouldFileBeAppended(missingRanges, request.ContentRange);
             
             if (shouldFileBeAppended)
             {
-                await _fileUploadService.AppendBytesToFile(uploadSession, request.ContentStream);
+                await fileUploadService.AppendBytesToFile(uploadSession, request.ContentStream);
             }
             else
             {
-                await _fileUploadService.InsertBytesToFile(uploadSession, request.ContentStream, request.ContentRange.From!.Value);
+                await fileUploadService.InsertBytesToFile(uploadSession, request.ContentStream, request.ContentRange.From!.Value);
             }
 
-            await _fileUploadService.UpdateUploadSession(uploadSession, missingRanges, request.ContentRange);
+            await fileUploadService.UpdateUploadSession(uploadSession, missingRanges, request.ContentRange);
 
-            if (_fileUploadService.IsUploadFinished(uploadSession))
+            if (fileUploadService.IsUploadFinished(uploadSession))
             {
-                await _uploadSessionRepository.Delete(uploadSession);
+                await uploadSessionRepository.Delete(uploadSession);
 
-                FileMetadata fileMetadata = await _fileUploadService.AddFileMetadata(uploadSession);
+                FileMetadata fileMetadata = await fileUploadService.AddFileMetadata(uploadSession);
 
                 ImageFile imageFile = GetImageFile(uploadSessionId);
                 await UpdateImageFile(fileMetadata, imageFile);
@@ -77,7 +64,7 @@ namespace PictureLibrary.Application.Command
 
         private ImageFile GetImageFile(ObjectId uploadSessionId)
         {
-            return _imageFileRepository.Query().Single(x => x.UploadSessionId == uploadSessionId);
+            return imageFileRepository.Query().Single(x => x.UploadSessionId == uploadSessionId);
         }
 
         private async Task<ImageFile> UpdateImageFile(FileMetadata fileMetadata, ImageFile imageFile)
@@ -85,7 +72,7 @@ namespace PictureLibrary.Application.Command
             imageFile.FileId = fileMetadata.Id;
             imageFile.UploadSessionId = ObjectId.Empty;
 
-            await _imageFileRepository.Update(imageFile);
+            await imageFileRepository.Update(imageFile);
 
             return imageFile;
         }

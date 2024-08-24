@@ -13,7 +13,7 @@ namespace PictureLibrary.Infrastructure.Repositories
         
         protected abstract string CollectionName { get; }
 
-        public Repository(
+        protected Repository(
             IAppSettings appSettings,
             IMongoClient mongoClient)
         {

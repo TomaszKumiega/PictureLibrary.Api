@@ -6,15 +6,9 @@ using Tag = PictureLibrary.Domain.Entities.Tag;
 
 namespace PictureLibrary.Infrastructure.Repositories
 {
-    public class TagRepository : Repository<Tag>, ITagRepository
+    public class TagRepository(IAppSettings appSettings, IMongoClient mongoClient) 
+        : Repository<Tag>(appSettings, mongoClient), ITagRepository
     {
-        public TagRepository(
-            IAppSettings appSettings, 
-            IMongoClient mongoClient) 
-            : base(appSettings, mongoClient)
-        {
-        }
-
         protected override string CollectionName => "Tags";
         public async Task<IEnumerable<Tag>> GetAll(ObjectId libraryId)
         {
