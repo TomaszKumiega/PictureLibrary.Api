@@ -8,18 +8,12 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Command
 {
-    public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, UserDto>
+    public class UpdateUserHandler(
+        IMapper mapper,
+        IUserRepository userRepository) : IRequestHandler<UpdateUserCommand, UserDto>
     {
-        private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
-
-        public UpdateUserHandler(
-            IMapper mapper, 
-            IUserRepository userRepository)
-        {
-            _mapper = mapper;
-            _userRepository = userRepository;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly IUserRepository _userRepository = userRepository;
 
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
@@ -34,7 +28,7 @@ namespace PictureLibrary.Application.Command
             return _mapper.MapToDto(user);
         }
 
-        private User UpdateUser(User user, UpdateUserDto userDto)
+        private static User UpdateUser(User user, UpdateUserDto userDto)
         {
             user.Email = userDto.Email;
             user.Username = userDto.Username;

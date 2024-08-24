@@ -5,34 +5,25 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Command
 {
-    public class DeleteTagHandler : IRequestHandler<DeleteTagCommand>
+    public class DeleteTagHandler(
+        ITagRepository tagRepository,
+        ILibraryRepository libraryRepository) : IRequestHandler<DeleteTagCommand>
     {
-        private readonly ITagRepository _tagRepository;
-        private readonly ILibraryRepository _libraryRepository;
-
-        public DeleteTagHandler(
-            ITagRepository tagRepository,
-            ILibraryRepository libraryRepository)
-        {
-            _tagRepository = tagRepository;
-            _libraryRepository = libraryRepository;
-        }
-
         public async Task Handle(DeleteTagCommand request, CancellationToken cancellationToken)
         {
             ObjectId userId = ObjectId.Parse(request.UserId);
             ObjectId tagId = ObjectId.Parse(request.TagId);
 
-            var tag = _tagRepository.FindById(tagId) ?? throw new NotFoundException();
+            var tag = tagRepository.FindById(tagId) ?? throw new NotFoundException();
 
-            bool userOwnsTheLibrary = await _libraryRepository.IsOwner(userId, tag.LibraryId);
+            bool userOwnsTheLibrary = await libraryRepository.IsOwner(userId, tag.LibraryId);
 
             if (!userOwnsTheLibrary)
             {
                 throw new NotFoundException();
             }
 
-            await _tagRepository.Delete(tag);
+            await tagRepository.Delete(tag);
         }
     }
 }

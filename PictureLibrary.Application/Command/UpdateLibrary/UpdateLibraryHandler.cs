@@ -8,18 +8,12 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Command
 {
-    public class UpdateLibraryHandler : IRequestHandler<UpdateLibraryCommand, LibraryDto>
+    public class UpdateLibraryHandler(
+        IMapper mapper,
+        ILibraryRepository libraryRepository) : IRequestHandler<UpdateLibraryCommand, LibraryDto>
     {
-        private readonly IMapper _mapper;
-        private readonly ILibraryRepository _libraryRepository;
-
-        public UpdateLibraryHandler(
-            IMapper mapper,
-            ILibraryRepository libraryRepository)
-        {
-            _mapper = mapper;
-            _libraryRepository = libraryRepository;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly ILibraryRepository _libraryRepository = libraryRepository;
 
         public async Task<LibraryDto> Handle(UpdateLibraryCommand request, CancellationToken cancellationToken)
         {

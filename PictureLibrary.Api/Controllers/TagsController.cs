@@ -8,13 +8,8 @@ namespace PictureLibrary.Api.Controllers
 {
     [Route("tag")]
     [ApiController]
-    public class TagsController : ControllerBase
+    public class TagsController(IMediator mediator) : ControllerBase(mediator)
     {
-        public TagsController(IMediator mediator) 
-            : base(mediator)
-        {
-        }
-
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll([FromQuery] string libraryId)
         {

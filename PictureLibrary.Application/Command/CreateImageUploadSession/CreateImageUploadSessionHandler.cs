@@ -6,19 +6,11 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Command
 {
-    public class CreateImageUploadSessionHandler : IRequestHandler<CreateImageUploadSessionCommand, CreateImageUploadSessionResult>
+    public class CreateImageUploadSessionHandler(
+        IImageFileRepository imageFileRepository,
+        IUploadSessionRepository uploadSessionRepository) 
+        : IRequestHandler<CreateImageUploadSessionCommand, CreateImageUploadSessionResult>
     {
-        private readonly IImageFileRepository _imageFileRepository;
-        private readonly IUploadSessionRepository _uploadSessionRepository;
-
-        public CreateImageUploadSessionHandler(
-            IImageFileRepository imageFileRepository,
-            IUploadSessionRepository uploadSessionRepository)
-        {
-            _imageFileRepository = imageFileRepository;
-            _uploadSessionRepository = uploadSessionRepository;
-        }
-
         public async Task<CreateImageUploadSessionResult> Handle(CreateImageUploadSessionCommand request, CancellationToken cancellationToken)
         {
             UploadSession uploadSession = new()
@@ -38,8 +30,8 @@ namespace PictureLibrary.Application.Command
                 TagIds = request.CreateUploadSessionDto.TagIds.Select(ObjectId.Parse),
             };
 
-            await _uploadSessionRepository.Add(uploadSession);
-            await _imageFileRepository.Add(imageFile);
+            await uploadSessionRepository.Add(uploadSession);
+            await imageFileRepository.Add(imageFile);
             
             return new CreateImageUploadSessionResult
             {

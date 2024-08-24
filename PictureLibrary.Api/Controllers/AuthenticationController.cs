@@ -10,12 +10,8 @@ namespace PictureLibrary.Api.Controllers
     [Route("auth")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController(IMediator mediator) : ControllerBase(mediator)
     {
-        public AuthenticationController(IMediator mediator) : base(mediator)
-        {
-        }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginUser)
         {

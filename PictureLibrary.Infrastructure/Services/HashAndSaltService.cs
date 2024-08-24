@@ -6,7 +6,7 @@ namespace PictureLibrary.Infrastructure.Services
     {
         public HashAndSalt GetHashAndSalt(string text)
         {
-            ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
+            ArgumentException.ThrowIfNullOrEmpty(text);
 
             using var hmac = new System.Security.Cryptography.HMACSHA512();
 

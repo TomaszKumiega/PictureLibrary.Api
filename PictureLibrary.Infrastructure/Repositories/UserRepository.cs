@@ -6,15 +6,9 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Infrastructure.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository(IAppSettings appSettings, IMongoClient mongoClient) 
+        : Repository<User>(appSettings, mongoClient), IUserRepository
     {
-        public UserRepository(
-            IAppSettings appSettings, 
-            IMongoClient mongoClient) 
-            : base(appSettings, mongoClient)
-        {
-        }
-
         protected override string CollectionName => "Users";
 
         public User? GetByUsername(string username)
