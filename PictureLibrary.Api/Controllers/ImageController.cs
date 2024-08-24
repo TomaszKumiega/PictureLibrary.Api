@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Query;
 using PictureLibrary.Contracts;
 using System.Net.Http.Headers;
 
@@ -91,6 +92,23 @@ namespace PictureLibrary.Api.Controllers
             }
 
             var command = new UpdateImageFileCommand(userId, imageFileId, updateImageFileDto);
+
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll([FromQuery] string libraryId)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null) 
+            {
+                return Unauthorized();
+            }
+
+            var command = new GetAllImageFilesQuery(userId, libraryId);
 
             var result = await _mediator.Send(command);
 
