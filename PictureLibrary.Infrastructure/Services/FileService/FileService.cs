@@ -1,4 +1,5 @@
 ﻿using PictureLibrary.Domain.Services;
+using System.Drawing;
 
 namespace PictureLibrary.Infrastructure.Services
 {
@@ -15,6 +16,19 @@ namespace PictureLibrary.Infrastructure.Services
 
             contentStream.Position = 0;
             contentStream.CopyTo(fileStream);
+        }
+
+        public string ChangeFileName(string filePath, string newFileName)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+
+            string fileDirectoryPath = Path.GetDirectoryName(filePath)
+                ?? throw new ArgumentException("File path is incorrect.");
+            string newFilePath = Path.Combine(fileDirectoryPath, newFileName);
+            
+            File.Move(filePath, newFilePath);
+
+            return newFilePath;
         }
 
         public void Insert(string fileName, Stream contentStream, long position)
