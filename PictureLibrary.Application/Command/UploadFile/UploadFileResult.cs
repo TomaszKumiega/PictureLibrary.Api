@@ -4,8 +4,8 @@ namespace PictureLibrary.Application.Command
 {
     public class UploadFileResult
     {
-        public FileCreatedResult? _fileCreatedResult;
-        public FileContentAcceptedResult? _fileContentAcceptedResult;
+        private readonly FileCreatedResult? _fileCreatedResult;
+        private readonly FileContentAcceptedResult? _fileContentAcceptedResult;
 
         public UploadFileResult(FileCreatedResult fileCreatedResult)
         {

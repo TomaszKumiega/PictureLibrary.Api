@@ -8,28 +8,17 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Command
 {
-    public class CreateTagHandler : IRequestHandler<CreateTagCommand, TagDto>
+    public class CreateTagHandler(
+        IMapper mapper,
+        ITagRepository tagRepository,
+        ILibraryRepository libraryRepository) : IRequestHandler<CreateTagCommand, TagDto>
     {
-        private readonly IMapper _mapper;
-        private readonly ITagRepository _tagRepository;
-        private readonly ILibraryRepository _libraryRepository;
-
-        public CreateTagHandler(
-            IMapper mapper,
-            ITagRepository tagRepository,
-            ILibraryRepository libraryRepository)
-        {
-            _mapper = mapper;
-            _tagRepository = tagRepository;
-            _libraryRepository = libraryRepository;
-        }
-
         public async Task<TagDto> Handle(CreateTagCommand request, CancellationToken cancellationToken)
         {
             ObjectId userId = ObjectId.Parse(request.UserId);
             ObjectId libraryId = ObjectId.Parse(request.LibraryId);
 
-            bool userOwnsTheLibrary = await _libraryRepository.IsOwner(userId, libraryId);
+            bool userOwnsTheLibrary = await libraryRepository.IsOwner(userId, libraryId);
 
             if (!userOwnsTheLibrary)
             {
@@ -44,9 +33,9 @@ namespace PictureLibrary.Application.Command
                 ColorHex = request.NewTagDto.ColorHex,
             };
 
-            await _tagRepository.Add(tag);
+            await tagRepository.Add(tag);
 
-            return _mapper.MapToDto(tag);
+            return mapper.MapToDto(tag);
         }
     }
 }

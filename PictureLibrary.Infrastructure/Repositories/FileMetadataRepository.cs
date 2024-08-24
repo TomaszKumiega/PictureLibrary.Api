@@ -5,12 +5,9 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Infrastructure.Repositories
 {
-    public class FileMetadataRepository : Repository<FileMetadata>, IFileMetadataRepository
+    public class FileMetadataRepository(IAppSettings appSettings, IMongoClient mongoClient) 
+        : Repository<FileMetadata>(appSettings, mongoClient), IFileMetadataRepository
     {
         protected override string CollectionName => "FilesMetadata";
-
-        public FileMetadataRepository(IAppSettings appSettings, IMongoClient mongoClient) : base(appSettings, mongoClient)
-        {
-        }
     }
 }

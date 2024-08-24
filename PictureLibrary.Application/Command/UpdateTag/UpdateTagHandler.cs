@@ -7,21 +7,14 @@ using PictureLibrary.Domain.Repositories;
 
 namespace PictureLibrary.Application.Command
 {
-    public class UpdateTagHandler : IRequestHandler<UpdateTagCommand, TagDto>
+    public class UpdateTagHandler(
+        IMapper mapper,
+        ITagRepository tagRepository,
+        ILibraryRepository libraryRepository) : IRequestHandler<UpdateTagCommand, TagDto>
     {
-        private readonly IMapper _mapper;
-        private readonly ITagRepository _tagRepository;
-        private readonly ILibraryRepository _libraryRepository;
-
-        public UpdateTagHandler(
-            IMapper mapper,
-            ITagRepository tagRepository,
-            ILibraryRepository libraryRepository)
-        {
-            _mapper = mapper;
-            _tagRepository = tagRepository;
-            _libraryRepository = libraryRepository;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly ITagRepository _tagRepository = tagRepository;
+        private readonly ILibraryRepository _libraryRepository = libraryRepository;
 
         public async Task<TagDto> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
         {

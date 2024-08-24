@@ -35,8 +35,8 @@ namespace PictureLibrary.Api.Configuration
         {
             return services
                 .AddSingleton<IAppSettings, AppSettings>()
-                .AddMediatR(new MediatRServiceConfiguration().RegisterServicesFromAssembly(typeof(ApplicationEntrypoint).Assembly))
-                .AddValidatorsFromAssembly(typeof(ApplicationEntrypoint).Assembly)
+                .AddMediatR(new MediatRServiceConfiguration().RegisterServicesFromAssembly(typeof(IApplicationEntrypoint).Assembly))
+                .AddValidatorsFromAssembly(typeof(IApplicationEntrypoint).Assembly)
                 .AddSingleton<IMapper, MapperlyMapper>()
                 .AddTransient<IMongoClient, MongoClient>((provider) => new MongoClient(configuration["DbConnectionString"]))
                 .AddSingleton<IHashAndSaltService, HashAndSaltService>()

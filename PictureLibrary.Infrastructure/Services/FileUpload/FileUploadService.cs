@@ -30,33 +30,33 @@ namespace PictureLibrary.Infrastructure.Services
 
         public bool ShouldFileBeAppended(MissingRanges missingRanges, ContentRangeHeaderValue range)
         {
-            ArgumentNullException.ThrowIfNull(range, nameof(range));
-            ArgumentNullException.ThrowIfNull(range.From, nameof(range.From));
+            ArgumentNullException.ThrowIfNull(range);
+            ArgumentNullException.ThrowIfNull(range.From);
 
             return IsContentRangeMatchingLastRange(missingRanges, range);
         }
 
         public async Task AppendBytesToFile(UploadSession uploadSession, Stream contentStream)
         {
-            ArgumentNullException.ThrowIfNull(uploadSession, nameof(uploadSession));
-            ArgumentNullException.ThrowIfNull(contentStream, nameof(contentStream));
+            ArgumentNullException.ThrowIfNull(uploadSession);
+            ArgumentNullException.ThrowIfNull(contentStream);
 
             await Task.Run(() => _fileService.AppendFile(uploadSession.FileName, contentStream));
         }
 
         public async Task InsertBytesToFile(UploadSession uploadSession, Stream contentStream, long startingPosition)
         {
-            ArgumentNullException.ThrowIfNull(uploadSession, nameof(uploadSession));
-            ArgumentNullException.ThrowIfNull(contentStream, nameof(contentStream));
+            ArgumentNullException.ThrowIfNull(uploadSession);
+            ArgumentNullException.ThrowIfNull(contentStream);
 
             await Task.Run(() => _fileService.Insert(uploadSession.FileName, contentStream, startingPosition));
         }
 
         public async Task UpdateUploadSession(UploadSession uploadSession, MissingRanges missingRanges, ContentRangeHeaderValue range)
         {
-            ArgumentNullException.ThrowIfNull(uploadSession, nameof(uploadSession));
-            ArgumentNullException.ThrowIfNull(range, nameof(range));
-            ArgumentNullException.ThrowIfNull(range.From, nameof(range.From));
+            ArgumentNullException.ThrowIfNull(uploadSession);
+            ArgumentNullException.ThrowIfNull(range);
+            ArgumentNullException.ThrowIfNull(range.From);
 
             UpdateMissingRanges(uploadSession, missingRanges, range);
 
@@ -72,14 +72,14 @@ namespace PictureLibrary.Infrastructure.Services
 
         public bool IsUploadFinished(UploadSession uploadSession)
         {
-            ArgumentNullException.ThrowIfNull(uploadSession, nameof(uploadSession));
+            ArgumentNullException.ThrowIfNull(uploadSession);
 
             return string.IsNullOrEmpty(uploadSession.MissingRanges);
         }
 
         public async Task<FileMetadata> AddFileMetadata(UploadSession uploadSession)
         {
-            ArgumentNullException.ThrowIfNull(uploadSession, nameof(uploadSession));
+            ArgumentNullException.ThrowIfNull(uploadSession);
 
             FileMetadata fileMetadata = new()
             {

@@ -2,17 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
 using PictureLibrary.Contracts;
+using System.Net.Http.Headers;
 
 namespace PictureLibrary.Api.Controllers
 {
     [Route("image")]
     [ApiController]
-    public class ImageController : ControllerBase
+    public class ImageController(IMediator mediator) : ControllerBase(mediator)
     {
-        public ImageController(IMediator mediator) : base(mediator)
-        {
-        }
-
         [HttpPost("createUploadSession")]
         public async Task<IActionResult> CreateUploadSession(
             [FromBody] CreateImageUploadSessionDto createUploadSessionDto)
@@ -32,7 +29,9 @@ namespace PictureLibrary.Api.Controllers
         }
 
         [HttpPost("uploadFile")]
-        public async Task<IActionResult> UploadFile([FromQuery] string uploadSessionId)
+        public async Task<IActionResult> UploadFile(
+            [FromQuery] string uploadSessionId, 
+            [FromHeader(Name = "Content-Range")] string contentRangeString)
         {
             string? userId = GetUserId();
 
@@ -41,7 +40,7 @@ namespace PictureLibrary.Api.Controllers
                 return Unauthorized();
             }
 
-            var contentRange = GetContentRange();
+            ContentRangeHeaderValue? contentRange = GetContentRange(contentRangeString);
 
             if (contentRange == null)
             {

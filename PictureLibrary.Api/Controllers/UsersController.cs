@@ -9,13 +9,8 @@ namespace PictureLibrary.Api.Controllers
 {
     [Route("user")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IMediator mediator) : ControllerBase(mediator)
     {
-        public UsersController(IMediator mediator) 
-            : base(mediator)
-        {
-        }
-
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] NewUserDto newUser)

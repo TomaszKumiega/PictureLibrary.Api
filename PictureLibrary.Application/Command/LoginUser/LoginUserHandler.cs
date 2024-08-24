@@ -7,28 +7,16 @@ using PictureLibrary.Domain.Services;
 
 namespace PictureLibrary.Application.Command
 {
-    public class LoginUserHandler : IRequestHandler<LoginUserCommand, UserAuthorizationDataDto>
+    public class LoginUserHandler(
+        IUserRepository userRepository,
+        IHashAndSaltService hashAndSaltService,
+        IAuthorizationDataService authorizationDataService,
+        IAuthorizationDataRepository authorizationDataRepository) 
+        : IRequestHandler<LoginUserCommand, UserAuthorizationDataDto>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IHashAndSaltService _hashAndSaltService;
-        private readonly IAuthorizationDataService _authorizationDataService;
-        private readonly IAuthorizationDataRepository _authorizationDataRepository;
-
-        public LoginUserHandler(
-            IUserRepository userRepository,
-            IHashAndSaltService hashAndSaltService,
-            IAuthorizationDataService authorizationDataService,
-            IAuthorizationDataRepository authorizationDataRepository)
-        {
-            _userRepository = userRepository;
-            _hashAndSaltService = hashAndSaltService;
-            _authorizationDataService = authorizationDataService;
-            _authorizationDataRepository = authorizationDataRepository;
-        }
-
         public async Task<UserAuthorizationDataDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            User user = _userRepository.GetByUsername(request.LoginDto.Username) ?? throw new NotFoundException();
+            User user = userRepository.GetByUsername(request.LoginDto.Username) ?? throw new NotFoundException();
 
             HashAndSalt hashAndSalt = new()
             {
@@ -37,14 +25,14 @@ namespace PictureLibrary.Application.Command
                 Salt = user.PasswordSalt
             };
 
-            if (!_hashAndSaltService.Verify(hashAndSalt))
+            if (!hashAndSaltService.Verify(hashAndSalt))
             {
                 throw new NotFoundException();
             }
 
-            AuthorizationData authorizationData = _authorizationDataService.GenerateAuthorizationData(user);
+            AuthorizationData authorizationData = authorizationDataService.GenerateAuthorizationData(user);
 
-            authorizationData = await _authorizationDataRepository.UpsertForUser(authorizationData);
+            authorizationData = await authorizationDataRepository.UpsertForUser(authorizationData);
 
             return new UserAuthorizationDataDto
             {

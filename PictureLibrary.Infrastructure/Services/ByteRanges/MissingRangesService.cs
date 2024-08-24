@@ -5,18 +5,16 @@ namespace PictureLibrary.Infrastructure.Services
 {
     public class MissingRangesService(IByteRangesService byteRangesService) : IMissingRangesService
     {
-        private readonly IByteRangesService _byteRangesService = byteRangesService;
-
         public int GetFirstIndexOfMissingRangeContainingAnotherRange(MissingRanges missingRanges, ContentRangeHeaderValue range)
         {
-            ArgumentNullException.ThrowIfNull(range?.From, nameof(range));
+            ArgumentNullException.ThrowIfNull(range?.From);
 
             ByteRange byteRange = GetByteRangeFromContentRangeHeaderValue(range);
 
             var matchingRange = missingRanges.Ranges
                 .Select((range, i) => new
                 {
-                    IsInRange = _byteRangesService.IsOneRangeIncludedInAnother(byteRange, range),
+                    IsInRange = byteRangesService.IsOneRangeIncludedInAnother(byteRange, range),
                     Index = i,
                 })
                 .SingleOrDefault(x => x.IsInRange);
@@ -35,7 +33,7 @@ namespace PictureLibrary.Infrastructure.Services
 
             ByteRange byteRange = GetByteRangeFromContentRangeHeaderValue(range);
 
-            IEnumerable<ByteRange> resultOfExcludingRange = _byteRangesService.Except(missingRanges.Ranges.ElementAt(index), byteRange);
+            IEnumerable<ByteRange> resultOfExcludingRange = byteRangesService.Except(missingRanges.Ranges.ElementAt(index), byteRange);
 
             IEnumerable<ByteRange> newRanges = missingRanges.Ranges
                 .Take(index)

@@ -8,25 +8,14 @@ using PictureLibrary.Domain.Services;
 
 namespace PictureLibrary.Application.Command
 {
-    public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, UserDto>
+    public class RegisterUserHandler(
+        IMapper mapper,
+        IUserRepository userRepository,
+        IHashAndSaltService hashAndSaltService) : IRequestHandler<RegisterUserCommand, UserDto>
     {
-        private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
-        private readonly IHashAndSaltService _hashAndSaltService;
-
-        public RegisterUserHandler(
-            IMapper mapper, 
-            IUserRepository userRepository,
-            IHashAndSaltService hashAndSaltService)
-        {
-            _mapper = mapper;
-            _userRepository = userRepository;
-            _hashAndSaltService = hashAndSaltService;
-        }
-
         public async Task<UserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            var passwordHashAndSalt = _hashAndSaltService.GetHashAndSalt(request.NewUser.Password);
+            var passwordHashAndSalt = hashAndSaltService.GetHashAndSalt(request.NewUser.Password);
 
             var user = new User
             {
@@ -37,9 +26,9 @@ namespace PictureLibrary.Application.Command
                 PasswordSalt = passwordHashAndSalt.Salt
             };
 
-            await _userRepository.Add(user);
+            await userRepository.Add(user);
 
-            return _mapper.MapToDto(user);
+            return mapper.MapToDto(user);
         }
     }
 }
