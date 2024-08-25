@@ -17,5 +17,11 @@ namespace PictureLibrary.Infrastructure.Repositories
                 .Where(x => x.LibraryId == libraryId)
                 .ToList();
         }
+
+        public ImageFile? GetImageFile(ObjectId imageFileId)
+        {
+            return Query()
+                .FirstOrDefault(x => x.Id == imageFileId);
+        }
     }
 }
