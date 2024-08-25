@@ -55,6 +55,7 @@ namespace PictureLibrary.Infrastructure.Test
             result.Should().NotBeNull();
             result.FileMetadata.FileName.Should().Be(updateImageFileData.FileName);
             result.FileMetadata.FilePath.Should().Be(newFilePath);
+            result.ImageFile.FileName.Should().Be(updateImageFileData.FileName);
 
             _fileServiceMock.Verify(x => x.ChangeFileName(oldFilePath, updateImageFileData.FileName), Times.Once);
         }

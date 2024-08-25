@@ -16,14 +16,14 @@ namespace PictureLibrary.Infrastructure.Services
             ArgumentNullException.ThrowIfNull(fileMetadata);
             ArgumentNullException.ThrowIfNull(updateImageFileData);
 
-            fileMetadata = UpdateImageFileName(fileMetadata, updateImageFileData.FileName);
+            fileMetadata = UpdateImageFileName(imageFile, fileMetadata, updateImageFileData.FileName);
             imageFile = UpdateTagIds(imageFile, updateImageFileData.TagIds);
             imageFile = UpdateLibraryId(imageFile, updateImageFileData.LibraryId);
 
             return new UpdateImageFileResult(imageFile, fileMetadata);
         }
 
-        private FileMetadata UpdateImageFileName(FileMetadata fileMetadata, string? fileName)
+        private FileMetadata UpdateImageFileName(ImageFile imageFile, FileMetadata fileMetadata, string? fileName)
         {
             if (fileName != null)
             {
@@ -31,10 +31,12 @@ namespace PictureLibrary.Infrastructure.Services
 
                 fileMetadata.FilePath = newFilePath;
                 fileMetadata.FileName = fileName;
+                imageFile.FileName = fileName;
             }
 
             return fileMetadata;
         }
+
         private static ImageFile UpdateTagIds(ImageFile imageFile, IEnumerable<string>? tagIds)
         {
             if (tagIds != null)
@@ -44,6 +46,7 @@ namespace PictureLibrary.Infrastructure.Services
 
             return imageFile;
         }
+
         private static ImageFile UpdateLibraryId(ImageFile imageFile, string? libraryId)
         {
             if (libraryId != null)
