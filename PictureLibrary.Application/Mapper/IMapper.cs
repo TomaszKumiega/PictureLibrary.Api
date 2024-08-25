@@ -11,7 +11,6 @@ namespace PictureLibrary.Application.Mapper
         public UserDto MapToDto(User user);
         public UserAuthorizationDataDto MapToDto(AuthorizationData authorizationData);
         public UpdateImageFileData MapToUpdateImageFileData(UpdateImageFileDto dto);
-        public ImageFileDto MapToDto(FullImageFileInformation fullImageFileInformation);
         public ImageFileDto MapToDto(ImageFile imageFile);
     }
 }

@@ -12,7 +12,6 @@ namespace PictureLibrary.Application.Mapper
         public partial TagDto MapToDto(Tag tag);
         public partial UserDto MapToDto(User user);
         public partial UserAuthorizationDataDto MapToDto(AuthorizationData authorizationData);
-        public partial ImageFileDto MapToDto(FullImageFileInformation fullImageFileInformation);
         public partial ImageFileDto MapToDto(ImageFile imageFile);
         public partial UpdateImageFileData MapToUpdateImageFileData(UpdateImageFileDto dto);
     }
