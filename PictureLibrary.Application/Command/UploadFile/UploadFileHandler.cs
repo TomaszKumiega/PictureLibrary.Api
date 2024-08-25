@@ -71,6 +71,8 @@ namespace PictureLibrary.Application.Command
         {
             imageFile.FileId = fileMetadata.Id;
             imageFile.UploadSessionId = ObjectId.Empty;
+            imageFile.FileName = fileMetadata.FileName;
+            imageFile.Base64Thumbnail = string.Empty; //TODO: fill base64 thumbnail
 
             await imageFileRepository.Update(imageFile);
 
