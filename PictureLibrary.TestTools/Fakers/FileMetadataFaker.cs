@@ -9,7 +9,6 @@ namespace PictureLibrary.TestTools.Fakers
         public FileMetadataFaker()
         {
             RuleFor(x => x.Id, x => ObjectId.GenerateNewId());
-            RuleFor(x => x.OwnerId, x => ObjectId.GenerateNewId());
         }
     }
 }

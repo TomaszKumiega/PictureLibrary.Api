@@ -279,7 +279,6 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             _fileMetadataRepositoryMock.Setup(x => x.Add(It.IsAny<FileMetadata>()))
                 .Callback((FileMetadata fileMetadata) =>
                 {
-                    fileMetadata.OwnerId.Should().Be(uploadSession.UserId);
                     fileMetadata.FileName.Should().Be(uploadSession.FileName);
                     fileMetadata.FilePath.Should().Be(Path.Combine(storagePath, uploadSession.FileName));
                 })
@@ -295,7 +294,6 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             result.Should().NotBeNull();
             result.FilePath.Should().Be(Path.Combine(storagePath, uploadSession.FileName));
             result.FileName.Should().Be(uploadSession.FileName);
-            result.OwnerId.Should().Be(uploadSession.UserId);
 
             _fileMetadataRepositoryMock.Verify();
             _pathsProviderMock.Verify();

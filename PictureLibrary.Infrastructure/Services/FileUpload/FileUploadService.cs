@@ -87,7 +87,6 @@ namespace PictureLibrary.Infrastructure.Services
             FileMetadata fileMetadata = new()
             {
                 Id = ObjectId.GenerateNewId(),
-                OwnerId = uploadSession.UserId,
                 FilePath = Path.Combine(_pathsProvider.GetStoragePath(), uploadSession.FileName),
                 FileName = uploadSession.FileName
             };
