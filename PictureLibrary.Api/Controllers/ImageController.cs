@@ -114,5 +114,22 @@ namespace PictureLibrary.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("content")]
+        public async Task<IActionResult> GetContent([FromQuery] string imageFileId)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var command = new GetImageFileContentQuery(userId, imageFileId);
+            
+            var result = await _mediator.Send(command);
+
+            return File(result.Content, result.ContentType);
+        }
     }
 }
