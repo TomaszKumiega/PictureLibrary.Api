@@ -5,13 +5,13 @@ namespace PictureLibrary.Infrastructure.Services
 {
     public class ImageThumbnailCreator : IImageThumbnailCreator
     {
-        public string GetBase64Thumbnail(string filePath)
+        public async Task<string> GetBase64Thumbnail(string filePath)
         {
-            using Image image = Image.Load(filePath);
+            using Image image = await Image.LoadAsync(filePath);
             using MemoryStream thumbnailMemoryStream = new();
 
             image.Mutate(x => x.Resize(50, 50));
-            image.Save(thumbnailMemoryStream, new JpegEncoder());
+            await image.SaveAsync(thumbnailMemoryStream, new JpegEncoder());
 
             byte[] thumbnailBytes = thumbnailMemoryStream.ToArray();
 

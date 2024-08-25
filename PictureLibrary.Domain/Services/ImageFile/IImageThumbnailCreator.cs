@@ -6,6 +6,6 @@ namespace PictureLibrary.Domain.Services
         /// Creates 50x50 thumbnail in base64 format.
         /// </summary>
         /// <returns></returns>
-        public string GetBase64Thumbnail(string filePath);
+        public Task<string> GetBase64Thumbnail(string filePath);
     }
 }

@@ -12,6 +12,7 @@ namespace PictureLibrary.Application.Command
         IFileUploadService fileUploadService,
         IMissingRangesParser missingRangesParser,
         IImageFileRepository imageFileRepository,
+        IImageThumbnailCreator imageThumbnailCreator,
         IUploadSessionRepository uploadSessionRepository) : IRequestHandler<UploadFileCommand, UploadFileResult>
     {
         public async Task<UploadFileResult> Handle(UploadFileCommand request, CancellationToken cancellationToken)
@@ -72,7 +73,7 @@ namespace PictureLibrary.Application.Command
             imageFile.FileId = fileMetadata.Id;
             imageFile.UploadSessionId = ObjectId.Empty;
             imageFile.FileName = fileMetadata.FileName;
-            imageFile.Base64Thumbnail = string.Empty; //TODO: fill base64 thumbnail
+            imageFile.Base64Thumbnail = await imageThumbnailCreator.GetBase64Thumbnail(fileMetadata.FilePath);
 
             await imageFileRepository.Update(imageFile);
 
