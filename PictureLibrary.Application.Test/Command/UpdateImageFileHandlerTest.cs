@@ -129,14 +129,7 @@ namespace PictureLibrary.Application.Test.Command
                 TagIds = dto.TagIds
             };
 
-            UpdateImageFileResult updateResult = new UpdateImageFileResult(imageFile, fileMetadata, new FullImageFileInformation()
-            { 
-                Id = imageFile.Id.ToString(),
-                FileName = fileMetadata.FileName,
-                Base64Thumbnail = Convert.ToBase64String(Encoding.UTF8.GetBytes("Test")),
-                LibraryId = imageFile.LibraryId.ToString(),
-                TagIds  = imageFile.TagIds?.Select(x => x.ToString()).ToList()
-            });
+            UpdateImageFileResult updateResult = new UpdateImageFileResult(imageFile, fileMetadata);
 
             ImageFileDto resultDto = new ImageFileDtoFaker().Generate();
 
@@ -162,7 +155,7 @@ namespace PictureLibrary.Application.Test.Command
                 .Returns(updateResult)
                 .Verifiable();
 
-            _mapperMock.Setup(x => x.MapToDto(updateResult.FullImageFileInformation))
+            _mapperMock.Setup(x => x.MapToDto(updateResult.ImageFile))
                 .Returns(resultDto)
                 .Verifiable();
 

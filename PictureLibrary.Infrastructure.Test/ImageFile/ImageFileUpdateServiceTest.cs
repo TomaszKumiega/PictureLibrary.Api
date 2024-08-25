@@ -11,16 +11,14 @@ namespace PictureLibrary.Infrastructure.Test
     public class ImageFileUpdateServiceTest
     {
         private readonly Mock<IFileService> _fileServiceMock;
-        private readonly Mock<IImageFileFullInformationProvider> _fullInformationProviderMock;
 
         private readonly ImageFileUpdateService _updateService;
 
         public ImageFileUpdateServiceTest()
         {
             _fileServiceMock = new Mock<IFileService>();
-            _fullInformationProviderMock = new Mock<IImageFileFullInformationProvider>();
 
-            _updateService = new ImageFileUpdateService(_fileServiceMock.Object, _fullInformationProviderMock.Object);
+            _updateService = new ImageFileUpdateService(_fileServiceMock.Object);
         }
 
         [Fact]
@@ -40,37 +38,25 @@ namespace PictureLibrary.Infrastructure.Test
         {
             UpdateImageFileData updateImageFileData = new()
             {
-                FileName = "newFileName"
+                FileName = "fileName123.jpg"
             };
 
+            string oldFilePath = "C:\\Folder1\\Folder2\\oldFileName.jpg";
             FileMetadata fileMetadata = new FileMetadataFaker().Generate();
+            fileMetadata.FilePath = oldFilePath;
             ImageFile imageFile = new ImageFileFaker().Generate();
             string newFilePath = $"C:\\Folder1\\Folder2\\{updateImageFileData.FileName}";
 
-            FullImageFileInformation fullImageFileInformation = new()
-            {
-                Id = imageFile.Id.ToString(),
-                LibraryId = imageFile.LibraryId.ToString(),
-                FileName = updateImageFileData.FileName,
-                Base64Thumbnail = string.Empty,
-                TagIds = imageFile.TagIds?.Select(x => x.ToString())
-            };
-
             _fileServiceMock.Setup(x => x.ChangeFileName(fileMetadata.FilePath, updateImageFileData.FileName))
                 .Returns(newFilePath);
-
-            _fullInformationProviderMock.Setup(x => x.GetFullImageFileInformation(imageFile, fileMetadata))
-                .Returns(fullImageFileInformation);
 
             UpdateImageFileResult result = _updateService.UpdateImageFile(imageFile, fileMetadata, updateImageFileData);
 
             result.Should().NotBeNull();
             result.FileMetadata.FileName.Should().Be(updateImageFileData.FileName);
             result.FileMetadata.FilePath.Should().Be(newFilePath);
-            result.FullImageFileInformation.Should().Be(fullImageFileInformation);
 
-            _fileServiceMock.Verify(x => x.ChangeFileName(fileMetadata.FilePath, updateImageFileData.FileName), Times.Once);
-            _fullInformationProviderMock.Verify(x => x.GetFullImageFileInformation(imageFile, fileMetadata), Times.Once);
+            _fileServiceMock.Verify(x => x.ChangeFileName(oldFilePath, updateImageFileData.FileName), Times.Once);
         }
 
         [Fact]
@@ -78,31 +64,16 @@ namespace PictureLibrary.Infrastructure.Test
         {
             UpdateImageFileData updateImageFileData = new()
             {
-                TagIds = ["1", "2", "3"]
+                TagIds = [ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString()]
             };
 
             FileMetadata fileMetadata = new FileMetadataFaker().Generate();
             ImageFile imageFile = new ImageFileFaker().Generate();
 
-            FullImageFileInformation fullImageFileInformation = new()
-            {
-                Id = imageFile.Id.ToString(),
-                LibraryId = imageFile.LibraryId.ToString(),
-                FileName = fileMetadata.FileName,
-                Base64Thumbnail = string.Empty,
-                TagIds = updateImageFileData.TagIds?.Select(x => x.ToString())
-            };
-
-            _fullInformationProviderMock.Setup(x => x.GetFullImageFileInformation(imageFile, fileMetadata))
-                .Returns(fullImageFileInformation);
-
             UpdateImageFileResult result = _updateService.UpdateImageFile(imageFile, fileMetadata, updateImageFileData);
 
             result.Should().NotBeNull();
             result.ImageFile.TagIds.Should().BeEquivalentTo(updateImageFileData.TagIds?.Select(x => ObjectId.Parse(x)));
-            result.FullImageFileInformation.Should().Be(fullImageFileInformation);
-
-            _fullInformationProviderMock.Verify(x => x.GetFullImageFileInformation(imageFile, fileMetadata), Times.Once);
         }
 
         [Fact]
@@ -116,25 +87,10 @@ namespace PictureLibrary.Infrastructure.Test
             FileMetadata fileMetadata = new FileMetadataFaker().Generate();
             ImageFile imageFile = new ImageFileFaker().Generate();
 
-            FullImageFileInformation fullImageFileInformation = new()
-            {
-                Id = imageFile.Id.ToString(),
-                LibraryId = updateImageFileData.LibraryId,
-                FileName = fileMetadata.FileName,
-                Base64Thumbnail = string.Empty,
-                TagIds = imageFile.TagIds?.Select(x => x.ToString())
-            };
-
-            _fullInformationProviderMock.Setup(x => x.GetFullImageFileInformation(imageFile, fileMetadata))
-                .Returns(fullImageFileInformation);
-
             UpdateImageFileResult result = _updateService.UpdateImageFile(imageFile, fileMetadata, updateImageFileData);
 
             result.Should().NotBeNull();
             result.ImageFile.LibraryId.Should().Be(ObjectId.Parse(updateImageFileData.LibraryId));
-            result.FullImageFileInformation.Should().Be(fullImageFileInformation);
-
-            _fullInformationProviderMock.Verify(x => x.GetFullImageFileInformation(imageFile, fileMetadata), Times.Once);
         }
     }
 }

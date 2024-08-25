@@ -32,7 +32,7 @@ namespace PictureLibrary.Application.Command
             await fileMetadataRepository.Update(result.FileMetadata);
             await imageFileRepository.Update(result.ImageFile);
 
-            return mapper.MapToDto(result.FullImageFileInformation);
+            return mapper.MapToDto(result.ImageFile);
         }
 
         private async Task EnsureUserOwnsTheLibrary(ObjectId userId, ObjectId libraryId)

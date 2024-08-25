@@ -5,21 +5,22 @@ using PictureLibrary.Domain.Services;
 namespace PictureLibrary.Infrastructure.Services
 {
     public class ImageFileUpdateService(
-        IFileService fileService,
-        IImageFileFullInformationProvider imageFileFullInfoProvider) : IImageFileUpdateService
+        IFileService fileService) : IImageFileUpdateService
     {
         public UpdateImageFileResult UpdateImageFile(
             ImageFile imageFile, 
             FileMetadata fileMetadata, 
             UpdateImageFileData updateImageFileData)
         {
+            ArgumentNullException.ThrowIfNull(imageFile);
+            ArgumentNullException.ThrowIfNull(fileMetadata);
+            ArgumentNullException.ThrowIfNull(updateImageFileData);
+
             fileMetadata = UpdateImageFileName(fileMetadata, updateImageFileData.FileName);
             imageFile = UpdateTagIds(imageFile, updateImageFileData.TagIds);
             imageFile = UpdateLibraryId(imageFile, updateImageFileData.LibraryId);
 
-            FullImageFileInformation fullInformation = imageFileFullInfoProvider.GetFullImageFileInformation(imageFile, fileMetadata);
-
-            return new UpdateImageFileResult(imageFile, fileMetadata, fullInformation);
+            return new UpdateImageFileResult(imageFile, fileMetadata);
         }
 
         private FileMetadata UpdateImageFileName(FileMetadata fileMetadata, string? fileName)

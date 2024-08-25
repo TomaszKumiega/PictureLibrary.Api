@@ -10,7 +10,6 @@ namespace PictureLibrary.TestTools.Fakers
         {
             RuleFor(x => x.Id, x => ObjectId.GenerateNewId());
             RuleFor(x => x.OwnerId, x => ObjectId.GenerateNewId());
-            RuleFor(x => x.FilePath, x => x.Random.String());
         }
     }
 }
