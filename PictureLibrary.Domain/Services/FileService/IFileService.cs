@@ -1,12 +1,11 @@
-﻿using System.Drawing;
-
-namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services
 {
     public interface IFileService
     {
+        Stream OpenFile(string filePath);
         void AppendFile(string fileName, Stream contentStream);
         void Insert(string fileName, Stream contentStream, long position);
-        
+
         /// <summary>
         /// Changes file name, and returns new path.
         /// </summary>
@@ -14,5 +13,7 @@ namespace PictureLibrary.Domain.Services
         /// <param name="newFileName">New file name</param>
         /// <returns></returns>
         string ChangeFileName(string filePath, string newFileName);
+
+        string GetFileMimeType(string filePath);
     }
 }

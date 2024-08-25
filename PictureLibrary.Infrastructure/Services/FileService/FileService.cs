@@ -1,5 +1,5 @@
-﻿using PictureLibrary.Domain.Services;
-using System.Drawing;
+﻿using Microsoft.AspNetCore.StaticFiles;
+using PictureLibrary.Domain.Services;
 
 namespace PictureLibrary.Infrastructure.Services
 {
@@ -31,6 +31,15 @@ namespace PictureLibrary.Infrastructure.Services
             return newFilePath;
         }
 
+        public string GetFileMimeType(string filePath)
+        {
+            var extensionProvider = new FileExtensionContentTypeProvider();
+
+            return extensionProvider.TryGetContentType(filePath, out string? contentType)
+                ? contentType
+                : "application/octet-stream";
+        }
+
         public void Insert(string fileName, Stream contentStream, long position)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
@@ -58,6 +67,11 @@ namespace PictureLibrary.Infrastructure.Services
             fileWrapper.Delete(fileName);
             fileWrapper.Copy(tempFilePath, fileName);
             fileWrapper.Delete(tempFilePath);
+        }
+
+        public Stream OpenFile(string filePath)
+        {
+            return File.Open(filePath, FileMode.Open);
         }
     }
 }
