@@ -5,6 +5,5 @@ namespace PictureLibrary.Domain.Repositories
 {
     public interface IFileMetadataRepository : IRepository<FileMetadata>
     {
-        public FileMetadata? GetFileMetadata(ObjectId fileMetadata);
     }
 }

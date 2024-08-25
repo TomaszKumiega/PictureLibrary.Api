@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Query
             ObjectId userId = ObjectId.Parse(request.UserId);
             ObjectId imageFileId = ObjectId.Parse(request.ImageFileId);
 
-            ImageFile imageFile = imageFileRepository.GetImageFile(imageFileId) ?? throw new NotFoundException();
+            ImageFile imageFile = imageFileRepository.FindById(imageFileId) ?? throw new NotFoundException();
 
             bool userOwnsLibrary = await libraryRepository.IsOwner(userId, imageFile.LibraryId);
 
@@ -27,7 +27,7 @@ namespace PictureLibrary.Application.Query
                 throw new NotFoundException();
             }
 
-            FileMetadata fileMetadata = fileMetadataRepository.GetFileMetadata(imageFile.FileId) ?? throw new NotFoundException();
+            FileMetadata fileMetadata = fileMetadataRepository.FindById(imageFile.FileId) ?? throw new NotFoundException();
 
             Stream fileContent = fileService.OpenFile(fileMetadata.FilePath);
             string contentType = fileService.GetFileMimeType(fileMetadata.FilePath);
