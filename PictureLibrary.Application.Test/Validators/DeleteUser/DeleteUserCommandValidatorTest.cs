@@ -16,7 +16,7 @@ namespace PictureLibrary.Application.Test.Validators.DeleteUser
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new DeleteUserCommand(null);
+            var command = new DeleteUserCommand(null!);
 
             var result = _validator.TestValidate(command);
 

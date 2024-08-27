@@ -22,7 +22,7 @@ namespace PictureLibrary.Infrastructure.Test
         [Fact]
         public void UpdateFileName_Should_Throw_ArgumentNullException_When_FileMetadata_Is_Null()
         {
-            FileMetadata fileMetadata = null;
+            FileMetadata fileMetadata = null!;
             string newFileName = "newFileName";
 
             Assert.Throws<ArgumentNullException>(() => _fileMetadataUpdateService.UpdateFileName(fileMetadata, newFileName));
@@ -32,7 +32,7 @@ namespace PictureLibrary.Infrastructure.Test
         public void UpdateFileName_Should_Throw_ArgumentNullException_When_NewFileName_Is_Null()
         {
             FileMetadata fileMetadata = new FileMetadataFaker().Generate();
-            string newFileName = null;
+            string newFileName = null!;
 
             Assert.Throws<ArgumentNullException>(() => _fileMetadataUpdateService.UpdateFileName(fileMetadata, newFileName));
         }

@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateTag
         {
             var tag = new NewTagDto()
             {
-                Name = null,
+                Name = null!,
                 ColorHex = "#FFFFFF"
             };
 
@@ -47,7 +47,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateTag
             var tag = new NewTagDto()
             {
                 Name = "Tag",
-                ColorHex = null
+                ColorHex = null!
             };
 
             var result = _validator.TestValidate(tag);

@@ -19,7 +19,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateTag
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new UpdateTagCommand(null, ObjectId.GenerateNewId().ToString(), new UpdateTagDtoFaker().Generate());
+            var command = new UpdateTagCommand(null!, ObjectId.GenerateNewId().ToString(), new UpdateTagDtoFaker().Generate());
 
             var result = _validator.TestValidate(command);
 
@@ -39,7 +39,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateTag
         [Fact]
         public void Validate_Should_Have_Errors_When_TagId_Is_Null()
         {
-            var command = new UpdateTagCommand(ObjectId.GenerateNewId().ToString(), null, new UpdateTagDtoFaker().Generate());
+            var command = new UpdateTagCommand(ObjectId.GenerateNewId().ToString(), null!, new UpdateTagDtoFaker().Generate());
 
             var result = _validator.TestValidate(command);
 
@@ -59,7 +59,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateTag
         [Fact]
         public void Validate_Should_Have_Errors_When_UpdateTagDto_Is_Null()
         {
-            var command = new UpdateTagCommand(ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), null);
+            var command = new UpdateTagCommand(ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 

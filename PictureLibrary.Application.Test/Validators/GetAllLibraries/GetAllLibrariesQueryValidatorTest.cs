@@ -36,7 +36,7 @@ namespace PictureLibrary.Application.Test.Validators.GetAllLibraries
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var query = new GetAllLibrariesQuery(null);
+            var query = new GetAllLibrariesQuery(null!);
 
             var result = _validator.TestValidate(query);
 

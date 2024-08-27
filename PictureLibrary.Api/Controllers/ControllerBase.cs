@@ -14,7 +14,7 @@ namespace PictureLibrary.Api.Controllers
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        protected ContentRangeHeaderValue? GetContentRange(string contentRange)
+        protected static ContentRangeHeaderValue? GetContentRange(string contentRange)
         {
             if (string.IsNullOrEmpty(contentRange))
             {

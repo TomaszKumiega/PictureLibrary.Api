@@ -42,7 +42,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateImageUploadSession
         [Fact]
         public void Should_Have_Error_When_CreateUploadSessionDto_Is_Null()
         {
-            var command = new CreateImageUploadSessionCommand(ObjectId.GenerateNewId().ToString(), null);
+            var command = new CreateImageUploadSessionCommand(ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 

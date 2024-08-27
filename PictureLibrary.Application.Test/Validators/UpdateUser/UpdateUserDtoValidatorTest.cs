@@ -19,7 +19,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateUser
         {
             var user = new UpdateUserDto()
             {
-                Username = null,
+                Username = null!,
                 Email = "email@example.com"
             };
 

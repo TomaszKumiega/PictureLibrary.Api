@@ -32,9 +32,9 @@ namespace PictureLibrary.Infrastructure.Test.ByteRanges
         {
             IByteRangesService service = GetByteRangesService();
 
-            service.Except(new ByteRange(0, 10), new ByteRange(0, 5)).Should().Equal([new ByteRange(6, 10)]);
-            service.Except(new ByteRange(0, 10), new ByteRange(5, 10)).Should().Equal([new ByteRange(0, 4)]);
-            service.Except(new ByteRange(0, 10), new ByteRange(3, 7)).Should().Equal([new ByteRange(0, 2), new ByteRange(8, 10)]);
+            service.Except(new ByteRange(0, 10), new ByteRange(0, 5)).Should().Equal(new ByteRange(6, 10));
+            service.Except(new ByteRange(0, 10), new ByteRange(5, 10)).Should().Equal(new ByteRange(0, 4));
+            service.Except(new ByteRange(0, 10), new ByteRange(3, 7)).Should().Equal(new ByteRange(0, 2), new ByteRange(8, 10));
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace PictureLibrary.Infrastructure.Test.ByteRanges
             service.Except(new ByteRange(1, 5), new ByteRange(1, 5)).Should().BeEmpty();
         }
 
-        private IByteRangesService GetByteRangesService()
+        private static IByteRangesService GetByteRangesService()
         {
             return new ByteRangesService();
         }

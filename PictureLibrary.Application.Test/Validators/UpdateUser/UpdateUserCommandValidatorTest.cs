@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateUser
         [Fact]
         public void Validate_Should_Have_Errors_When_UserDto_Is_Null()
         {
-            var command = new UpdateUserCommand(ObjectId.GenerateNewId().ToString(), null);
+            var command = new UpdateUserCommand(ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 
@@ -28,7 +28,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateUser
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new UpdateUserCommand(null, new UpdateUserDtoFaker().Generate());
+            var command = new UpdateUserCommand(null!, new UpdateUserDtoFaker().Generate());
 
             var result = _validator.TestValidate(command);
 

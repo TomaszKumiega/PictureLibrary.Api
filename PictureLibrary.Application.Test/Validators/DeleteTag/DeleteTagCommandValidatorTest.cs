@@ -16,7 +16,7 @@ namespace PictureLibrary.Application.Test.Validators.DeleteTag
         [Fact]
         public void Validate_Should_Have_Errors_When_TagId_Is_Null()
         {
-            var command = new DeleteTagCommand(ObjectId.GenerateNewId().ToString(), null);
+            var command = new DeleteTagCommand(ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 
@@ -36,7 +36,7 @@ namespace PictureLibrary.Application.Test.Validators.DeleteTag
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new DeleteTagCommand(null, ObjectId.GenerateNewId().ToString());
+            var command = new DeleteTagCommand(null!, ObjectId.GenerateNewId().ToString());
 
             var result = _validator.TestValidate(command);
 

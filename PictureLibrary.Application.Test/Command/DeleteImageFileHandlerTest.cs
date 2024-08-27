@@ -35,7 +35,7 @@ namespace PictureLibrary.Application.Test
             var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
 
             _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
-                .Returns<ImageFile?>(null)
+                .Returns((ImageFile?)null)
                 .Verifiable();
 
             await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));

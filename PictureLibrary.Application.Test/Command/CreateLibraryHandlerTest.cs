@@ -34,7 +34,7 @@ namespace PictureLibrary.Application.Test.Command
         [Fact]
         public async Task Handle_Should_Throw_NotFoundException_When_User_Doesnt_Exist()
         {
-            var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), null);
+            var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), null!);
 
             _userRepositoryMock.Setup(r => r.Query())
                 .Returns(new List<User>().AsQueryable())

@@ -53,7 +53,7 @@ namespace PictureLibrary.Infrastructure.Test.ByteRanges
         public void Parse_Should_ThrowArgumentException_WhenRangesAreNull()
         {
             var parser = GetMissingRangesParser();
-            string ranges = null;
+            string ranges = null!;
 
             Assert.Throws<ArgumentNullException>(() => parser.Parse(ranges));
         }
@@ -116,7 +116,7 @@ namespace PictureLibrary.Infrastructure.Test.ByteRanges
             expectedString.Should().Be(result);
         }
 
-        private IMissingRangesParser GetMissingRangesParser()
+        private static IMissingRangesParser GetMissingRangesParser()
         {
             return new MissingRangesParser();
         }

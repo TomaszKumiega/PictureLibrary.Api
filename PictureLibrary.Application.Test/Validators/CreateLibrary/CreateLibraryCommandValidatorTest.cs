@@ -37,7 +37,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateLibrary
         [Fact]
         public void Validate_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new CreateLibraryCommand(null, new NewLibraryDto()
+            var command = new CreateLibraryCommand(null!, new NewLibraryDto()
             {
                 Name = "Name"
             });
@@ -89,7 +89,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateLibrary
         [Fact]
         public void Validate_Have_Errors_When_NewLibrary_Is_Null()
         {
-            var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), null);
+            var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 

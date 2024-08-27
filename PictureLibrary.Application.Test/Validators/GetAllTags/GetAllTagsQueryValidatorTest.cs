@@ -46,7 +46,7 @@ namespace PictureLibrary.Application.Test.Validators.GetAllTags
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var query = new GetAllTagsQuery(null, ObjectId.GenerateNewId().ToString());
+            var query = new GetAllTagsQuery(null!, ObjectId.GenerateNewId().ToString());
 
             var result = _validator.TestValidate(query);
 
@@ -56,7 +56,7 @@ namespace PictureLibrary.Application.Test.Validators.GetAllTags
         [Fact]
         public void Validate_Should_Have_Errors_When_LibraryId_Is_Null()
         {
-            var query = new GetAllTagsQuery(ObjectId.GenerateNewId().ToString(), null);
+            var query = new GetAllTagsQuery(ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(query);
 

@@ -68,7 +68,7 @@ namespace PictureLibrary.Infrastructure.Test.ByteRanges
         {
             var missingRangesService = GetMissingRangesService();
 
-            Assert.Throws<ArgumentNullException>(() => missingRangesService.GetFirstIndexOfMissingRangeContainingAnotherRange(new MissingRanges([]), null));
+            Assert.Throws<ArgumentNullException>(() => missingRangesService.GetFirstIndexOfMissingRangeContainingAnotherRange(new MissingRanges([]), null!));
             Assert.Throws<ArgumentNullException>(() => missingRangesService.GetFirstIndexOfMissingRangeContainingAnotherRange(new MissingRanges([]), new ContentRangeHeaderValue(10)));
         }
 
@@ -138,7 +138,7 @@ namespace PictureLibrary.Infrastructure.Test.ByteRanges
         {
             var missingRangesService = GetMissingRangesService();
 
-            Assert.Throws<ArgumentNullException>(() => missingRangesService.RemoveRangeFromMissingRanges(new MissingRanges([]), null));
+            Assert.Throws<ArgumentNullException>(() => missingRangesService.RemoveRangeFromMissingRanges(new MissingRanges([]), null!));
             Assert.Throws<ArgumentNullException>(() => missingRangesService.RemoveRangeFromMissingRanges(new MissingRanges([]), new ContentRangeHeaderValue(10)));
         }
 

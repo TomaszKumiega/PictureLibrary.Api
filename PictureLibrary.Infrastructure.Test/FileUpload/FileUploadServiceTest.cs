@@ -67,7 +67,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
         {
             var missingRanges = new MissingRanges([new ByteRange(1, 2), new ByteRange(5, 7), new ByteRange(12, 15)]);
 
-            Assert.Throws<ArgumentNullException>(() => _fileUploadService.ShouldFileBeAppended(missingRanges, null));
+            Assert.Throws<ArgumentNullException>(() => _fileUploadService.ShouldFileBeAppended(missingRanges, null!));
             Assert.Throws<ArgumentNullException>(() => _fileUploadService.ShouldFileBeAppended(missingRanges, new ContentRangeHeaderValue(20)));
         }
 
@@ -101,8 +101,8 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             };
             using var stream = new MemoryStream();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AppendBytesToFile(null, stream));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AppendBytesToFile(uploadSession, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AppendBytesToFile(null!, stream));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AppendBytesToFile(uploadSession, null!));
         }
 
         [Fact]
@@ -137,8 +137,8 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
 
             using var stream = new MemoryStream();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.InsertBytesToFile(null, stream, 5));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.InsertBytesToFile(uploadSession, null, 5));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.InsertBytesToFile(null!, stream, 5));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.InsertBytesToFile(uploadSession, null!, 5));
         }
 
         [Fact]
@@ -188,7 +188,6 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             var missingRange = new MissingRanges([new ByteRange(1, 5)]);
             var newMissingRange = new MissingRanges([new ByteRange(6, 7)]);
             var header = new ContentRangeHeaderValue(1, 2);
-            var headerWithNullFrom = new ContentRangeHeaderValue(2);
 
             _missingRangesParserMock.Setup(x => x.ToString(newMissingRange))
                 .Returns(string.Empty)
@@ -223,8 +222,8 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
             var header = new ContentRangeHeaderValue(1, 2);
             var headerWithNullFrom = new ContentRangeHeaderValue(2);
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(null, missingRange, header));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(uploadSession, missingRange, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(null!, missingRange, header));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(uploadSession, missingRange, null!));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.UpdateUploadSession(uploadSession, missingRange, headerWithNullFrom));
         }
 
@@ -302,7 +301,7 @@ namespace PictureLibrary.Infrastructure.Test.FileUpload
         [Fact]
         public async Task AddFileMetadata_ThrowsArgumentNullException()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AddFileMetadata(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _fileUploadService.AddFileMetadata(null!));
         }
     }
 }
