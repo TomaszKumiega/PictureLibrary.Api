@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PictureLibrary.Domain\PictureLibrary.Domain.csproj" />
-    <ProjectReference Include="..\PictureLibrary.Infrastructure\PictureLibrary.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\PictureLibrary.Domain\PictureLibrary.Domain.csproj" />
+    <ProjectReference Include="..\..\PictureLibrary.Infrastructure\PictureLibrary.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
