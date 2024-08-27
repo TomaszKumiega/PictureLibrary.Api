@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Test.Validators.RegisterUser
         {
             var dto = new NewUserDto()
             {
-                Username = null,
+                Username = null!,
                 Password = "password",
                 Email = "email@email.com"
             };
@@ -49,7 +49,7 @@ namespace PictureLibrary.Application.Test.Validators.RegisterUser
             var dto = new NewUserDto()
             {
                 Username = "username",
-                Password = null,
+                Password = null!,
                 Email = "email"
             };
 

@@ -16,7 +16,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateLibrary
         [Fact]
         public void Validate_Should_Have_Errors_When_Library_Name_Is_Null()
         {
-            var dto = new UpdateLibraryDto() { Name = null };
+            var dto = new UpdateLibraryDto() { Name = null! };
 
             var result = _validator.TestValidate(dto);
 

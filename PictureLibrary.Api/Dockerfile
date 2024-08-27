@@ -13,11 +13,11 @@ COPY ["PictureLibrary.Api/PictureLibrary.Api.csproj", "PictureLibrary.Api/"]
 RUN dotnet restore "./PictureLibrary.Api/./PictureLibrary.Api.csproj"
 COPY . .
 WORKDIR "/src/PictureLibrary.Api"
-RUN dotnet build "./PictureLibrary.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./PictureLibrary.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./PictureLibrary.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./PictureLibrary.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

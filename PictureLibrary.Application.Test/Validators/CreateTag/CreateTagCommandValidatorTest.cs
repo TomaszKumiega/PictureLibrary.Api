@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateTag
         [Fact]
         public void Validate_Should_Have_Errors_When_LibraryId_Is_Null()
         {
-            var command = new CreateTagCommand(ObjectId.GenerateNewId().ToString(), null, new NewTagDtoFaker().Generate());
+            var command = new CreateTagCommand(ObjectId.GenerateNewId().ToString(), null!, new NewTagDtoFaker().Generate());
 
             var result = _validator.TestValidate(command);
 
@@ -38,7 +38,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateTag
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new CreateTagCommand(null, ObjectId.GenerateNewId().ToString(), new NewTagDtoFaker().Generate());
+            var command = new CreateTagCommand(null!, ObjectId.GenerateNewId().ToString(), new NewTagDtoFaker().Generate());
 
             var result = _validator.TestValidate(command);
 
@@ -58,7 +58,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateTag
         [Fact]
         public void Validate_Should_Have_Errors_When_NewTagDto_Is_Null()
         {
-            var command = new CreateTagCommand(ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), null);
+            var command = new CreateTagCommand(ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 

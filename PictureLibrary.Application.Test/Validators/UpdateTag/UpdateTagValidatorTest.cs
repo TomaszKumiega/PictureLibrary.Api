@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateTag
         {
             var tag = new UpdateTagDto()
             {
-                Name = null,
+                Name = null!,
                 ColorHex = "#FFFFFF"
             };
 
@@ -47,7 +47,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateTag
             var tag = new UpdateTagDto()
             {
                 Name = "Tag",
-                ColorHex = null
+                ColorHex = null!
             };
 
             var result = _validator.TestValidate(tag);

@@ -31,7 +31,7 @@ namespace PictureLibrary.Application.Test.Validators.CreateLibrary
         {
             var newLibrary = new NewLibraryDto()
             {
-                Name = null
+                Name = null!
             };
         
             var result = _validator.TestValidate(newLibrary);

@@ -26,7 +26,7 @@ namespace PictureLibrary.Application.Test.Validators.GetUser
         [Fact]
         public void Should_Have_Error_When_UserId_Is_Null()
         {
-            var query = new GetUserQuery(null);
+            var query = new GetUserQuery(null!);
 
             var result = _validator.TestValidate(query);
 

@@ -46,7 +46,7 @@ namespace PictureLibrary.Application.Test.Validators.DeleteLibrary
         [Fact]
         public void Validate_Should_Have_Errors_When_UserId_Is_Null()
         {
-            var command = new DeleteLibraryCommand(null, ObjectId.GenerateNewId().ToString());
+            var command = new DeleteLibraryCommand(null!, ObjectId.GenerateNewId().ToString());
 
             var result = _validator.TestValidate(command);
 
@@ -56,7 +56,7 @@ namespace PictureLibrary.Application.Test.Validators.DeleteLibrary
         [Fact]
         public void Validate_Should_Have_Errors_When_LibraryId_Is_Null()
         {
-            var command = new DeleteLibraryCommand(ObjectId.GenerateNewId().ToString(), null);
+            var command = new DeleteLibraryCommand(ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 

@@ -18,7 +18,7 @@ namespace PictureLibrary.Application.Test.Validators.LoginUser
         {
             var dto = new LoginUserDto()
             {
-                Username = null,
+                Username = null!,
                 Password = "password"
             };
 
@@ -47,7 +47,7 @@ namespace PictureLibrary.Application.Test.Validators.LoginUser
             var dto = new LoginUserDto
             {
                 Username = "username",
-                Password = null
+                Password = null!
             };
 
             var result = _validator.TestValidate(dto);

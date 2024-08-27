@@ -17,7 +17,7 @@ namespace PictureLibrary.Application.Test.Validators.RegisterUser
         [Fact]
         public void Validate_Should_Have_Errors_When_NewUser_Is_Null()
         {
-            var command = new RegisterUserCommand(null);
+            var command = new RegisterUserCommand(null!);
 
             var result = _validator.TestValidate(command);
 

@@ -36,7 +36,7 @@ namespace PictureLibrary.Application.Test.Validators.UpdateImageFile
         [Fact]
         public void Validate_Should_Have_Errors_When_Dto_Is_Empty()
         {
-            var command = new UpdateImageFileCommand(ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), null);
+            var command = new UpdateImageFileCommand(ObjectId.GenerateNewId().ToString(), ObjectId.GenerateNewId().ToString(), null!);
 
             var result = _validator.TestValidate(command);
 

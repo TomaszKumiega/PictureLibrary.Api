@@ -50,37 +50,37 @@ namespace PictureLibrary.Infrastructure.Test
             var fileService = GetFileService();
             using var stream = new MemoryStream();
 
-            Assert.Throws<ArgumentNullException>(() => fileService.AppendFile(null, stream));
-            Assert.Throws<ArgumentNullException>(() => fileService.AppendFile("fileName", null));
+            Assert.Throws<ArgumentNullException>(() => fileService.AppendFile(null!, stream));
+            Assert.Throws<ArgumentNullException>(() => fileService.AppendFile("fileName", null!));
             Assert.Throws<ArgumentException>(() => fileService.AppendFile(string.Empty, stream));
         }
 
-        [Fact]
-        public void Insert_ShouldInsertBytesInFile()
-        {
-            //TODO
-            //string tempDirectoryPath = "\\Temp";
-            //string filePath = "\\File.jpg";
-            //var fileBytes = new byte[] { 1, 2, 3, 4, 5 };
-            //var newbytes = new byte[] { 6, 7, 8, 9, 10 };
-            //var contentStream = new MemoryStream(newbytes);
-            //_pathsProviderMock.Setup(x => x.GetTempDirectoryPath())
-            //    .Returns(tempDirectoryPath)
-            //    .Verifiable();
+        //[Fact]
+        //public void Insert_ShouldInsertBytesInFile()
+        //{
+        //    //TODO
+        //    //string tempDirectoryPath = "\\Temp";
+        //    //string filePath = "\\File.jpg";
+        //    //var fileBytes = new byte[] { 1, 2, 3, 4, 5 };
+        //    //var newbytes = new byte[] { 6, 7, 8, 9, 10 };
+        //    //var contentStream = new MemoryStream(newbytes);
+        //    //_pathsProviderMock.Setup(x => x.GetTempDirectoryPath())
+        //    //    .Returns(tempDirectoryPath)
+        //    //    .Verifiable();
 
-            //_fileWrapperMock.Setup(x => x.Delete(It.IsAny<string>()))
-            //    .Verifiable();
+        //    //_fileWrapperMock.Setup(x => x.Delete(It.IsAny<string>()))
+        //    //    .Verifiable();
 
-            //_fileWrapperMock.Setup(x => x.Copy(It.IsAny<string>(), filePath))
-            //    .Verifiable();
+        //    //_fileWrapperMock.Setup(x => x.Copy(It.IsAny<string>(), filePath))
+        //    //    .Verifiable();
 
-            //_fileWrapperMock.Setup(x => x.Open(It.IsAny<string>(), It.IsAny<FileMode>()))
-            //    .Returns();
+        //    //_fileWrapperMock.Setup(x => x.Open(It.IsAny<string>(), It.IsAny<FileMode>()))
+        //    //    .Returns();
 
-            //var fileService = GetFileService();
+        //    //var fileService = GetFileService();
 
-            //fileService.Insert(filePath, )
-        }
+        //    //fileService.Insert(filePath, )
+        //}
 
         [Fact]
         public void Insert_ShouldThrowArgumentException()
@@ -88,8 +88,8 @@ namespace PictureLibrary.Infrastructure.Test
             var fileService = GetFileService();
             using var stream = new MemoryStream();
 
-            Assert.Throws<ArgumentNullException>(() => fileService.Insert(null, stream, 0));
-            Assert.Throws<ArgumentNullException>(() => fileService.Insert("fileName", null, 0));
+            Assert.Throws<ArgumentNullException>(() => fileService.Insert(null!, stream, 0));
+            Assert.Throws<ArgumentNullException>(() => fileService.Insert("fileName", null!, 0));
             Assert.Throws<ArgumentException>(() => fileService.Insert(string.Empty, stream, 0));
         }
 

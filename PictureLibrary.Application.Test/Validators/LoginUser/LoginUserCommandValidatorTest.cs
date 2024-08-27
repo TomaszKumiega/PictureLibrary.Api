@@ -17,7 +17,7 @@ namespace PictureLibrary.Application.Test.Validators.LoginUser
         [Fact]
         public void Validate_Should_Have_Errors_When_LoginUserDto_Is_Null()
         {
-            var command = new LoginUserCommand(null);
+            var command = new LoginUserCommand(null!);
 
             var result = _validator.TestValidate(command);
 

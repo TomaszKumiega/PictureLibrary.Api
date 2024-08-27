@@ -9,8 +9,9 @@ namespace PictureLibrary.Application.Mapper
         public LibraryDto MapToDto(Library library);
         public TagDto MapToDto(Tag tag);
         public UserDto MapToDto(User user);
+        public ImageFileDto MapToDto(ImageFile imageFile);
         public UserAuthorizationDataDto MapToDto(AuthorizationData authorizationData);
         public UpdateImageFileData MapToUpdateImageFileData(UpdateImageFileDto dto);
-        public ImageFileDto MapToDto(ImageFile imageFile);
+        
     }
 }
