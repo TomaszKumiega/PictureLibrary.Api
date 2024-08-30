@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
-using PictureLibrary.Contracts;
+using PictureLibrary.Application.DtoValidators;
 
 namespace PictureLibrary.Application.Command.UpdateTag
 {
     public class UpdateTagCommandValidator : AbstractValidator<UpdateTagCommand>
     {
-        public UpdateTagCommandValidator(AbstractValidator<UpdateTagDto> dtoValidator)
+        public UpdateTagCommandValidator(UpdateTagValidator dtoValidator)
         {
             RuleFor(x => x.UserId).NotEmpty().Must(userId => ObjectId.TryParse(userId, out _));
             RuleFor(x => x.TagId).NotEmpty().Must(tagId => ObjectId.TryParse(tagId, out _));

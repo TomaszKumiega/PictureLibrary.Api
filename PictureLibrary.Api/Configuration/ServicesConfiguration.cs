@@ -48,7 +48,9 @@ namespace PictureLibrary.Api.Configuration
                 .AddTransient<IFileService, FileService>()
                 .AddTransient<IFileWrapper, FileWrapper>()
                 .AddTransient<IFileMetadataUpdateService, FileMetadataUpdateService>()
-                .AddTransient<IImageThumbnailCreator, ImageThumbnailCreator>();
+                .AddTransient<IImageThumbnailCreator, ImageThumbnailCreator>()
+                .AddTransient<IPathsProvider, PathsProvider>()
+                .AddTransient<IImageFileUpdateService, ImageFileUpdateService>();
         }
     }
 }
