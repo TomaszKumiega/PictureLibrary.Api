@@ -33,3 +33,5 @@ jobs:
           secrets: |
             "cert=${{ secrets.CERTIFICATE_PFX }}"
             "password=${{ secrets.CERTIFICATE_PASSWORD }}"
+        env:
+          DOCKER_BUILDKIT: 1
