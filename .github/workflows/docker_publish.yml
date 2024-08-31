@@ -46,8 +46,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             CERTIFICATE_PATH=cert.pfx
-        env:
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+          secrets: |
+            password=${{ secrets.CERTIFICATE_PASSWORD }}    
       
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
