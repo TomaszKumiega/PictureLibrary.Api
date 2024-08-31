@@ -9,11 +9,8 @@ ARG CERTIFICATE_PATH
 ENV ASPNETCORE_URLS="https://+;http://+"
 ENV ASPNETCORE_HTTPS_PORT=8081
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=$CERTIFICATE_PATH
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password=$CERTIFICATE_PASSWORD
 ENV ASPNETCORE_ENVIRONMENT=Production
-
-RUN --mount=type=secret,id=password \
-    export CERT_PASSWORD=$(cat /run/secrets/password) && \
-    echo "ASPNETCORE_Kestrel__Certificates__Default__Password=$CERT_PASSWORD" >> /etc/environment
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
