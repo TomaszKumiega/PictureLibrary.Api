@@ -8,6 +8,8 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+RUN echo "It's just a test i swear i'm not leaking my password here: $CERTIFICATE_PASSWORD"
+
 ENV ASPNETCORE_URLS="https://+;http://+"
 ENV ASPNETCORE_HTTPS_PORT=8081
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
