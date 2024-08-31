@@ -1,10 +1,20 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
+
+RUN --mount=type=secret,id=cert \
+    cp /run/secrets/cert /https/aspnetapp.pfx
+
+ENV ASPNETCORE_URLS="https://+;http://+"
+ENV ASPNETCORE_HTTPS_PORT=8081
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+RUN --mount=type=secret,id=password \
+    export CERT_PASSWORD=$(cat /run/secrets/password) && \
+    echo "ASPNETCORE_Kestrel__Certificates__Default__Password=$CERT_PASSWORD" >> /etc/environment
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -24,5 +34,4 @@ RUN dotnet publish ./PictureLibrary.Api.csproj -c "$BUILD_CONFIGURATION" -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ASPNETCORE_ENVIRONMENT=Production
 ENTRYPOINT ["dotnet", "PictureLibrary.Api.dll"]
