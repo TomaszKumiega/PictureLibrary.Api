@@ -5,7 +5,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 RUN --mount=type=secret,id=cert \
-    cp /run/secrets/cert /https/aspnetapp.pfx
+    echo $(cat /run/secrets/cert) | base64 -d > /https/aspnetapp.pfx
 
 ENV ASPNETCORE_URLS="https://+;http://+"
 ENV ASPNETCORE_HTTPS_PORT=8081
