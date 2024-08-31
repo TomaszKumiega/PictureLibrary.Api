@@ -23,14 +23,6 @@ jobs:
       - name: Decode CERTIFICATE_PFX and save to file
         run: echo ${{ secrets.CERTIFICATE_PFX }} | base64 -d > cert.pfx
 
-      - name: Check if certificate file exists
-        run: |
-          if [ -f "cert.pfx" ]; then
-            echo "Certificate file exists."
-          else
-            echo "Certificate file does not exist."
-            exit 1
-          fi
 
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
