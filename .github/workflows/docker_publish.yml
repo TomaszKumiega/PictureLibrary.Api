@@ -47,7 +47,7 @@ jobs:
           build-args: |
             CERTIFICATE_PATH=cert.pfx
         env:
-          CERTIFICATE_PASSWORD=${{ secrets.CERTIFICATE_PASSWORD }}    
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}    
       
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
@@ -55,4 +55,3 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
-      
