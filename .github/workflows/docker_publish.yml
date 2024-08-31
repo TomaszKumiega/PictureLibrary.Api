@@ -20,6 +20,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Decode CERTIFICATE_PFX and save to file
+        run: echo ${{ secrets.CERTIFICATE_PFX }} | base64 -d > cert.pfx
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -41,9 +44,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: |
-            password=$"{{ secrets.CERTIFICATE_PASSWORD }}"
-            cert=$"{{ secrets.CERTIFICATE_PFX }}"
+          build-args: |
+            CERTIFICATE_PATH=cert.pfx
+        env:
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
