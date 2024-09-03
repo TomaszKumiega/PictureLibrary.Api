@@ -14,7 +14,8 @@ namespace PictureLibrary.Api.Configuration
             ValidIssuer = configuration["JwtIssuer"] ?? string.Empty;
             ValidAudience = configuration["JwtAudience"] ?? string.Empty;
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("TokenPrivateKey")!));
-
+            LogValidationExceptions = true;
+            ClockSkew = TimeSpan.Zero;
         }
     }
 }
