@@ -69,7 +69,7 @@ namespace PictureLibrary.Infrastructure.Services
             };
         }
 
-        private static (string accessToken, DateTime expiryDate) GenerateAccessToken(User user, string privateKey)
+        private (string accessToken, DateTime expiryDate) GenerateAccessToken(User user, string privateKey)
         {
             DateTime expires = DateTime.UtcNow.AddHours(1);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -82,7 +82,8 @@ namespace PictureLibrary.Infrastructure.Services
                     new(ClaimTypes.Email, user.Email ?? string.Empty),
                     new(ClaimTypes.Name, user.Username),
                 ]),
-
+                Issuer = appSettings.JwtIssuer,
+                Audience = appSettings.JwtAudience,
                 Expires = expires,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
