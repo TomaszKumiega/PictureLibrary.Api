@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
 using PictureLibrary.Api.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,20 +13,7 @@ builder.Services.AddLogging();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(o =>
-    {
-        o.TokenValidationParameters = new PictureLibraryTokenValidationParameters(builder.Configuration);
-        o.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                logger.LogError($"Authentication failed {context?.Exception?.Message}. {context?.Result?.ToString()}.");
-
-                return Task.CompletedTask;
-            }
-        };
-    });
+    .AddJwtBearer(o => o.TokenValidationParameters = new PictureLibraryTokenValidationParameters(builder.Configuration));
 
 var app = builder.Build();
 
