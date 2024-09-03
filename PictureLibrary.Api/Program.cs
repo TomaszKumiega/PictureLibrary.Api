@@ -22,7 +22,7 @@ builder.Services
             OnAuthenticationFailed = context =>
             {
                 var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                logger.LogError("Authentication failed.", context.Exception);
+                logger.LogError($"Authentication failed {context.Exception.Message}. {context.Result.ToString()}");
 
                 return Task.CompletedTask;
             }
