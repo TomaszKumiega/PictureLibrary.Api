@@ -1,8 +1,17 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 5000
+EXPOSE 5001
+
+ARG CERTIFICATE_PATH
+COPY $CERTIFICATE_PATH /https/aspnetapp.pfx
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS="http://+:5000;https://+:5001"
+ENV ASPNETCORE_HTTP_PORT=5000
+ENV ASPNETCORE_HTTPS_PORT=5001
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
