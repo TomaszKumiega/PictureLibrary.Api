@@ -1,17 +1,18 @@
-﻿using PictureLibrary.Domain.Services;
+﻿using PictureLibrary.Domain.Configuration;
+using PictureLibrary.Domain.Services;
 
 namespace PictureLibrary.Infrastructure.Services
 {
-    public class PathsProvider : IPathsProvider
+    public class PathsProvider(IAppSettings appSettings) : IPathsProvider
     {
         public string GetStoragePath()
         {
-            throw new NotImplementedException();
+            return appSettings.VolumePath;
         }
 
         public string GetTempDirectoryPath()
         {
-            throw new NotImplementedException();
+            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         }
     }
 }

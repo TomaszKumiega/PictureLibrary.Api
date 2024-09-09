@@ -10,11 +10,13 @@ namespace PictureLibrary.Api.Configuration
             TokenPrivateKey = configuration["TokenPrivateKey"] ?? string.Empty;
             JwtIssuer = configuration["JwtIssuer"] ?? string.Empty;
             JwtAudience = configuration["JwtAudience"] ?? string.Empty;
+            VolumePath = configuration["VolumePath"] ?? string.Empty;
         }
 
         public required string DatabaseName { get; set; }
         public required string TokenPrivateKey { get; set; }
         public required string JwtIssuer { get; set; }
         public required string JwtAudience { get; set; }
+        public string VolumePath { get; set; }
     }
 }
