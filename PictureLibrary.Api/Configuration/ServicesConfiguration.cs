@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MongoDB.Driver;
+using PictureLibrary.Api.ErrorMapping;
 using PictureLibrary.Application.Configuration;
 using PictureLibrary.Application.Mapper;
 using PictureLibrary.Domain.Configuration;
@@ -50,7 +51,8 @@ namespace PictureLibrary.Api.Configuration
                 .AddTransient<IFileMetadataUpdateService, FileMetadataUpdateService>()
                 .AddTransient<IImageThumbnailCreator, ImageThumbnailCreator>()
                 .AddTransient<IPathsProvider, PathsProvider>()
-                .AddTransient<IImageFileUpdateService, ImageFileUpdateService>();
+                .AddTransient<IImageFileUpdateService, ImageFileUpdateService>()
+                .AddTransient<IExceptionMapper, ExceptionMapper>();
         }
     }
 }

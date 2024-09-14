@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PictureLibrary.Api.Configuration;
+using PictureLibrary.Api.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegisterServices(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(o =>
+{
+    o.Filters.Add<ExceptionFilter>();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
