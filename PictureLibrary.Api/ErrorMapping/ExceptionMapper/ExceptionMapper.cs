@@ -19,11 +19,22 @@ namespace PictureLibrary.Api.ErrorMapping
 
         private static ErrorDetails GetValidationError(ValidationException e)
         {
+            var additionalInformations = e.Errors.Select(x => new ValidationErrorAdditionalInformation
+            {
+                PropertyName = x.PropertyName,
+                ErrorMessage = x.ErrorMessage,
+                ErrorCode = x.ErrorCode
+            });
+
             return new ErrorDetails
             {
                 StatusCode = 400,
                 ErrorCode = ErrorCode.ValidationError,
-                Message = e.Message
+                Message = e.Message,
+                AdditionalInformation = new Dictionary<string, object>
+                {
+                    { "validationErrors", additionalInformations }
+                },
             };
         }
         private static ErrorDetails GetInvalidTokenError()
@@ -59,7 +70,7 @@ namespace PictureLibrary.Api.ErrorMapping
             {
                 StatusCode = 500,
                 ErrorCode = ErrorCode.Unknown,
-                Message = "An error occurred"
+                Message = "An error occurred."
             };
         }
     }
