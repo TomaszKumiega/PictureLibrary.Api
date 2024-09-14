@@ -58,6 +58,7 @@ namespace PictureLibrary.Api.ErrorMapping
             return new ErrorDetails
             {
                 StatusCode = 500,
+                ErrorCode = ErrorCode.Unknown,
                 Message = "An error occurred"
             };
         }

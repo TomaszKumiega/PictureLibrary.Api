@@ -2,9 +2,10 @@
 {
     public enum ErrorCode
     {
-        ValidationError = 0,
-        NotFound = 1,
-        AlreadyExists = 2,
-        InvalidToken = 3
+        Unknown = 0,
+        ValidationError = 1,
+        NotFound = 2,
+        AlreadyExists = 3,
+        InvalidToken = 4
     }
 }

@@ -2,8 +2,8 @@
 {
     public class ErrorDetails
     {
-        public int StatusCode { get; set; }
-        public ErrorCode ErrorCode { get; set; }
-        public required string Message { get; set; }
+        public required int StatusCode { get; init; }
+        public required ErrorCode ErrorCode { get; init; }
+        public required string Message { get; init; }
     }
 }
