@@ -15,6 +15,12 @@ namespace PictureLibrary.Api.ErrorMapping
                     ErrorCode = ErrorCode.ValidationError,
                     Message = e.Message
                 },
+                InvalidTokenException e => new ErrorDetails
+                {
+                    StatusCode = 401,
+                    ErrorCode = ErrorCode.InvalidToken,
+                    Message = e.Message
+                },
                 NotFoundException e => new ErrorDetails
                 {
                     StatusCode = 404,

@@ -5,5 +5,6 @@
         ValidationError = 0,
         NotFound = 1,
         AlreadyExists = 2,
+        InvalidToken = 3
     }
 }
