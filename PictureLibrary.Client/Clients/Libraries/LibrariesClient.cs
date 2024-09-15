@@ -27,7 +27,7 @@ namespace PictureLibrary.Client.Clients.Libraries
 
         public async Task DeleteLibrary(string id, AuthorizationData authorizationData)
         {
-            await apiHttpClient.Get<Library>($"library/delete?id={id}", authorizationData);
+            await apiHttpClient.Delete($"library/delete?id={id}", authorizationData);
         }
     }
 }

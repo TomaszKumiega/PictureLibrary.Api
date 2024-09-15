@@ -27,7 +27,7 @@ namespace PictureLibrary.Client.Clients.Users
 
         public async Task DeleteUser(AuthorizationData authorizationData)
         {
-            await client.Get<User>("user/delete", authorizationData);
+            await client.Delete("user/delete", authorizationData);
         }
     }
 }

@@ -91,6 +91,28 @@ namespace PictureLibrary.Client
             return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
+        public async Task Delete(string url, AuthorizationData? authorizationData = null)
+        {
+            HttpRequestMessage request = new(HttpMethod.Delete, url);
+
+            if (authorizationData != null)
+            {
+                if (!IsTokenValid(authorizationData))
+                {
+                    authorizationData = await RefreshTokens(authorizationData);
+                }
+
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationData.AccessToken);
+            }
+
+            HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                errorHandler.HandleErrorStatusCode(response);
+            }
+        }
+
         private static async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
         {
             var refreshTokensRequest = new RefreshAuthorizationDataRequest()

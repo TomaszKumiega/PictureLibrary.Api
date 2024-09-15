@@ -22,7 +22,7 @@ namespace PictureLibrary.Client.Clients.Tags
 
         public async Task DeleteTag(string tagId, AuthorizationData authorizationData)
         {
-            await client.Get<Tag>($"tag/delete?tagId={tagId}", authorizationData);
+            await client.Delete($"tag/delete?tagId={tagId}", authorizationData);
         }
     }
 }
