@@ -5,14 +5,14 @@ namespace PictureLibrary.Client.Clients.Libraries
 {
     public class LibrariesClient(IApiHttpClient apiHttpClient)
     {
-        public async Task<Library> GetLibrary(string id)
+        public async Task<Library> GetLibrary(string id, AuthorizationData authorizationData)
         {
-            return await apiHttpClient.Get<Library>($"library/get/{id}");
+            return await apiHttpClient.Get<Library>($"library/get/{id}", authorizationData);
         }
 
-        public async Task<AllLibraries> GetAllLibraries()
+        public async Task<AllLibraries> GetAllLibraries(AuthorizationData authorizationData)
         {
-            return await apiHttpClient.Get<AllLibraries>("library/getall");
+            return await apiHttpClient.Get<AllLibraries>("library/getall", authorizationData);
         }
 
         public async Task<Library> AddLibrary(AddLibraryRequest request, AuthorizationData authorizationData)
