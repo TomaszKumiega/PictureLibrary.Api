@@ -1,4 +1,5 @@
 ﻿using PictureLibrary.Client.ErrorHandling;
+using PictureLibrary.Client.Exceptions;
 using PictureLibrary.Client.Model;
 using System.Net.Http.Headers;
 using System.Text;
@@ -70,7 +71,7 @@ namespace PictureLibrary.Client
                 RefreshToken = authorizationData.RefreshToken 
             };
 
-            return await Post<AuthorizationData>("auth/refreshTokens", refreshTokensRequest) ?? throw new Exception();
+            return await Post<AuthorizationData>("auth/refreshTokens", refreshTokensRequest) ?? throw new AuthorizationFailedException();
         }
 
         private static bool IsTokenValid(AuthorizationData authorizationData)
