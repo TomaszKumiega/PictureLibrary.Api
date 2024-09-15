@@ -3,7 +3,7 @@ using PictureLibrary.Client.Requests;
 
 namespace PictureLibrary.Client.Clients.Tags
 {
-    public class TagsClient(IApiHttpClient client)
+    public class TagsClient(IApiHttpClient client) : ITagsClient
     {
         public async Task<AllTags> GetAllTags(string libraryId, AuthorizationData authorizationData)
         {
