@@ -1,6 +1,6 @@
 ﻿using PictureLibrary.Client.Model;
 
-namespace PictureLibrary.Client.Clients
+namespace PictureLibrary.Client.Clients.Users
 {
     public class UsersClient(IApiHttpClient client) : IUsersClient
     {
