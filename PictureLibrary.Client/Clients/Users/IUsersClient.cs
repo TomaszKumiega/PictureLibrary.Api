@@ -1,4 +1,5 @@
 ﻿using PictureLibrary.Client.Model;
+using PictureLibrary.Client.Requests;
 
 namespace PictureLibrary.Client.Clients.Users
 {

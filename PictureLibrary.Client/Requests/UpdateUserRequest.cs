@@ -1,4 +1,4 @@
-﻿namespace PictureLibrary.Client.Model
+﻿namespace PictureLibrary.Client.Requests
 {
     public class UpdateUserRequest
     {
