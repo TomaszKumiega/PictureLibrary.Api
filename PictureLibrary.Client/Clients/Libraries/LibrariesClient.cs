@@ -3,7 +3,7 @@ using PictureLibrary.Client.Requests;
 
 namespace PictureLibrary.Client.Clients.Libraries
 {
-    public class LibrariesClient(IApiHttpClient apiHttpClient)
+    public class LibrariesClient(IApiHttpClient apiHttpClient) : ILibrariesClient
     {
         public async Task<Library> GetLibrary(string id, AuthorizationData authorizationData)
         {
