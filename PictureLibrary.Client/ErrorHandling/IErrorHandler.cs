@@ -1,6 +1,6 @@
 ﻿namespace PictureLibrary.Client.ErrorHandling
 {
-    public interface IErrorHandler
+    internal interface IErrorHandler
     {
         void HandleErrorStatusCode(HttpResponseMessage response);
     }

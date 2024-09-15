@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace PictureLibrary.Client.BaseClient
 {
-    public class ApiHttpClient(HttpClient httpClient, IErrorHandler errorHandler) : IApiHttpClient
+    internal class ApiHttpClient(HttpClient httpClient, IErrorHandler errorHandler) : IApiHttpClient
     {
         public async Task<T> Get<T>(string url, AuthorizationData? authorizationData = null) where T : class
         {

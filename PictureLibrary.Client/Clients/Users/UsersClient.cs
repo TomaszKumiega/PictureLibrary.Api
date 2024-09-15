@@ -4,7 +4,7 @@ using PictureLibrary.Client.Requests;
 
 namespace PictureLibrary.Client.Clients.Users
 {
-    public class UsersClient(IApiHttpClient client) : IUsersClient
+    internal class UsersClient(IApiHttpClient client) : IUsersClient
     {
         public async Task<AuthorizationData> Login(LoginUserRequest request)
         {
