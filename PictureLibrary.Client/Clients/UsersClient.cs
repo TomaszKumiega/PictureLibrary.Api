@@ -18,5 +18,10 @@ namespace PictureLibrary.Client.Clients
         {
             return await client.Get<User>($"user/get", authorizationData);
         }
+
+        public async Task<User> UpdateUser(UpdateUserRequest request, AuthorizationData authorizationData)
+        {
+            return await client.Post<User>("user/update", request, authorizationData);
+        }
     }
 }
