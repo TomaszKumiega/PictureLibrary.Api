@@ -7,17 +7,22 @@ namespace PictureLibrary.Client.Clients.Tags
     {
         public async Task<AllTags> GetAllTags(string libraryId, AuthorizationData authorizationData)
         {
-            return await client.Get<AllTags>($"tags/getall?libraryId={libraryId}", authorizationData);
+            return await client.Get<AllTags>($"tag/getall?libraryId={libraryId}", authorizationData);
         }
 
         public async Task<Tag> AddTag(string libraryId, AddTagRequest request, AuthorizationData authorizationData)
         {
-            return await client.Post<Tag>($"tags/add?libraryId={libraryId}", request, authorizationData);
+            return await client.Post<Tag>($"tag/add?libraryId={libraryId}", request, authorizationData);
         }
 
         public async Task<Tag> UpdateTag(string libraryId, UpdateTagRequest request, AuthorizationData authorizationData)
         {
-            return await client.Post<Tag>($"tags/update?libraryId={libraryId}", request, authorizationData);
+            return await client.Post<Tag>($"tag/update?libraryId={libraryId}", request, authorizationData);
+        }
+
+        public async Task DeleteTag(string tagId, AuthorizationData authorizationData)
+        {
+            await client.Get<Tag>($"tag/delete?tagId={tagId}", authorizationData);
         }
     }
 }
