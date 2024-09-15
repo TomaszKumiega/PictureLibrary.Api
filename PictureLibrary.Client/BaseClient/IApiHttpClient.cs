@@ -1,6 +1,6 @@
 ﻿using PictureLibrary.Client.Model;
 
-namespace PictureLibrary.Client
+namespace PictureLibrary.Client.BaseClient
 {
     public interface IApiHttpClient
     {

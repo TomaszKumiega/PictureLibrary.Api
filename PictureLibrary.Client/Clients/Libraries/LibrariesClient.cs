@@ -1,4 +1,5 @@
-﻿using PictureLibrary.Client.Model;
+﻿using PictureLibrary.Client.BaseClient;
+using PictureLibrary.Client.Model;
 using PictureLibrary.Client.Requests;
 
 namespace PictureLibrary.Client.Clients.Libraries

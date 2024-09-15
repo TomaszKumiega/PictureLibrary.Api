@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace PictureLibrary.Client
+namespace PictureLibrary.Client.BaseClient
 {
     public class ApiHttpClient(HttpClient httpClient, IErrorHandler errorHandler) : IApiHttpClient
     {
