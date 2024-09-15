@@ -7,7 +7,7 @@ namespace PictureLibrary.Client.Clients.Libraries
     {
         public async Task<Library> GetLibrary(string id, AuthorizationData authorizationData)
         {
-            return await apiHttpClient.Get<Library>($"library/get/{id}", authorizationData);
+            return await apiHttpClient.Get<Library>($"library/get/?id={id}", authorizationData);
         }
 
         public async Task<AllLibraries> GetAllLibraries(AuthorizationData authorizationData)
