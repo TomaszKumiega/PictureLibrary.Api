@@ -8,5 +8,10 @@ namespace PictureLibrary.Client.Clients.Libraries
         {
             return await apiHttpClient.Get<Library>($"library/get/{id}");
         }
+
+        public async Task<AllLibraries> GetAllLibraries()
+        {
+            return await apiHttpClient.Get<AllLibraries>("library/getall");
+        }
     }
 }
