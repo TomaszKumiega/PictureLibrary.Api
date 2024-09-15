@@ -27,7 +27,7 @@ namespace PictureLibrary.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("refreshTokens")]
+        [HttpPost("refreshTokens")]
         public async Task<IActionResult> RefreshTokens([FromBody] RefreshAuthorizationDataDto userAuthorizationDataDto)
         {
             var query = new RefreshTokensQuery(userAuthorizationDataDto);
