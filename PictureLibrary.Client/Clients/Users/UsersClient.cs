@@ -22,7 +22,7 @@ namespace PictureLibrary.Client.Clients.Users
 
         public async Task<User> UpdateUser(UpdateUserRequest request, AuthorizationData authorizationData)
         {
-            return await client.Post<User>("user/update", request, authorizationData);
+            return await client.Patch<User>("user/update", request, authorizationData);
         }
 
         public async Task DeleteUser(AuthorizationData authorizationData)

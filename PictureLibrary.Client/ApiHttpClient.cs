@@ -63,7 +63,35 @@ namespace PictureLibrary.Client
             return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
-        private async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
+        public async Task<T> Patch<T>(string url, object data, AuthorizationData? authorizationData = null) where T : class
+        {
+            HttpRequestMessage request = new(HttpMethod.Patch, url);
+
+            if (authorizationData != null)
+            {
+                if (!IsTokenValid(authorizationData))
+                {
+                    authorizationData = await RefreshTokens(authorizationData);
+                }
+
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationData.AccessToken);
+            }
+
+            request.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                errorHandler.HandleErrorStatusCode(response);
+            }
+
+            string responseJson = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
+        }
+
+        private static async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
         {
             var refreshTokensRequest = new RefreshAuthorizationDataRequest()
             {
