@@ -19,5 +19,10 @@ namespace PictureLibrary.Client.Clients.Libraries
         {
             return await apiHttpClient.Post<Library>("library/create", request, authorizationData);
         }
+
+        public async Task<Library> UpdateLibrary(string libraryId, UpdateLibraryRequest request, AuthorizationData authorizationData)
+        {
+            return await apiHttpClient.Post<Library>($"library/update?libraryId={libraryId}", request, authorizationData);
+        }
     }
 }
