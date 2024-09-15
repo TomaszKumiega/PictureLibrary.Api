@@ -23,5 +23,10 @@ namespace PictureLibrary.Client.Clients
         {
             return await client.Post<User>("user/update", request, authorizationData);
         }
+
+        public async Task DeleteUser(AuthorizationData authorizationData)
+        {
+            await client.Get<User>("user/delete", authorizationData);
+        }
     }
 }
