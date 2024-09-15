@@ -7,9 +7,9 @@ using System.Text.Json;
 
 namespace PictureLibrary.Client
 {
-    public class ApiHttpClient(HttpClient httpClient, IErrorHandler errorHandler)
+    public class ApiHttpClient(HttpClient httpClient, IErrorHandler errorHandler) : IApiHttpClient
     {
-        public async Task<T?> Get<T>(string url, AuthorizationData? authorizationData = null) where T : class
+        public async Task<T> Get<T>(string url, AuthorizationData? authorizationData = null) where T : class
         {
             HttpRequestMessage request = new(HttpMethod.Get, url);
 
@@ -32,10 +32,10 @@ namespace PictureLibrary.Client
 
             string responseJson = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<T>(responseJson);
+            return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
-        public async Task<T?> Post<T>(string url, object data, AuthorizationData? authorizationData = null) where T : class
+        public async Task<T> Post<T>(string url, object data, AuthorizationData? authorizationData = null) where T : class
         {
             HttpRequestMessage request = new(HttpMethod.Post, url);
 
@@ -60,15 +60,15 @@ namespace PictureLibrary.Client
 
             string responseJson = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<T>(responseJson);
+            return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
         private async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
         {
             var refreshTokensRequest = new RefreshAuthorizationDataRequest()
-            { 
-                AccessToken = authorizationData.AccessToken, 
-                RefreshToken = authorizationData.RefreshToken 
+            {
+                AccessToken = authorizationData.AccessToken,
+                RefreshToken = authorizationData.RefreshToken
             };
 
             return await Post<AuthorizationData>("auth/refreshTokens", refreshTokensRequest) ?? throw new AuthorizationFailedException();
