@@ -1,13 +1,13 @@
 ﻿using PictureLibrary.Client.Model;
-using PictureLibrary.Client.Requests;
+using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Client.Clients.Tags
 {
     public interface ITagsClient
     {
-        Task<Tag> AddTag(string libraryId, AddTagRequest request, AuthorizationData authorizationData);
+        Task<TagDto> AddTag(string libraryId, NewTagDto request, AuthorizationData authorizationData);
         Task DeleteTag(string tagId, AuthorizationData authorizationData);
-        Task<AllTags> GetAllTags(string libraryId, AuthorizationData authorizationData);
-        Task<Tag> UpdateTag(string libraryId, UpdateTagRequest request, AuthorizationData authorizationData);
+        Task<TagsDto> GetAllTags(string libraryId, AuthorizationData authorizationData);
+        Task<TagDto> UpdateTag(string libraryId, UpdateTagDto request, AuthorizationData authorizationData);
     }
 }

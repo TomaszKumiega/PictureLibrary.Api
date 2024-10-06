@@ -1,29 +1,29 @@
 ﻿using PictureLibrary.Client.BaseClient;
 using PictureLibrary.Client.Model;
-using PictureLibrary.Client.Requests;
+using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Client.Clients.Users
 {
     internal class UsersClient(IApiHttpClient client) : IUsersClient
     {
-        public async Task<AuthorizationData> Login(LoginUserRequest request)
+        public async Task<AuthorizationData> Login(LoginUserDto request)
         {
             return await client.Post<AuthorizationData>("auth/login", request);
         }
 
-        public async Task<User> Register(AddUserRequest request)
+        public async Task<UserDto> Register(NewUserDto request)
         {
-            return await client.Post<User>("user/register", request);
+            return await client.Post<UserDto>("user/register", request);
         }
 
-        public async Task<User> GetUser(AuthorizationData authorizationData)
+        public async Task<UserDto> GetUser(AuthorizationData authorizationData)
         {
-            return await client.Get<User>($"user/get", authorizationData);
+            return await client.Get<UserDto>($"user/get", authorizationData);
         }
 
-        public async Task<User> UpdateUser(UpdateUserRequest request, AuthorizationData authorizationData)
+        public async Task<UserDto> UpdateUser(UpdateUserDto request, AuthorizationData authorizationData)
         {
-            return await client.Patch<User>("user/update", request, authorizationData);
+            return await client.Patch<UserDto>("user/update", request, authorizationData);
         }
 
         public async Task DeleteUser(AuthorizationData authorizationData)

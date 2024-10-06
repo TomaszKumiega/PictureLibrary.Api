@@ -1,14 +1,15 @@
 ﻿using PictureLibrary.Client.Model;
-using PictureLibrary.Client.Requests;
+using PictureLibrary.Contracts;
+using PictureLibrary.Contracts.Library;
 
 namespace PictureLibrary.Client.Clients.Libraries
 {
     public interface ILibrariesClient
     {
-        Task<Library> AddLibrary(AddLibraryRequest request, AuthorizationData authorizationData);
+        Task<LibraryDto> AddLibrary(NewLibraryDto request, AuthorizationData authorizationData);
         Task DeleteLibrary(string id, AuthorizationData authorizationData);
-        Task<AllLibraries> GetAllLibraries(AuthorizationData authorizationData);
-        Task<Library> GetLibrary(string id, AuthorizationData authorizationData);
-        Task<Library> UpdateLibrary(string libraryId, UpdateLibraryRequest request, AuthorizationData authorizationData);
+        Task<LibrariesDto> GetAllLibraries(AuthorizationData authorizationData);
+        Task<LibraryDto> GetLibrary(string id, AuthorizationData authorizationData);
+        Task<LibraryDto> UpdateLibrary(string libraryId, UpdateLibraryDto request, AuthorizationData authorizationData);
     }
 }

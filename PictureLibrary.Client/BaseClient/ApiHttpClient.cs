@@ -1,6 +1,7 @@
 ﻿using PictureLibrary.Client.ErrorHandling;
 using PictureLibrary.Client.Exceptions;
 using PictureLibrary.Client.Model;
+using PictureLibrary.Client.Requests;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -113,7 +114,7 @@ namespace PictureLibrary.Client.BaseClient
             }
         }
 
-        private static async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
+        private async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
         {
             var refreshTokensRequest = new RefreshAuthorizationDataRequest()
             {
