@@ -1,29 +1,23 @@
-﻿using PictureLibrary.Client.ErrorHandling;
-using PictureLibrary.Client.Exceptions;
-using PictureLibrary.Client.Model;
-using PictureLibrary.Client.Requests;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using PictureLibrary.Client.Clients.Authorization;
+using PictureLibrary.Client.ErrorHandling;
+using PictureLibrary.Client.Exceptions;
 
 namespace PictureLibrary.Client.BaseClient
 {
-    internal class ApiHttpClient(HttpClient httpClient, IErrorHandler errorHandler) : IApiHttpClient
+    internal class ApiHttpClient(
+        HttpClient httpClient,
+        IErrorHandler errorHandler,
+        IAuthorizationClient authorizationClient) : IApiHttpClient
     {
-        public async Task<T> Get<T>(string url, AuthorizationData? authorizationData = null) where T : class
+        public async Task<T> Get<T>(string url) where T : class
         {
             HttpRequestMessage request = new(HttpMethod.Get, url);
-
-            if (authorizationData != null)
-            {
-                if (!IsTokenValid(authorizationData))
-                {
-                    authorizationData = await RefreshTokens(authorizationData);
-                }
-
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationData.AccessToken);
-            }
-
+            
+            request = await AddAuthorizationHeaderWithValidToken(request);
+            
             HttpResponseMessage response = await httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
@@ -36,20 +30,11 @@ namespace PictureLibrary.Client.BaseClient
             return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
-        public async Task<T> Post<T>(string url, object data, AuthorizationData? authorizationData = null) where T : class
+        public async Task<T> Post<T>(string url, object data) where T : class
         {
             HttpRequestMessage request = new(HttpMethod.Post, url);
-
-            if (authorizationData != null)
-            {
-                if (!IsTokenValid(authorizationData))
-                {
-                    authorizationData = await RefreshTokens(authorizationData);
-                }
-
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationData.AccessToken);
-            }
-
+            
+            request = await AddAuthorizationHeaderWithValidToken(request);
             request.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await httpClient.SendAsync(request);
@@ -64,20 +49,11 @@ namespace PictureLibrary.Client.BaseClient
             return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
-        public async Task<T> Patch<T>(string url, object data, AuthorizationData? authorizationData = null) where T : class
+        public async Task<T> Patch<T>(string url, object data) where T : class
         {
             HttpRequestMessage request = new(HttpMethod.Patch, url);
 
-            if (authorizationData != null)
-            {
-                if (!IsTokenValid(authorizationData))
-                {
-                    authorizationData = await RefreshTokens(authorizationData);
-                }
-
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationData.AccessToken);
-            }
-
+            request = await AddAuthorizationHeaderWithValidToken(request);
             request.Content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await httpClient.SendAsync(request);
@@ -92,19 +68,11 @@ namespace PictureLibrary.Client.BaseClient
             return JsonSerializer.Deserialize<T>(responseJson) ?? throw new InvalidResponseException();
         }
 
-        public async Task Delete(string url, AuthorizationData? authorizationData = null)
+        public async Task Delete(string url)
         {
             HttpRequestMessage request = new(HttpMethod.Delete, url);
 
-            if (authorizationData != null)
-            {
-                if (!IsTokenValid(authorizationData))
-                {
-                    authorizationData = await RefreshTokens(authorizationData);
-                }
-
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authorizationData.AccessToken);
-            }
+            request = await AddAuthorizationHeaderWithValidToken(request);
 
             HttpResponseMessage response = await httpClient.SendAsync(request);
 
@@ -114,20 +82,13 @@ namespace PictureLibrary.Client.BaseClient
             }
         }
 
-        private async Task<AuthorizationData> RefreshTokens(AuthorizationData authorizationData)
+        private async Task<HttpRequestMessage> AddAuthorizationHeaderWithValidToken(HttpRequestMessage request)
         {
-            var refreshTokensRequest = new RefreshAuthorizationDataRequest()
-            {
-                AccessToken = authorizationData.AccessToken,
-                RefreshToken = authorizationData.RefreshToken
-            };
+            await authorizationClient.RefreshTokensIfNecessary();
+            var tokens = authorizationClient.GetAuthorizationData();
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokens.AccessToken);
 
-            return await Post<AuthorizationData>("auth/refreshTokens", refreshTokensRequest) ?? throw new AuthorizationFailedException();
-        }
-
-        private static bool IsTokenValid(AuthorizationData authorizationData)
-        {
-            return authorizationData.ExpiryDate > DateTime.UtcNow.AddMinutes(1);
+            return request;
         }
     }
 }
