@@ -364,4 +364,8 @@ FodyWeavers.xsd
 
 docker_compose.yml
 
+<<<<<<< HEAD
 .idea/
+=======
+./idea/
+>>>>>>> 59f1b6db5b9a52bb73968fc297166b5b4ba01ec4
