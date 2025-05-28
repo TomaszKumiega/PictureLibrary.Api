@@ -1,9 +1,8 @@
 ﻿using PictureLibrary.Domain.Entities;
 
-namespace PictureLibrary.Domain.Services
+namespace PictureLibrary.Domain.Services;
+
+public interface IImageFileUpdateService
 {
-    public interface IImageFileUpdateService
-    {
-        public UpdateImageFileResult UpdateImageFile(ImageFile imageFile, FileMetadata fileMetadata, UpdateImageFileData updateImageFileData);
-    }
+    public UpdateImageFileResult UpdateImageFile(ImageFile imageFile, FileMetadata fileMetadata, UpdateImageFileData updateImageFileData);
 }

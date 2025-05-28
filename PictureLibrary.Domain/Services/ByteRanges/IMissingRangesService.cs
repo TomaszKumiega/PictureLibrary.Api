@@ -1,10 +1,9 @@
 ﻿using System.Net.Http.Headers;
 
-namespace PictureLibrary.Domain.Services
+namespace PictureLibrary.Domain.Services;
+
+public interface IMissingRangesService
 {
-    public interface IMissingRangesService
-    {
-        int GetFirstIndexOfMissingRangeContainingAnotherRange(MissingRanges missingRanges, ContentRangeHeaderValue range);
-        MissingRanges RemoveRangeFromMissingRanges(MissingRanges missingRanges, ContentRangeHeaderValue range);
-    }
+    int GetFirstIndexOfMissingRangeContainingAnotherRange(MissingRanges missingRanges, ContentRangeHeaderValue range);
+    MissingRanges RemoveRangeFromMissingRanges(MissingRanges missingRanges, ContentRangeHeaderValue range);
 }

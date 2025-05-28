@@ -2,13 +2,12 @@
 using MongoDB.Bson;
 using PictureLibrary.Domain.Entities;
 
-namespace PictureLibrary.TestTools.Fakers
+namespace PictureLibrary.TestTools.Fakers;
+
+public class FileMetadataFaker : AutoFaker<FileMetadata>
 {
-    public class FileMetadataFaker : AutoFaker<FileMetadata>
+    public FileMetadataFaker()
     {
-        public FileMetadataFaker()
-        {
-            RuleFor(x => x.Id, x => ObjectId.GenerateNewId());
-        }
+        RuleFor(x => x.Id, x => ObjectId.GenerateNewId());
     }
 }

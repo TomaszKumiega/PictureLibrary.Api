@@ -6,19 +6,18 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query
+namespace PictureLibrary.Application.Query;
+
+public class GetUserHandler(
+    IMapper mapper,
+    IUserRepository userRepository) 
+    : IRequestHandler<GetUserQuery, UserDto>
 {
-    public class GetUserHandler(
-        IMapper mapper,
-        IUserRepository userRepository) 
-        : IRequestHandler<GetUserQuery, UserDto>
+    public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        public async Task<UserDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
-        {
-            ObjectId userId = ObjectId.Parse(request.UserId);
-            User user = userRepository.FindById(userId) ?? throw new NotFoundException();
+        ObjectId userId = ObjectId.Parse(request.UserId);
+        User user = userRepository.FindById(userId) ?? throw new NotFoundException();
         
-            return await Task.FromResult(mapper.MapToDto(user));
-        }
+        return await Task.FromResult(mapper.MapToDto(user));
     }
 }

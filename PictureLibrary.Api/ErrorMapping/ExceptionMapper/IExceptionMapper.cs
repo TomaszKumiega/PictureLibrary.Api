@@ -1,7 +1,6 @@
-﻿namespace PictureLibrary.Api.ErrorMapping
+﻿namespace PictureLibrary.Api.ErrorMapping;
+
+public interface IExceptionMapper
 {
-    public interface IExceptionMapper
-    {
-        ErrorDetails Map(Exception exception);
-    }
+    ErrorDetails Map(Exception exception);
 }

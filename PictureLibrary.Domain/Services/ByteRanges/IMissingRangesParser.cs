@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services;
+
+public interface IMissingRangesParser
 {
-    public interface IMissingRangesParser
-    {
-        MissingRanges Parse(string ranges);
-        string ToString(MissingRanges missingRanges);
-    }
+    MissingRanges Parse(string ranges);
+    string ToString(MissingRanges missingRanges);
 }

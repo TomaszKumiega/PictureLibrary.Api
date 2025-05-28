@@ -1,4 +1,3 @@
-﻿namespace PictureLibrary.Contracts.Images
-{
-    public record ImageFilesDto(IEnumerable<ImageFileDto> ImageFiles);
-}
+﻿namespace PictureLibrary.Contracts.Images;
+
+public record ImageFilesDto(IEnumerable<ImageFileDto> ImageFiles);

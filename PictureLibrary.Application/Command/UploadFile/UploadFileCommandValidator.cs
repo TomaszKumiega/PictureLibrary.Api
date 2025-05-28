@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Command
+namespace PictureLibrary.Application.Command;
+
+public class UploadFileCommandValidator : AbstractValidator<UploadFileCommand>
 {
-    public class UploadFileCommandValidator : AbstractValidator<UploadFileCommand>
+    public UploadFileCommandValidator()
     {
-        public UploadFileCommandValidator()
-        {
-            RuleFor(x => x.UserId).NotEmpty().Must(x => ObjectId.TryParse(x, out _));
-            RuleFor(x => x.ContentRange).NotNull();
-        }
+        RuleFor(x => x.UserId).NotEmpty().Must(x => ObjectId.TryParse(x, out _));
+        RuleFor(x => x.ContentRange).NotNull();
     }
 }

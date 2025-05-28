@@ -3,27 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
-namespace PictureLibrary.Api.Controllers
+namespace PictureLibrary.Api.Controllers;
+
+public class ControllerBase(IMediator mediator) : Controller
 {
-    public class ControllerBase(IMediator mediator) : Controller
+    protected readonly IMediator _mediator = mediator;
+
+    protected string? GetUserId()
     {
-        protected readonly IMediator _mediator = mediator;
+        return User.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 
-        protected string? GetUserId()
+    protected static ContentRangeHeaderValue? GetContentRange(string contentRange)
+    {
+        if (string.IsNullOrEmpty(contentRange))
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return null;
         }
 
-        protected static ContentRangeHeaderValue? GetContentRange(string contentRange)
-        {
-            if (string.IsNullOrEmpty(contentRange))
-            {
-                return null;
-            }
-
-            return ContentRangeHeaderValue.TryParse(contentRange, out var contentRangeHeaderValue)
-                ? contentRangeHeaderValue
-                : null;
-        }
+        return ContentRangeHeaderValue.TryParse(contentRange, out var contentRangeHeaderValue)
+            ? contentRangeHeaderValue
+            : null;
     }
 }

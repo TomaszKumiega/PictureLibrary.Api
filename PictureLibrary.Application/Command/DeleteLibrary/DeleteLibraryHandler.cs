@@ -3,18 +3,17 @@ using MongoDB.Bson;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command
+namespace PictureLibrary.Application.Command;
+
+public class DeleteLibraryHandler(ILibraryRepository libraryRepository) : IRequestHandler<DeleteLibraryCommand>
 {
-    public class DeleteLibraryHandler(ILibraryRepository libraryRepository) : IRequestHandler<DeleteLibraryCommand>
+    public async Task Handle(DeleteLibraryCommand request, CancellationToken cancellationToken)
     {
-        public async Task Handle(DeleteLibraryCommand request, CancellationToken cancellationToken)
-        {
-            ObjectId userId = ObjectId.Parse(request.UserId);
-            ObjectId libraryId = ObjectId.Parse(request.LibraryId);
+        ObjectId userId = ObjectId.Parse(request.UserId);
+        ObjectId libraryId = ObjectId.Parse(request.LibraryId);
 
-            var library = await libraryRepository.Get(userId, libraryId) ?? throw new NotFoundException();
+        var library = await libraryRepository.Get(userId, libraryId) ?? throw new NotFoundException();
 
-            await libraryRepository.Delete(library);
-        }
+        await libraryRepository.Delete(library);
     }
 }

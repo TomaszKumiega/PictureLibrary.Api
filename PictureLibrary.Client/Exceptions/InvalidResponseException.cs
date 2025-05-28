@@ -1,6 +1,5 @@
-﻿namespace PictureLibrary.Client.Exceptions
+﻿namespace PictureLibrary.Client.Exceptions;
+
+public class InvalidResponseException : Exception
 {
-    public class InvalidResponseException : Exception
-    {
-    }
 }

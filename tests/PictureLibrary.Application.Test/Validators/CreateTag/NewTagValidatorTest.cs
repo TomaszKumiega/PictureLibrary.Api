@@ -2,99 +2,98 @@
 using PictureLibrary.Application.DtoValidators;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Test.Validators.CreateTag
+namespace PictureLibrary.Application.Test.Validators.CreateTag;
+
+public class NewTagValidatorTest
 {
-    public class NewTagValidatorTest
+    private readonly NewTagValidator _validator;
+
+    public NewTagValidatorTest()
     {
-        private readonly NewTagValidator _validator;
+        _validator = new NewTagValidator();
+    }
 
-        public NewTagValidatorTest()
+    [Fact]
+    public void Validate_Should_Have_Errors_When_Name_Is_Null()
+    {
+        var tag = new NewTagDto()
         {
-            _validator = new NewTagValidator();
-        }
+            Name = null!,
+            ColorHex = "#FFFFFF"
+        };
 
-        [Fact]
-        public void Validate_Should_Have_Errors_When_Name_Is_Null()
+        var result = _validator.TestValidate(tag);
+
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
+
+    [Fact]
+    public void Validate_Should_Have_Errors_When_Name_Is_Empty()
+    {
+        var tag = new NewTagDto()
         {
-            var tag = new NewTagDto()
-            {
-                Name = null!,
-                ColorHex = "#FFFFFF"
-            };
+            Name = "",
+            ColorHex = "#FFFFFF"
+        };
 
-            var result = _validator.TestValidate(tag);
+        var result = _validator.TestValidate(tag);
 
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
 
-        [Fact]
-        public void Validate_Should_Have_Errors_When_Name_Is_Empty()
+    [Fact]
+    public void Validate_Should_Have_Errors_When_ColorHex_Is_Null()
+    {
+        var tag = new NewTagDto()
         {
-            var tag = new NewTagDto()
-            {
-                Name = "",
-                ColorHex = "#FFFFFF"
-            };
+            Name = "Tag",
+            ColorHex = null!
+        };
 
-            var result = _validator.TestValidate(tag);
+        var result = _validator.TestValidate(tag);
 
-            result.ShouldHaveValidationErrorFor(x => x.Name);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.ColorHex);
+    }
 
-        [Fact]
-        public void Validate_Should_Have_Errors_When_ColorHex_Is_Null()
+    [Fact]
+    public void Validate_Should_Have_Errors_When_ColorHex_Is_Empty()
+    {
+        var tag = new NewTagDto()
         {
-            var tag = new NewTagDto()
-            {
-                Name = "Tag",
-                ColorHex = null!
-            };
+            Name = "Tag",
+            ColorHex = ""
+        };
 
-            var result = _validator.TestValidate(tag);
+        var result = _validator.TestValidate(tag);
 
-            result.ShouldHaveValidationErrorFor(x => x.ColorHex);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.ColorHex);
+    }
 
-        [Fact]
-        public void Validate_Should_Have_Errors_When_ColorHex_Is_Empty()
+    [Fact]
+    public void Validate_Should_Have_Errors_When_ColorHex_Is_Not_Color()
+    {
+        var tag = new NewTagDto()
         {
-            var tag = new NewTagDto()
-            {
-                Name = "Tag",
-                ColorHex = ""
-            };
+            Name = "Tag",
+            ColorHex = "NotColor"
+        };
 
-            var result = _validator.TestValidate(tag);
+        var result = _validator.TestValidate(tag);
 
-            result.ShouldHaveValidationErrorFor(x => x.ColorHex);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.ColorHex);
+    }
 
-        [Fact]
-        public void Validate_Should_Have_Errors_When_ColorHex_Is_Not_Color()
+    [Fact]
+    public void Validate_Should_Not_Have_Errors_When_Dto_Is_Valid()
+    {
+        var tag = new NewTagDto()
         {
-            var tag = new NewTagDto()
-            {
-                Name = "Tag",
-                ColorHex = "NotColor"
-            };
+            Name = "Tag",
+            ColorHex = "#FFFFFF"
+        };
 
-            var result = _validator.TestValidate(tag);
+        var result = _validator.TestValidate(tag);
 
-            result.ShouldHaveValidationErrorFor(x => x.ColorHex);
-        }
-
-        [Fact]
-        public void Validate_Should_Not_Have_Errors_When_Dto_Is_Valid()
-        {
-            var tag = new NewTagDto()
-            {
-                Name = "Tag",
-                ColorHex = "#FFFFFF"
-            };
-
-            var result = _validator.TestValidate(tag);
-
-            result.ShouldNotHaveAnyValidationErrors();
-        }
+        result.ShouldNotHaveAnyValidationErrors();
     }
 }

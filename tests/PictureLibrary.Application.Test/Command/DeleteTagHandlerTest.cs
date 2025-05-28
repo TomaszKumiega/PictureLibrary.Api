@@ -7,92 +7,91 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.TestTools.Fakers;
 
-namespace PictureLibrary.Application.Test.Command
+namespace PictureLibrary.Application.Test.Command;
+
+public class DeleteTagHandlerTest
 {
-    public class DeleteTagHandlerTest
+    Mock<ITagRepository> _tagRepositoryMock;
+    Mock<ILibraryRepository> _libraryRepositoryMock;
+
+    private readonly DeleteTagHandler _handler;
+
+    public DeleteTagHandlerTest()
     {
-        Mock<ITagRepository> _tagRepositoryMock;
-        Mock<ILibraryRepository> _libraryRepositoryMock;
+        _tagRepositoryMock = new Mock<ITagRepository>(MockBehavior.Strict);
+        _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
 
-        private readonly DeleteTagHandler _handler;
+        _handler = new DeleteTagHandler(_tagRepositoryMock.Object, _libraryRepositoryMock.Object);
+    }
 
-        public DeleteTagHandlerTest()
-        {
-            _tagRepositoryMock = new Mock<ITagRepository>(MockBehavior.Strict);
-            _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
+    [Fact]
+    public async Task Handle_Should_Delete_Tag()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var tagId = ObjectId.GenerateNewId();
+        var tag = new TagFaker().Generate();
 
-            _handler = new DeleteTagHandler(_tagRepositoryMock.Object, _libraryRepositoryMock.Object);
-        }
+        var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
 
-        [Fact]
-        public async Task Handle_Should_Delete_Tag()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var tagId = ObjectId.GenerateNewId();
-            var tag = new TagFaker().Generate();
+        _tagRepositoryMock.Setup(x => x.FindById(tagId))
+            .Returns(tag)
+            .Verifiable();
 
-            var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
+        _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
+            .ReturnsAsync(true)
+            .Verifiable();
 
-            _tagRepositoryMock.Setup(x => x.FindById(tagId))
-                .Returns(tag)
-                .Verifiable();
+        _tagRepositoryMock.Setup(x => x.Delete(tag))
+            .Callback<Tag>(x =>
+            {
+                x.Should().Be(tag);
+            })
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-            _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
-                .ReturnsAsync(true)
-                .Verifiable();
+        await _handler.Handle(command, CancellationToken.None);
 
-            _tagRepositoryMock.Setup(x => x.Delete(tag))
-                .Callback<Tag>(x =>
-                {
-                    x.Should().Be(tag);
-                })
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+        _tagRepositoryMock.Verify();
+        _libraryRepositoryMock.Verify();
+    }
 
-            await _handler.Handle(command, CancellationToken.None);
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_Tag_Doesnt_Exist()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var tagId = ObjectId.GenerateNewId();
 
-            _tagRepositoryMock.Verify();
-            _libraryRepositoryMock.Verify();
-        }
+        var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_Tag_Doesnt_Exist()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var tagId = ObjectId.GenerateNewId();
+        _tagRepositoryMock.Setup(x => x.FindById(tagId))
+            .Returns((Tag?)null)
+            .Verifiable();
 
-            var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
+        await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
 
-            _tagRepositoryMock.Setup(x => x.FindById(tagId))
-                .Returns((Tag?)null)
-                .Verifiable();
+        _tagRepositoryMock.Verify();
+    }
 
-            await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_User_Doesnt_Own_The_Library()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var tagId = ObjectId.GenerateNewId();
+        var tag = new TagFaker().Generate();
 
-            _tagRepositoryMock.Verify();
-        }
+        var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_User_Doesnt_Own_The_Library()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var tagId = ObjectId.GenerateNewId();
-            var tag = new TagFaker().Generate();
+        _tagRepositoryMock.Setup(x => x.FindById(tagId))
+            .Returns(tag)
+            .Verifiable();
 
-            var command = new DeleteTagCommand(userId.ToString(), tagId.ToString());
+        _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
+            .ReturnsAsync(false)
+            .Verifiable();
 
-            _tagRepositoryMock.Setup(x => x.FindById(tagId))
-                .Returns(tag)
-                .Verifiable();
+        await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
 
-            _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
-                .ReturnsAsync(false)
-                .Verifiable();
-
-            await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
-
-            _tagRepositoryMock.Verify();
-            _libraryRepositoryMock.Verify();
-        }
+        _tagRepositoryMock.Verify();
+        _libraryRepositoryMock.Verify();
     }
 }

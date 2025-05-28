@@ -1,6 +1,5 @@
-﻿namespace PictureLibrary.Domain.Exceptions
+﻿namespace PictureLibrary.Domain.Exceptions;
+
+public class InvalidTokenException : Exception
 {
-    public class InvalidTokenException : Exception
-    {
-    }
 }

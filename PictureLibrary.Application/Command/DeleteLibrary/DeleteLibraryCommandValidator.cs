@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Command
+namespace PictureLibrary.Application.Command;
+
+public class DeleteLibraryCommandValidator : AbstractValidator<DeleteLibraryCommand>
 {
-    public class DeleteLibraryCommandValidator : AbstractValidator<DeleteLibraryCommand>
+    public DeleteLibraryCommandValidator()
     {
-        public DeleteLibraryCommandValidator()
-        {
-            RuleFor(x => x.UserId).NotEmpty().Must(userId => ObjectId.TryParse(userId, out _));
-            RuleFor(x => x.LibraryId).NotEmpty().Must(libraryId => ObjectId.TryParse(libraryId, out _));
-        }
+        RuleFor(x => x.UserId).NotEmpty().Must(userId => ObjectId.TryParse(userId, out _));
+        RuleFor(x => x.LibraryId).NotEmpty().Must(libraryId => ObjectId.TryParse(libraryId, out _));
     }
 }

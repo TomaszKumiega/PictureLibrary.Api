@@ -2,13 +2,12 @@
 using MongoDB.Bson;
 using PictureLibrary.Domain.Entities;
 
-namespace PictureLibrary.TestTools.Fakers
+namespace PictureLibrary.TestTools.Fakers;
+
+public class UserFaker : AutoFaker<User>
 {
-    public class UserFaker : AutoFaker<User>
+    public UserFaker()
     {
-        public UserFaker()
-        {
-            RuleFor(x => x.Id, f => ObjectId.GenerateNewId());
-        }
+        RuleFor(x => x.Id, f => ObjectId.GenerateNewId());
     }
 }

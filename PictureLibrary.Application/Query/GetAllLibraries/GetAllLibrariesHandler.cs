@@ -5,22 +5,21 @@ using PictureLibrary.Contracts;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query
+namespace PictureLibrary.Application.Query;
+
+public class GetAllLibrariesHandler(
+    IMapper mapper,
+    ILibraryRepository libraryRepository) 
+    : IRequestHandler<GetAllLibrariesQuery, LibrariesDto>
 {
-    public class GetAllLibrariesHandler(
-        IMapper mapper,
-        ILibraryRepository libraryRepository) 
-        : IRequestHandler<GetAllLibrariesQuery, LibrariesDto>
+    public async Task<LibrariesDto> Handle(GetAllLibrariesQuery request, CancellationToken cancellationToken)
     {
-        public async Task<LibrariesDto> Handle(GetAllLibrariesQuery request, CancellationToken cancellationToken)
-        {
-            ObjectId userId = ObjectId.Parse(request.UserId);
+        ObjectId userId = ObjectId.Parse(request.UserId);
 
-            IEnumerable<Library> libraries = await libraryRepository.GetAll(userId);
+        IEnumerable<Library> libraries = await libraryRepository.GetAll(userId);
 
-            var libraryDtos = libraries.Select(x => mapper.MapToDto(x));
+        var libraryDtos = libraries.Select(x => mapper.MapToDto(x));
 
-            return new LibrariesDto(libraryDtos);
-        }
+        return new LibrariesDto(libraryDtos);
     }
 }

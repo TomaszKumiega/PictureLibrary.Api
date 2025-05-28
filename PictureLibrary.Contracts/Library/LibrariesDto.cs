@@ -1,4 +1,3 @@
-﻿namespace PictureLibrary.Contracts
-{
-    public record LibrariesDto(IEnumerable<LibraryDto> Libraries);
-}
+﻿namespace PictureLibrary.Contracts;
+
+public record LibrariesDto(IEnumerable<LibraryDto> Libraries);

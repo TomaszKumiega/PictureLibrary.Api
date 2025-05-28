@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Contracts
+﻿namespace PictureLibrary.Contracts;
+
+public class NewTagDto
 {
-    public class NewTagDto
-    {
-        public required string Name { get; set; }
-        public required string ColorHex { get; set; }
-    }
+    public required string Name { get; set; }
+    public required string ColorHex { get; set; }
 }

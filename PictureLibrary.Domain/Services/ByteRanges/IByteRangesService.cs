@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services;
+
+public interface IByteRangesService
 {
-    public interface IByteRangesService
-    {
-        bool IsOneRangeIncludedInAnother(ByteRange smallerRange, ByteRange biggerRange);
-        IEnumerable<ByteRange> Except(ByteRange range, ByteRange excludedRange);
-    }
+    bool IsOneRangeIncludedInAnother(ByteRange smallerRange, ByteRange biggerRange);
+    IEnumerable<ByteRange> Except(ByteRange range, ByteRange excludedRange);
 }

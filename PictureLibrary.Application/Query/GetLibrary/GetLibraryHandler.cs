@@ -6,22 +6,21 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query
+namespace PictureLibrary.Application.Query;
+
+public class GetLibraryHandler(
+    IMapper mapper,
+    ILibraryRepository libraryRepository) 
+    : IRequestHandler<GetLibraryQuery, LibraryDto>
 {
-    public class GetLibraryHandler(
-        IMapper mapper,
-        ILibraryRepository libraryRepository) 
-        : IRequestHandler<GetLibraryQuery, LibraryDto>
+    public async Task<LibraryDto> Handle(GetLibraryQuery request, CancellationToken cancellationToken)
     {
-        public async Task<LibraryDto> Handle(GetLibraryQuery request, CancellationToken cancellationToken)
-        {
-            ObjectId userId = ObjectId.Parse(request.UserId);
-            ObjectId libraryId = ObjectId.Parse(request.LibraryId);
+        ObjectId userId = ObjectId.Parse(request.UserId);
+        ObjectId libraryId = ObjectId.Parse(request.LibraryId);
 
-            Library library = await libraryRepository.Get(userId, libraryId)
-                ?? throw new NotFoundException();
+        Library library = await libraryRepository.Get(userId, libraryId)
+                          ?? throw new NotFoundException();
 
-            return mapper.MapToDto(library);
-        }
+        return mapper.MapToDto(library);
     }
 }

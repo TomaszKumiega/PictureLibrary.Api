@@ -1,11 +1,10 @@
-namespace PictureLibrary.Domain.Services
+namespace PictureLibrary.Domain.Services;
+
+public interface IImageThumbnailCreator
 {
-    public interface IImageThumbnailCreator
-    {
-        /// <summary>
-        /// Creates 50x50 thumbnail in base64 format.
-        /// </summary>
-        /// <returns></returns>
-        public Task<string> GetBase64Thumbnail(string filePath);
-    }
+    /// <summary>
+    /// Creates 50x50 thumbnail in base64 format.
+    /// </summary>
+    /// <returns></returns>
+    public Task<string> GetBase64Thumbnail(string filePath);
 }

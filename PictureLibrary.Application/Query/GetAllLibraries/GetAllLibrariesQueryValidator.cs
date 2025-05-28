@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Query
+namespace PictureLibrary.Application.Query;
+
+public class GetAllLibrariesQueryValidator : AbstractValidator<GetAllLibrariesQuery>
 {
-    public class GetAllLibrariesQueryValidator : AbstractValidator<GetAllLibrariesQuery>
+    public GetAllLibrariesQueryValidator()
     {
-        public GetAllLibrariesQueryValidator()
-        {
-            RuleFor(x => x.UserId).NotEmpty().Must((userId) => ObjectId.TryParse(userId, out _));
-        }
+        RuleFor(x => x.UserId).NotEmpty().Must((userId) => ObjectId.TryParse(userId, out _));
     }
 }

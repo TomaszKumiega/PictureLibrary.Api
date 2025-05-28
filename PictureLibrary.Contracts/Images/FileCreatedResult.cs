@@ -1,4 +1,3 @@
-﻿namespace PictureLibrary.Contracts
-{
-    public record FileCreatedResult(string ImageFileId);
-}
+﻿namespace PictureLibrary.Contracts;
+
+public record FileCreatedResult(string ImageFileId);

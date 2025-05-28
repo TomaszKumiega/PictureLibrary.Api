@@ -2,15 +2,14 @@
 using MongoDB.Bson;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.DtoValidators
+namespace PictureLibrary.Application.DtoValidators;
+
+public class CreateImageUploadSessionDtoValidator : AbstractValidator<CreateImageUploadSessionDto>
 {
-    public class CreateImageUploadSessionDtoValidator : AbstractValidator<CreateImageUploadSessionDto>
+    public CreateImageUploadSessionDtoValidator()
     {
-        public CreateImageUploadSessionDtoValidator()
-        {
-            RuleFor(x => x.FileName).NotEmpty();
-            RuleFor(x => x.FileLength).NotEmpty();
-            RuleFor(x => x.LibraryId).NotEmpty().Must(libraryId => ObjectId.TryParse(libraryId, out _));
-        }
+        RuleFor(x => x.FileName).NotEmpty();
+        RuleFor(x => x.FileLength).NotEmpty();
+        RuleFor(x => x.LibraryId).NotEmpty().Must(libraryId => ObjectId.TryParse(libraryId, out _));
     }
 }

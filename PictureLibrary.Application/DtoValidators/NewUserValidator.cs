@@ -1,18 +1,17 @@
 ﻿using FluentValidation;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.DtoValidators
+namespace PictureLibrary.Application.DtoValidators;
+
+public class NewUserValidator : AbstractValidator<NewUserDto>
 {
-    public class NewUserValidator : AbstractValidator<NewUserDto>
+    public NewUserValidator()
     {
-        public NewUserValidator()
+        RuleFor(x => x.Username).NotEmpty();
+        RuleFor(x => x.Password).NotEmpty().MinimumLength(7);
+        When(x => x.Email != null, () =>
         {
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.Password).NotEmpty().MinimumLength(7);
-            When(x => x.Email != null, () =>
-            {
-                RuleFor(x => x.Email).EmailAddress();
-            });
-        }
+            RuleFor(x => x.Email).EmailAddress();
+        });
     }
 }

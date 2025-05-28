@@ -5,131 +5,130 @@ using PictureLibrary.Application.Query;
 using PictureLibrary.Contracts;
 using System.Net.Http.Headers;
 
-namespace PictureLibrary.Api.Controllers
+namespace PictureLibrary.Api.Controllers;
+
+[Route("image")]
+[ApiController]
+public class ImageController(IMediator mediator) : ControllerBase(mediator)
 {
-    [Route("image")]
-    [ApiController]
-    public class ImageController(IMediator mediator) : ControllerBase(mediator)
+    [HttpPost("createUploadSession")]
+    public async Task<IActionResult> CreateUploadSession(
+        [FromBody] CreateImageUploadSessionDto createUploadSessionDto)
     {
-        [HttpPost("createUploadSession")]
-        public async Task<IActionResult> CreateUploadSession(
-            [FromBody] CreateImageUploadSessionDto createUploadSessionDto)
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            var command = new CreateImageUploadSessionCommand(userId, createUploadSessionDto);
-
-            var result = await _mediator.Send(command);
-
-            return Ok(result);
+            return Unauthorized();
         }
 
-        [HttpPost("uploadFile")]
-        public async Task<IActionResult> UploadFile(
-            [FromQuery] string uploadSessionId, 
-            [FromHeader(Name = "Content-Range")] string contentRangeString)
+        var command = new CreateImageUploadSessionCommand(userId, createUploadSessionDto);
+
+        var result = await _mediator.Send(command);
+
+        return Ok(result);
+    }
+
+    [HttpPost("uploadFile")]
+    public async Task<IActionResult> UploadFile(
+        [FromQuery] string uploadSessionId, 
+        [FromHeader(Name = "Content-Range")] string contentRangeString)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            ContentRangeHeaderValue? contentRange = GetContentRange(contentRangeString);
-
-            if (contentRange == null)
-            {
-                return BadRequest();
-            }
-
-            var command = new UploadFileCommand(userId, uploadSessionId, contentRange, Request.Body);
-
-            var result = await _mediator.Send(command);
-
-            return result.IsUploadFinished
-                ? Created("/image/get", result.Value)
-                : Accepted(result.Value);
+            return Unauthorized();
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery] string imageFileId)
+        ContentRangeHeaderValue? contentRange = GetContentRange(contentRangeString);
+
+        if (contentRange == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            if (string.IsNullOrEmpty(imageFileId))
-            {
-                return BadRequest();
-            }
-
-            var command = new DeleteImageFileCommand(userId, imageFileId);
-
-            await _mediator.Send(command);
-
-            return Ok();
+            return BadRequest();
         }
 
-        [HttpPatch("update")]
-        public async Task<IActionResult> Update(
-            [FromQuery] string imageFileId,
-            [FromBody] UpdateImageFileDto updateImageFileDto)
+        var command = new UploadFileCommand(userId, uploadSessionId, contentRange, Request.Body);
+
+        var result = await _mediator.Send(command);
+
+        return result.IsUploadFinished
+            ? Created("/image/get", result.Value)
+            : Accepted(result.Value);
+    }
+
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete([FromQuery] string imageFileId)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            var command = new UpdateImageFileCommand(userId, imageFileId, updateImageFileDto);
-
-            var result = await _mediator.Send(command);
-
-            return Ok(result);
+            return Unauthorized();
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAll([FromQuery] string libraryId)
+        if (string.IsNullOrEmpty(imageFileId))
         {
-            string? userId = GetUserId();
-
-            if (userId == null) 
-            {
-                return Unauthorized();
-            }
-
-            var command = new GetAllImageFilesQuery(userId, libraryId);
-
-            var result = await _mediator.Send(command);
-
-            return Ok(result);
+            return BadRequest();
         }
 
-        [HttpGet("content")]
-        public async Task<IActionResult> GetContent([FromQuery] string imageFileId)
+        var command = new DeleteImageFileCommand(userId, imageFileId);
+
+        await _mediator.Send(command);
+
+        return Ok();
+    }
+
+    [HttpPatch("update")]
+    public async Task<IActionResult> Update(
+        [FromQuery] string imageFileId,
+        [FromBody] UpdateImageFileDto updateImageFileDto)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
+            return Unauthorized();
+        }
 
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+        var command = new UpdateImageFileCommand(userId, imageFileId, updateImageFileDto);
 
-            var command = new GetImageFileContentQuery(userId, imageFileId);
+        var result = await _mediator.Send(command);
+
+        return Ok(result);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll([FromQuery] string libraryId)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null) 
+        {
+            return Unauthorized();
+        }
+
+        var command = new GetAllImageFilesQuery(userId, libraryId);
+
+        var result = await _mediator.Send(command);
+
+        return Ok(result);
+    }
+
+    [HttpGet("content")]
+    public async Task<IActionResult> GetContent([FromQuery] string imageFileId)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        var command = new GetImageFileContentQuery(userId, imageFileId);
             
-            var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command);
 
-            return File(result.Content, result.ContentType);
-        }
+        return File(result.Content, result.ContentType);
     }
 }

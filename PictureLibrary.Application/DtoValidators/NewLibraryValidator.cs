@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using PictureLibrary.Contracts.Library;
 
-namespace PictureLibrary.Application.DtoValidators
+namespace PictureLibrary.Application.DtoValidators;
+
+public class NewLibraryValidator : AbstractValidator<NewLibraryDto>
 {
-    public class NewLibraryValidator : AbstractValidator<NewLibraryDto>
+    public NewLibraryValidator()
     {
-        public NewLibraryValidator()
-        {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("Name cannot be empty");
-        }
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name cannot be empty");
     }
 }

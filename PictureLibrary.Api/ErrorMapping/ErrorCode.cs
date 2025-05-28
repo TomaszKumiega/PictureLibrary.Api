@@ -1,11 +1,10 @@
-﻿namespace PictureLibrary.Api.ErrorMapping
+﻿namespace PictureLibrary.Api.ErrorMapping;
+
+public enum ErrorCode
 {
-    public enum ErrorCode
-    {
-        Unknown = 0,
-        ValidationError = 1,
-        NotFound = 2,
-        AlreadyExists = 3,
-        InvalidToken = 4
-    }
+    Unknown = 0,
+    ValidationError = 1,
+    NotFound = 2,
+    AlreadyExists = 3,
+    InvalidToken = 4
 }

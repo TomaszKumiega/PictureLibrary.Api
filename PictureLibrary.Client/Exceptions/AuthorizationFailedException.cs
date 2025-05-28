@@ -1,6 +1,5 @@
-﻿namespace PictureLibrary.Client.Exceptions
+﻿namespace PictureLibrary.Client.Exceptions;
+
+public class AuthorizationFailedException : Exception
 {
-    public class AuthorizationFailedException : Exception
-    {
-    }
 }

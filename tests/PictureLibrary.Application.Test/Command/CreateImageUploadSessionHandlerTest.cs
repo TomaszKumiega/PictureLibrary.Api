@@ -6,70 +6,69 @@ using PictureLibrary.Application.Test.Fakers;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Test.Command
+namespace PictureLibrary.Application.Test.Command;
+
+public class CreateImageUploadSessionHandlerTest
 {
-    public class CreateImageUploadSessionHandlerTest
+    private readonly Mock<IImageFileRepository> _imageFileRepositoryMock;
+    private readonly Mock<IUploadSessionRepository> _uploadSessionRepositoryMock;
+
+    private readonly CreateImageUploadSessionHandler _handler;
+
+    public CreateImageUploadSessionHandlerTest()
     {
-        private readonly Mock<IImageFileRepository> _imageFileRepositoryMock;
-        private readonly Mock<IUploadSessionRepository> _uploadSessionRepositoryMock;
+        _imageFileRepositoryMock = new Mock<IImageFileRepository>(MockBehavior.Strict);
+        _uploadSessionRepositoryMock = new Mock<IUploadSessionRepository>(MockBehavior.Strict);
 
-        private readonly CreateImageUploadSessionHandler _handler;
+        _handler = new CreateImageUploadSessionHandler(_imageFileRepositoryMock.Object, _uploadSessionRepositoryMock.Object);
+    }
 
-        public CreateImageUploadSessionHandlerTest()
-        {
-            _imageFileRepositoryMock = new Mock<IImageFileRepository>(MockBehavior.Strict);
-            _uploadSessionRepositoryMock = new Mock<IUploadSessionRepository>(MockBehavior.Strict);
+    [Fact]
+    public async Task Handle_Should_Create_UploadSession_And_ImageFile()
+    {
+        var libraryId = ObjectId.GenerateNewId();
+        IEnumerable<ObjectId> tagIds = [ObjectId.GenerateNewId(), ObjectId.GenerateNewId()];
 
-            _handler = new CreateImageUploadSessionHandler(_imageFileRepositoryMock.Object, _uploadSessionRepositoryMock.Object);
-        }
+        var userId = ObjectId.GenerateNewId();
+        var dto = new CreateImageUploadSessionDtoFaker()
+            .WithLibraryId(libraryId)
+            .WithTagIds(tagIds)
+            .Generate();
 
-        [Fact]
-        public async Task Handle_Should_Create_UploadSession_And_ImageFile()
-        {
-            var libraryId = ObjectId.GenerateNewId();
-            IEnumerable<ObjectId> tagIds = [ObjectId.GenerateNewId(), ObjectId.GenerateNewId()];
+        ObjectId uploadSessionId = ObjectId.Empty;
 
-            var userId = ObjectId.GenerateNewId();
-            var dto = new CreateImageUploadSessionDtoFaker()
-                .WithLibraryId(libraryId)
-                .WithTagIds(tagIds)
-                .Generate();
+        var command = new CreateImageUploadSessionCommand(userId.ToString(), dto);
 
-            ObjectId uploadSessionId = ObjectId.Empty;
+        _uploadSessionRepositoryMock.Setup(x => x.Add(It.IsAny<UploadSession>()))
+            .Callback<UploadSession>(u =>
+            {
+                uploadSessionId = u.Id;
 
-            var command = new CreateImageUploadSessionCommand(userId.ToString(), dto);
+                u.Should().NotBeNull();
+                u.UserId.Should().Be(userId);
+                u.FileLength.Should().Be(dto.FileLength);
+                u.FileName.Should().Be(dto.FileName);
+                u.MissingRanges.Should().Be($"1-{dto.FileLength}");
+            })
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-            _uploadSessionRepositoryMock.Setup(x => x.Add(It.IsAny<UploadSession>()))
-                .Callback<UploadSession>(u =>
-                {
-                    uploadSessionId = u.Id;
+        _imageFileRepositoryMock.Setup(x => x.Add(It.IsAny<ImageFile>()))
+            .Callback<ImageFile>(i =>
+            {
+                i.Should().NotBeNull();
+                i.UploadSessionId.Should().Be(uploadSessionId);
+                i.LibraryId.Should().Be(libraryId);
+                i.TagIds.Should().BeEquivalentTo(tagIds);
+            })
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-                    u.Should().NotBeNull();
-                    u.UserId.Should().Be(userId);
-                    u.FileLength.Should().Be(dto.FileLength);
-                    u.FileName.Should().Be(dto.FileName);
-                    u.MissingRanges.Should().Be($"1-{dto.FileLength}");
-                })
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-            _imageFileRepositoryMock.Setup(x => x.Add(It.IsAny<ImageFile>()))
-                .Callback<ImageFile>(i =>
-                {
-                    i.Should().NotBeNull();
-                    i.UploadSessionId.Should().Be(uploadSessionId);
-                    i.LibraryId.Should().Be(libraryId);
-                    i.TagIds.Should().BeEquivalentTo(tagIds);
-                })
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+        result.Should().NotBeNull();
 
-            var result = await _handler.Handle(command, CancellationToken.None);
-
-            result.Should().NotBeNull();
-
-            _imageFileRepositoryMock.Verify();
-            _uploadSessionRepositoryMock.Verify();
-        }
+        _imageFileRepositoryMock.Verify();
+        _uploadSessionRepositoryMock.Verify();
     }
 }

@@ -1,23 +1,22 @@
 ﻿using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Command
+namespace PictureLibrary.Application.Command;
+
+public class UploadFileResult
 {
-    public class UploadFileResult
+    private readonly FileCreatedResult? _fileCreatedResult;
+    private readonly FileContentAcceptedResult? _fileContentAcceptedResult;
+
+    public UploadFileResult(FileCreatedResult fileCreatedResult)
     {
-        private readonly FileCreatedResult? _fileCreatedResult;
-        private readonly FileContentAcceptedResult? _fileContentAcceptedResult;
-
-        public UploadFileResult(FileCreatedResult fileCreatedResult)
-        {
-            _fileCreatedResult = fileCreatedResult;
-        }
-
-        public UploadFileResult(FileContentAcceptedResult fileContentAcceptedResult)
-        {
-            _fileContentAcceptedResult = fileContentAcceptedResult;
-        }
-
-        public bool IsUploadFinished { get; set; }
-        public object? Value => IsUploadFinished ? _fileCreatedResult : _fileContentAcceptedResult;
+        _fileCreatedResult = fileCreatedResult;
     }
+
+    public UploadFileResult(FileContentAcceptedResult fileContentAcceptedResult)
+    {
+        _fileContentAcceptedResult = fileContentAcceptedResult;
+    }
+
+    public bool IsUploadFinished { get; set; }
+    public object? Value => IsUploadFinished ? _fileCreatedResult : _fileContentAcceptedResult;
 }

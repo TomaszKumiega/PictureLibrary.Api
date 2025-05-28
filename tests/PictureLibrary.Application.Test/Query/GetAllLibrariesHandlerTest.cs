@@ -8,45 +8,44 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.TestTools.Fakers;
 
-namespace PictureLibrary.Application.Test.Query
+namespace PictureLibrary.Application.Test.Query;
+
+public class GetAllLibrariesHandlerTest
 {
-    public class GetAllLibrariesHandlerTest
+    private readonly Mock<IMapper> _mapper;
+    private readonly Mock<ILibraryRepository> _libraryRepository;
+
+    private readonly GetAllLibrariesHandler _handler;
+
+    public GetAllLibrariesHandlerTest()
     {
-        private readonly Mock<IMapper> _mapper;
-        private readonly Mock<ILibraryRepository> _libraryRepository;
+        _mapper = new Mock<IMapper>(MockBehavior.Strict);
+        _libraryRepository = new Mock<ILibraryRepository>(MockBehavior.Strict);
 
-        private readonly GetAllLibrariesHandler _handler;
+        _handler = new GetAllLibrariesHandler(_mapper.Object, _libraryRepository.Object);
+    }
 
-        public GetAllLibrariesHandlerTest()
-        {
-            _mapper = new Mock<IMapper>(MockBehavior.Strict);
-            _libraryRepository = new Mock<ILibraryRepository>(MockBehavior.Strict);
+    [Fact]
+    public async Task Handle_Should_Get_All_Libraries()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var query = new GetAllLibrariesQuery(userId.ToString());
 
-            _handler = new GetAllLibrariesHandler(_mapper.Object, _libraryRepository.Object);
-        }
+        var libraries = new LibraryFaker().Generate(10);
+        var libraryDto = new LibraryDtoFaker().Generate();
 
-        [Fact]
-        public async Task Handle_Should_Get_All_Libraries()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var query = new GetAllLibrariesQuery(userId.ToString());
+        _libraryRepository.Setup(x => x.GetAll(userId))
+            .ReturnsAsync(libraries)
+            .Verifiable();
 
-            var libraries = new LibraryFaker().Generate(10);
-            var libraryDto = new LibraryDtoFaker().Generate();
+        _mapper.Setup(x => x.MapToDto(It.IsIn<Library>(libraries)))
+            .Returns(libraryDto)
+            .Verifiable();
 
-            _libraryRepository.Setup(x => x.GetAll(userId))
-                .ReturnsAsync(libraries)
-                .Verifiable();
+        var result = await _handler.Handle(query, CancellationToken.None);
 
-            _mapper.Setup(x => x.MapToDto(It.IsIn<Library>(libraries)))
-                .Returns(libraryDto)
-                .Verifiable();
-
-            var result = await _handler.Handle(query, CancellationToken.None);
-
-            result.Should().NotBeNull();
-            result.Libraries.Should().NotBeNullOrEmpty();
-            result.Libraries.Should().HaveCount(libraries.Count);
-        }
+        result.Should().NotBeNull();
+        result.Libraries.Should().NotBeNullOrEmpty();
+        result.Libraries.Should().HaveCount(libraries.Count);
     }
 }

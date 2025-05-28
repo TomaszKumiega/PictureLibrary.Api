@@ -10,90 +10,89 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PictureLibrary.Application.Test.Validators.CreateLibrary
+namespace PictureLibrary.Application.Test.Validators.CreateLibrary;
+
+public class CreateLibraryCommandValidatorTest
 {
-    public class CreateLibraryCommandValidatorTest
+    private readonly CreateLibraryCommandValidator _validator;
+
+    public CreateLibraryCommandValidatorTest()
     {
-        private readonly CreateLibraryCommandValidator _validator;
+        _validator = new CreateLibraryCommandValidator(new NewLibraryValidator());
+    }
 
-        public CreateLibraryCommandValidatorTest()
+    [Fact]
+    public void Validate_Have_Errors_When_UserId_Is_Empty()
+    {
+        var command = new CreateLibraryCommand("", new NewLibraryDto()
         {
-            _validator = new CreateLibraryCommandValidator(new NewLibraryValidator());
-        }
+            Name = "Name"
+        });
 
-        [Fact]
-        public void Validate_Have_Errors_When_UserId_Is_Empty()
+        var result = _validator.TestValidate(command);
+
+        result.ShouldHaveValidationErrorFor(x => x.UserId);
+    }
+
+    [Fact]
+    public void Validate_Have_Errors_When_UserId_Is_Null()
+    {
+        var command = new CreateLibraryCommand(null!, new NewLibraryDto()
         {
-            var command = new CreateLibraryCommand("", new NewLibraryDto()
-            {
-                Name = "Name"
-            });
+            Name = "Name"
+        });
 
-            var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(command);
 
-            result.ShouldHaveValidationErrorFor(x => x.UserId);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.UserId);
+    }
 
-        [Fact]
-        public void Validate_Have_Errors_When_UserId_Is_Null()
+    [Fact]
+    public void Validate_Have_Errors_When_UserId_Is_Whitespace()
+    {
+        var command = new CreateLibraryCommand(" ", new NewLibraryDto()
         {
-            var command = new CreateLibraryCommand(null!, new NewLibraryDto()
-            {
-                Name = "Name"
-            });
+            Name = "Name"
+        });
 
-            var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(command);
 
-            result.ShouldHaveValidationErrorFor(x => x.UserId);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.UserId);
+    }
 
-        [Fact]
-        public void Validate_Have_Errors_When_UserId_Is_Whitespace()
+    [Fact]
+    public void Validate_Doesnt_Have_Errors_When_Command_Is_Valid()
+    {
+        var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), new NewLibraryDto()
         {
-            var command = new CreateLibraryCommand(" ", new NewLibraryDto()
-            {
-                Name = "Name"
-            });
+            Name = "Name"
+        });
 
-            var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(command);
 
-            result.ShouldHaveValidationErrorFor(x => x.UserId);
-        }
+        result.ShouldNotHaveValidationErrorFor(x => x.UserId);
+    }
 
-        [Fact]
-        public void Validate_Doesnt_Have_Errors_When_Command_Is_Valid()
+    [Fact]
+    public void Validate_Have_Errors_When_UserId_Is_Not_ObjectId()
+    {
+        var command = new CreateLibraryCommand("test", new NewLibraryDto()
         {
-            var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), new NewLibraryDto()
-            {
-                Name = "Name"
-            });
+            Name = "Name"
+        });
 
-            var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(command);
 
-            result.ShouldNotHaveValidationErrorFor(x => x.UserId);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.UserId);
+    }
 
-        [Fact]
-        public void Validate_Have_Errors_When_UserId_Is_Not_ObjectId()
-        {
-            var command = new CreateLibraryCommand("test", new NewLibraryDto()
-            {
-                Name = "Name"
-            });
+    [Fact]
+    public void Validate_Have_Errors_When_NewLibrary_Is_Null()
+    {
+        var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), null!);
 
-            var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(command);
 
-            result.ShouldHaveValidationErrorFor(x => x.UserId);
-        }
-
-        [Fact]
-        public void Validate_Have_Errors_When_NewLibrary_Is_Null()
-        {
-            var command = new CreateLibraryCommand(ObjectId.GenerateNewId().ToString(), null!);
-
-            var result = _validator.TestValidate(command);
-
-            result.ShouldHaveValidationErrorFor(x => x.NewLibrary);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.NewLibrary);
     }
 }

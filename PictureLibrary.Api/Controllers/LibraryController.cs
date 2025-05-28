@@ -5,117 +5,116 @@ using PictureLibrary.Application.Query;
 using PictureLibrary.Contracts;
 using PictureLibrary.Contracts.Library;
 
-namespace PictureLibrary.Api.Controllers
+namespace PictureLibrary.Api.Controllers;
+
+[Route("library")]
+[ApiController]
+public class LibraryController(IMediator mediator) : ControllerBase(mediator)
 {
-    [Route("library")]
-    [ApiController]
-    public class LibraryController(IMediator mediator) : ControllerBase(mediator)
+    [HttpGet("get")]
+    public async Task<IActionResult> Get([FromQuery] string id)
     {
-        [HttpGet("get")]
-        public async Task<IActionResult> Get([FromQuery] string id)
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            if (string.IsNullOrEmpty(id)) 
-            {
-                return BadRequest();
-            }
-
-            var query = new GetLibraryQuery(userId, id);
-
-            var result = await _mediator.Send(query);
-
-            return Ok(result);
+            return Unauthorized();
         }
 
-        [HttpGet("getall")]
-        public async Task<IActionResult> GetAll()
+        if (string.IsNullOrEmpty(id)) 
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            var query = new GetAllLibrariesQuery(userId);
-
-            var result = await _mediator.Send(query);
-
-            return Ok(result);
+            return BadRequest();
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] NewLibraryDto newLibrary)
+        var query = new GetLibraryQuery(userId, id);
+
+        var result = await _mediator.Send(query);
+
+        return Ok(result);
+    }
+
+    [HttpGet("getall")]
+    public async Task<IActionResult> GetAll()
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            if (newLibrary is null)
-            {
-                return BadRequest();
-            }
-
-            var command = new CreateLibraryCommand(userId, newLibrary);
-
-            var result = await _mediator.Send(command);
-
-            return Created("create", result);
+            return Unauthorized();
         }
 
-        [HttpPatch("update")]
-        public async Task<IActionResult> Update(
-            [FromQuery] string libraryId,
-            [FromBody] UpdateLibraryDto library)
+        var query = new GetAllLibrariesQuery(userId);
+
+        var result = await _mediator.Send(query);
+
+        return Ok(result);
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] NewLibraryDto newLibrary)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            if (library is null)
-            {
-                return BadRequest();
-            }
-
-            var command = new UpdateLibraryCommand(userId, libraryId, library);
-
-            var result = await _mediator.Send(command);
-
-            return Ok(result);
+            return Unauthorized();
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromQuery] string id)
+        if (newLibrary is null)
         {
-            string? userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            if (string.IsNullOrEmpty(id))
-            {
-                return BadRequest();
-            }
-
-            var command = new DeleteLibraryCommand(userId, id);
-
-            await _mediator.Send(command);
-
-            return Ok();
+            return BadRequest();
         }
+
+        var command = new CreateLibraryCommand(userId, newLibrary);
+
+        var result = await _mediator.Send(command);
+
+        return Created("create", result);
+    }
+
+    [HttpPatch("update")]
+    public async Task<IActionResult> Update(
+        [FromQuery] string libraryId,
+        [FromBody] UpdateLibraryDto library)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        if (library is null)
+        {
+            return BadRequest();
+        }
+
+        var command = new UpdateLibraryCommand(userId, libraryId, library);
+
+        var result = await _mediator.Send(command);
+
+        return Ok(result);
+    }
+
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete([FromQuery] string id)
+    {
+        string? userId = GetUserId();
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        if (string.IsNullOrEmpty(id))
+        {
+            return BadRequest();
+        }
+
+        var command = new DeleteLibraryCommand(userId, id);
+
+        await _mediator.Send(command);
+
+        return Ok();
     }
 }

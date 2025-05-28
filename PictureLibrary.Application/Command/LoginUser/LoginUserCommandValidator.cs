@@ -2,13 +2,12 @@
 using PictureLibrary.Application.DtoValidators;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Command
+namespace PictureLibrary.Application.Command;
+
+public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {
-    public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
+    public LoginUserCommandValidator(LoginUserDtoValidator dtoValidator)
     {
-        public LoginUserCommandValidator(LoginUserDtoValidator dtoValidator)
-        {
-            RuleFor(x => x.LoginDto).NotNull().SetValidator(dtoValidator);
-        }
+        RuleFor(x => x.LoginDto).NotNull().SetValidator(dtoValidator);
     }
 }

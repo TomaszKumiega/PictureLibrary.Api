@@ -1,9 +1,8 @@
-﻿namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services;
+
+public class HashAndSalt
 {
-    public class HashAndSalt
-    {
-        public required string Text { get; set; }
-        public required byte[] Hash { get; set; }
-        public required byte[] Salt { get; set; }
-    }
+    public required string Text { get; set; }
+    public required byte[] Hash { get; set; }
+    public required byte[] Salt { get; set; }
 }

@@ -9,73 +9,72 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.TestTools.Fakers;
 
-namespace PictureLibrary.Application.Test.Command
+namespace PictureLibrary.Application.Test.Command;
+
+public class UpdateUserHandlerTest
 {
-    public class UpdateUserHandlerTest
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IUserRepository> _userRepositoryMock;
+
+    private readonly UpdateUserHandler _handler;
+
+    public UpdateUserHandlerTest()
     {
-        private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<IUserRepository> _userRepositoryMock;
+        _mapperMock = new Mock<IMapper>(MockBehavior.Strict);
+        _userRepositoryMock = new Mock<IUserRepository>(MockBehavior.Strict);
 
-        private readonly UpdateUserHandler _handler;
+        _handler = new UpdateUserHandler(_mapperMock.Object, _userRepositoryMock.Object);
+    }
 
-        public UpdateUserHandlerTest()
-        {
-            _mapperMock = new Mock<IMapper>(MockBehavior.Strict);
-            _userRepositoryMock = new Mock<IUserRepository>(MockBehavior.Strict);
+    [Fact]
+    public async Task Handle_Should_Update_User()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
 
-            _handler = new UpdateUserHandler(_mapperMock.Object, _userRepositoryMock.Object);
-        }
+        var user = new UserFaker().Generate();
+        var userDto = new UserDtoFaker().Generate();
+        var updateUserDto = new UpdateUserDtoFaker().Generate();
 
-        [Fact]
-        public async Task Handle_Should_Update_User()
-        {
-            ObjectId userId = ObjectId.GenerateNewId();
+        var command = new UpdateUserCommand(userId.ToString(), updateUserDto);
 
-            var user = new UserFaker().Generate();
-            var userDto = new UserDtoFaker().Generate();
-            var updateUserDto = new UpdateUserDtoFaker().Generate();
+        _userRepositoryMock.Setup(x => x.FindById(userId))
+            .Returns(user)
+            .Verifiable();
 
-            var command = new UpdateUserCommand(userId.ToString(), updateUserDto);
+        _userRepositoryMock.Setup(x => x.Update(user))
+            .Callback((User u) =>
+            {
+                u.Email.Should().Be(updateUserDto.Email);
+                u.Username.Should().Be(updateUserDto.Username);
+            })
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-            _userRepositoryMock.Setup(x => x.FindById(userId))
-                .Returns(user)
-                .Verifiable();
+        _mapperMock.Setup(x => x.MapToDto(user))
+            .Returns(userDto)
+            .Verifiable();
 
-            _userRepositoryMock.Setup(x => x.Update(user))
-                .Callback((User u) =>
-                {
-                    u.Email.Should().Be(updateUserDto.Email);
-                    u.Username.Should().Be(updateUserDto.Username);
-                })
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-            _mapperMock.Setup(x => x.MapToDto(user))
-                .Returns(userDto)
-                .Verifiable();
+        result.Should().NotBeNull();
+        result.Should().Be(userDto);
+    }
 
-            var result = await _handler.Handle(command, CancellationToken.None);
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
 
-            result.Should().NotBeNull();
-            result.Should().Be(userDto);
-        }
+        var updateUserDto = new UpdateUserDtoFaker().Generate();
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException()
-        {
-            ObjectId userId = ObjectId.GenerateNewId();
+        var command = new UpdateUserCommand(userId.ToString(), updateUserDto);
 
-            var updateUserDto = new UpdateUserDtoFaker().Generate();
+        _userRepositoryMock.Setup(x => x.FindById(userId))
+            .Returns((User?)null)
+            .Verifiable();
 
-            var command = new UpdateUserCommand(userId.ToString(), updateUserDto);
+        await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
 
-            _userRepositoryMock.Setup(x => x.FindById(userId))
-                .Returns((User?)null)
-                .Verifiable();
-
-            await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
-
-            _userRepositoryMock.Verify();
-        }
+        _userRepositoryMock.Verify();
     }
 }

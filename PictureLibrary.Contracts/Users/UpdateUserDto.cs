@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Contracts
+﻿namespace PictureLibrary.Contracts;
+
+public class UpdateUserDto
 {
-    public class UpdateUserDto
-    {
-        public required string Username { get; set; }
-        public string? Email { get; set; }
-    }
+    public required string Username { get; set; }
+    public string? Email { get; set; }
 }

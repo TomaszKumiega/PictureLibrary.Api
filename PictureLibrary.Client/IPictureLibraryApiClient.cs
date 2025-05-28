@@ -3,13 +3,12 @@ using PictureLibrary.Client.Clients.Libraries;
 using PictureLibrary.Client.Clients.Tags;
 using PictureLibrary.Client.Clients.Users;
 
-namespace PictureLibrary.Client
+namespace PictureLibrary.Client;
+
+public interface IPictureLibraryApiClient
 {
-    public interface IPictureLibraryApiClient
-    {
-        IAuthorizationClient Authorization();
-        ILibrariesClient Libraries();
-        ITagsClient Tags();
-        IUsersClient Users();
-    }
+    IAuthorizationClient Authorization();
+    ILibrariesClient Libraries();
+    ITagsClient Tags();
+    IUsersClient Users();
 }

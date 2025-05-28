@@ -1,9 +1,8 @@
 ﻿using PictureLibrary.Domain.Entities;
 
-namespace PictureLibrary.Domain.Services
+namespace PictureLibrary.Domain.Services;
+
+public interface IFileMetadataUpdateService
 {
-    public interface IFileMetadataUpdateService
-    {
-        FileMetadata UpdateFileName(FileMetadata fileMetadata, string newFileName);
-    }
+    FileMetadata UpdateFileName(FileMetadata fileMetadata, string newFileName);
 }

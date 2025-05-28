@@ -1,12 +1,11 @@
 ﻿using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Client.Clients.Users
+namespace PictureLibrary.Client.Clients.Users;
+
+public interface IUsersClient
 {
-    public interface IUsersClient
-    {
-        Task<UserDto> Register(NewUserDto request);
-        Task<UserDto> GetUser();
-        Task<UserDto> UpdateUser(UpdateUserDto request);
-        Task DeleteUser();
-    }
+    Task<UserDto> Register(NewUserDto request);
+    Task<UserDto> GetUser();
+    Task<UserDto> UpdateUser(UpdateUserDto request);
+    Task DeleteUser();
 }

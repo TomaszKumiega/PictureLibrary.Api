@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services;
+
+public interface IPathsProvider
 {
-    public interface IPathsProvider
-    {
-        string GetTempDirectoryPath();
-        string GetStoragePath();
-    }
+    string GetTempDirectoryPath();
+    string GetStoragePath();
 }

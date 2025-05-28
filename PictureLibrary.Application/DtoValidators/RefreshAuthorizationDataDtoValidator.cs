@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.DtoValidators
+namespace PictureLibrary.Application.DtoValidators;
+
+public class RefreshAuthorizationDataDtoValidator : AbstractValidator<RefreshAuthorizationDataDto>
 {
-    public class RefreshAuthorizationDataDtoValidator : AbstractValidator<RefreshAuthorizationDataDto>
+    public RefreshAuthorizationDataDtoValidator()
     {
-        public RefreshAuthorizationDataDtoValidator()
-        {
-            RuleFor(x => x.AccessToken).NotEmpty();
-            RuleFor(x => x.RefreshToken).NotEmpty();
-        }
+        RuleFor(x => x.AccessToken).NotEmpty();
+        RuleFor(x => x.RefreshToken).NotEmpty();
     }
 }

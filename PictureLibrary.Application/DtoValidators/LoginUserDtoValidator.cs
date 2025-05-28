@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.DtoValidators
+namespace PictureLibrary.Application.DtoValidators;
+
+public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
 {
-    public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
+    public LoginUserDtoValidator()
     {
-        public LoginUserDtoValidator()
-        {
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.Password).NotEmpty();
-        }
+        RuleFor(x => x.Username).NotEmpty();
+        RuleFor(x => x.Password).NotEmpty();
     }
 }

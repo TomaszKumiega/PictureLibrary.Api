@@ -1,9 +1,8 @@
 ﻿using MongoDB.Bson;
 using PictureLibrary.Domain.Entities;
 
-namespace PictureLibrary.Domain.Repositories
+namespace PictureLibrary.Domain.Repositories;
+
+public interface IFileMetadataRepository : IRepository<FileMetadata>
 {
-    public interface IFileMetadataRepository : IRepository<FileMetadata>
-    {
-    }
 }

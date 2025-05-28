@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Contracts
+﻿namespace PictureLibrary.Contracts;
+
+public class RefreshAuthorizationDataDto
 {
-    public class RefreshAuthorizationDataDto
-    {
-        public required string AccessToken { get; set; }
-        public required string RefreshToken { get; set; }
-    }
+    public required string AccessToken { get; set; }
+    public required string RefreshToken { get; set; }
 }

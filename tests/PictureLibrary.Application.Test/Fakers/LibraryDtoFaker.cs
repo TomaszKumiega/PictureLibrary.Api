@@ -1,14 +1,13 @@
 ﻿using AutoBogus;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Test.Fakers
+namespace PictureLibrary.Application.Test.Fakers;
+
+public class LibraryDtoFaker : AutoFaker<LibraryDto>
 {
-    public class LibraryDtoFaker : AutoFaker<LibraryDto>
+    public LibraryDtoFaker()
     {
-        public LibraryDtoFaker()
-        {
-            RuleFor(x => x.Name, s => s.Lorem.Word());
-            RuleFor(x => x.Description, s => s.Lorem.Sentence());
-        }
+        RuleFor(x => x.Name, s => s.Lorem.Word());
+        RuleFor(x => x.Description, s => s.Lorem.Sentence());
     }
 }

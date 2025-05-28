@@ -1,7 +1,6 @@
-﻿namespace PictureLibrary.Contracts.Results
+﻿namespace PictureLibrary.Contracts.Results;
+
+public class CreateImageUploadSessionResult
 {
-    public class CreateImageUploadSessionResult
-    {
-        public required string UploadSessionId { get; set; }
-    }
+    public required string UploadSessionId { get; set; }
 }

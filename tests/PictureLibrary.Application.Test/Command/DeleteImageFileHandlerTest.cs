@@ -7,114 +7,113 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.TestTools.Fakers;
 
-namespace PictureLibrary.Application.Test
+namespace PictureLibrary.Application.Test;
+
+public class DeleteImageFileHandlerTest
 {
-    public class DeleteImageFileHandlerTest
+    private readonly Mock<ILibraryRepository> _libraryRepositoryMock;
+    private readonly Mock<IImageFileRepository> _imageFileRepositoryMock;
+    private readonly Mock<IFileMetadataRepository> _fileMetadataRepositoryMock;
+
+    private readonly DeleteImageFileHandler _handler;
+
+    public DeleteImageFileHandlerTest()
     {
-        private readonly Mock<ILibraryRepository> _libraryRepositoryMock;
-        private readonly Mock<IImageFileRepository> _imageFileRepositoryMock;
-        private readonly Mock<IFileMetadataRepository> _fileMetadataRepositoryMock;
+        _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
+        _imageFileRepositoryMock = new Mock<IImageFileRepository>(MockBehavior.Strict);
+        _fileMetadataRepositoryMock = new Mock<IFileMetadataRepository>(MockBehavior.Strict);
 
-        private readonly DeleteImageFileHandler _handler;
+        _handler = new DeleteImageFileHandler(_libraryRepositoryMock.Object, _imageFileRepositoryMock.Object, _fileMetadataRepositoryMock.Object);
+    }
 
-        public DeleteImageFileHandlerTest()
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_ImageFile_Does_Not_Exist()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
+        ObjectId imageFileId = ObjectId.GenerateNewId();
+
+        var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
+
+        _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
+            .Returns((ImageFile?)null)
+            .Verifiable();
+
+        await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+
+        _imageFileRepositoryMock.Verify();
+    }
+
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_User_Is_Not_Owner_Of_ImageFile()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
+        ObjectId imageFileId = ObjectId.GenerateNewId();
+
+        var imageFile = new ImageFile()
         {
-            _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
-            _imageFileRepositoryMock = new Mock<IImageFileRepository>(MockBehavior.Strict);
-            _fileMetadataRepositoryMock = new Mock<IFileMetadataRepository>(MockBehavior.Strict);
+            Id = imageFileId,
+            LibraryId = ObjectId.GenerateNewId(),
+            FileId = ObjectId.GenerateNewId(),
+            TagIds = [ObjectId.GenerateNewId()]
+        };
+        var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
 
-            _handler = new DeleteImageFileHandler(_libraryRepositoryMock.Object, _imageFileRepositoryMock.Object, _fileMetadataRepositoryMock.Object);
-        }
+        _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
+            .Returns(imageFile)
+            .Verifiable();
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_ImageFile_Does_Not_Exist()
+        _libraryRepositoryMock.Setup(x => x.IsOwner(userId, imageFile.LibraryId))
+            .ReturnsAsync(false)
+            .Verifiable();
+
+        await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+
+        _imageFileRepositoryMock.Verify();
+        _libraryRepositoryMock.Verify();
+    }
+
+    [Fact]
+    public async Task Handle_Should_Delete_ImageFile_And_FileMetadata()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
+        ObjectId imageFileId = ObjectId.GenerateNewId();
+
+        var imageFile = new ImageFile()
         {
-            ObjectId userId = ObjectId.GenerateNewId();
-            ObjectId imageFileId = ObjectId.GenerateNewId();
+            Id = imageFileId,
+            LibraryId = ObjectId.GenerateNewId(),
+            FileId = ObjectId.GenerateNewId(),
+            TagIds = [ObjectId.GenerateNewId()]
+        };
+        var fileMetadata = new FileMetadataFaker().Generate();
+        var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
 
-            var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
+        _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
+            .Returns(imageFile)
+            .Verifiable();
 
-            _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
-                .Returns((ImageFile?)null)
-                .Verifiable();
+        _libraryRepositoryMock.Setup(x => x.IsOwner(userId, imageFile.LibraryId))
+            .ReturnsAsync(true)
+            .Verifiable();
 
-            await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+        _fileMetadataRepositoryMock.Setup(x => x.FindById(imageFile.FileId))
+            .Returns(fileMetadata)
+            .Verifiable();
 
-            _imageFileRepositoryMock.Verify();
-        }
+        _fileMetadataRepositoryMock.Setup(x => x.Delete(fileMetadata))
+            .Callback<FileMetadata>(f => f.Should().Be(fileMetadata))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_User_Is_Not_Owner_Of_ImageFile()
-        {
-            ObjectId userId = ObjectId.GenerateNewId();
-            ObjectId imageFileId = ObjectId.GenerateNewId();
+        _imageFileRepositoryMock.Setup(x => x.Delete(imageFile))
+            .Callback<ImageFile>(f => f.Should().Be(imageFile))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-            var imageFile = new ImageFile()
-            {
-                Id = imageFileId,
-                LibraryId = ObjectId.GenerateNewId(),
-                FileId = ObjectId.GenerateNewId(),
-                TagIds = [ObjectId.GenerateNewId()]
-            };
-            var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
+        await _handler.Handle(command, CancellationToken.None);
 
-            _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
-                .Returns(imageFile)
-                .Verifiable();
-
-            _libraryRepositoryMock.Setup(x => x.IsOwner(userId, imageFile.LibraryId))
-                .ReturnsAsync(false)
-                .Verifiable();
-
-            await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
-
-            _imageFileRepositoryMock.Verify();
-            _libraryRepositoryMock.Verify();
-        }
-
-        [Fact]
-        public async Task Handle_Should_Delete_ImageFile_And_FileMetadata()
-        {
-            ObjectId userId = ObjectId.GenerateNewId();
-            ObjectId imageFileId = ObjectId.GenerateNewId();
-
-            var imageFile = new ImageFile()
-            {
-                Id = imageFileId,
-                LibraryId = ObjectId.GenerateNewId(),
-                FileId = ObjectId.GenerateNewId(),
-                TagIds = [ObjectId.GenerateNewId()]
-            };
-            var fileMetadata = new FileMetadataFaker().Generate();
-            var command = new DeleteImageFileCommand(userId.ToString(), imageFileId.ToString());
-
-            _imageFileRepositoryMock.Setup(x => x.FindById(imageFileId))
-                .Returns(imageFile)
-                .Verifiable();
-
-            _libraryRepositoryMock.Setup(x => x.IsOwner(userId, imageFile.LibraryId))
-                .ReturnsAsync(true)
-                .Verifiable();
-
-            _fileMetadataRepositoryMock.Setup(x => x.FindById(imageFile.FileId))
-                .Returns(fileMetadata)
-                .Verifiable();
-
-            _fileMetadataRepositoryMock.Setup(x => x.Delete(fileMetadata))
-                .Callback<FileMetadata>(f => f.Should().Be(fileMetadata))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            _imageFileRepositoryMock.Setup(x => x.Delete(imageFile))
-                .Callback<ImageFile>(f => f.Should().Be(imageFile))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            await _handler.Handle(command, CancellationToken.None);
-
-            _imageFileRepositoryMock.Verify();
-            _libraryRepositoryMock.Verify();
-            _fileMetadataRepositoryMock.Verify();
-        }
+        _imageFileRepositoryMock.Verify();
+        _libraryRepositoryMock.Verify();
+        _fileMetadataRepositoryMock.Verify();
     }
 }

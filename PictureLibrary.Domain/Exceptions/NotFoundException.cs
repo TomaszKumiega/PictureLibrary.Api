@@ -1,6 +1,5 @@
-﻿namespace PictureLibrary.Domain.Exceptions
+﻿namespace PictureLibrary.Domain.Exceptions;
+
+public class NotFoundException : Exception
 {
-    public class NotFoundException : Exception
-    {
-    }
 }

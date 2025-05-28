@@ -9,78 +9,77 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.TestTools.Fakers;
 
-namespace PictureLibrary.Application.Test.Command
+namespace PictureLibrary.Application.Test.Command;
+
+public class UpdateLibraryHandlerTest
 {
-    public class UpdateLibraryHandlerTest
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<ILibraryRepository> _libraryRepositoryMock;
+
+    private readonly UpdateLibraryHandler _handler;
+
+    public UpdateLibraryHandlerTest()
     {
-        private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<ILibraryRepository> _libraryRepositoryMock;
+        _mapperMock = new Mock<IMapper>(MockBehavior.Strict);
+        _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
 
-        private readonly UpdateLibraryHandler _handler;
+        _handler = new UpdateLibraryHandler(_mapperMock.Object, _libraryRepositoryMock.Object);
+    }
 
-        public UpdateLibraryHandlerTest()
-        {
-            _mapperMock = new Mock<IMapper>(MockBehavior.Strict);
-            _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
+    [Fact]
+    public async Task Handle_Should_Update_Library()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
+        ObjectId libraryId = ObjectId.GenerateNewId();
 
-            _handler = new UpdateLibraryHandler(_mapperMock.Object, _libraryRepositoryMock.Object);
-        }
+        var library = new LibraryFaker().Generate();
+        var libraryDto = new LibraryDtoFaker().Generate();
+        var updateLibraryDto = new UpdateLibraryDtoFaker().Generate();
 
-        [Fact]
-        public async Task Handle_Should_Update_Library()
-        {
-            ObjectId userId = ObjectId.GenerateNewId();
-            ObjectId libraryId = ObjectId.GenerateNewId();
+        var command = new UpdateLibraryCommand(userId.ToString(), libraryId.ToString(), updateLibraryDto);
 
-            var library = new LibraryFaker().Generate();
-            var libraryDto = new LibraryDtoFaker().Generate();
-            var updateLibraryDto = new UpdateLibraryDtoFaker().Generate();
+        _libraryRepositoryMock.Setup(x => x.Get(userId, libraryId))
+            .ReturnsAsync(library)
+            .Verifiable();
 
-            var command = new UpdateLibraryCommand(userId.ToString(), libraryId.ToString(), updateLibraryDto);
+        _libraryRepositoryMock.Setup(x => x.Update(library))
+            .Callback((Library lib) =>
+            {
+                lib.Name.Should().Be(updateLibraryDto.Name);
+                lib.Description.Should().Be(updateLibraryDto.Description);
+            })
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-            _libraryRepositoryMock.Setup(x => x.Get(userId, libraryId))
-                .ReturnsAsync(library)
-                .Verifiable();
+        _mapperMock.Setup(x => x.MapToDto(library))
+            .Returns(libraryDto)
+            .Verifiable();
 
-            _libraryRepositoryMock.Setup(x => x.Update(library))
-                .Callback((Library lib) =>
-                {
-                    lib.Name.Should().Be(updateLibraryDto.Name);
-                    lib.Description.Should().Be(updateLibraryDto.Description);
-                })
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-            _mapperMock.Setup(x => x.MapToDto(library))
-                .Returns(libraryDto)
-                .Verifiable();
+        result.Should().NotBeNull();
+        result.Should().Be(libraryDto);
 
-            var result = await _handler.Handle(command, CancellationToken.None);
+        _mapperMock.Verify();
+        _libraryRepositoryMock.Verify();
+    }
 
-            result.Should().NotBeNull();
-            result.Should().Be(libraryDto);
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_Library_Doesnt_Exist()
+    {
+        ObjectId userId = ObjectId.GenerateNewId();
+        ObjectId libraryId = ObjectId.GenerateNewId();
 
-            _mapperMock.Verify();
-            _libraryRepositoryMock.Verify();
-        }
+        var updateLibraryDto = new UpdateLibraryDtoFaker().Generate();
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_Library_Doesnt_Exist()
-        {
-            ObjectId userId = ObjectId.GenerateNewId();
-            ObjectId libraryId = ObjectId.GenerateNewId();
+        var command = new UpdateLibraryCommand(userId.ToString(), libraryId.ToString(), updateLibraryDto);
 
-            var updateLibraryDto = new UpdateLibraryDtoFaker().Generate();
+        _libraryRepositoryMock.Setup(x => x.Get(userId, libraryId))
+            .ReturnsAsync((Library?)null)
+            .Verifiable();
 
-            var command = new UpdateLibraryCommand(userId.ToString(), libraryId.ToString(), updateLibraryDto);
+        await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
 
-            _libraryRepositoryMock.Setup(x => x.Get(userId, libraryId))
-                .ReturnsAsync((Library?)null)
-                .Verifiable();
-
-            await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
-
-            _libraryRepositoryMock.Verify();
-        }
+        _libraryRepositoryMock.Verify();
     }
 }

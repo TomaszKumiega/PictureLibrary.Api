@@ -1,8 +1,7 @@
-﻿namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services;
+
+public interface IHashAndSaltService
 {
-    public interface IHashAndSaltService
-    {
-        HashAndSalt GetHashAndSalt(string text);
-        bool Verify(HashAndSalt hashAndSalt);
-    }
+    HashAndSalt GetHashAndSalt(string text);
+    bool Verify(HashAndSalt hashAndSalt);
 }

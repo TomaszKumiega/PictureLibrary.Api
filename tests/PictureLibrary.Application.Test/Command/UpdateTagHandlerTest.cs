@@ -9,103 +9,102 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.TestTools.Fakers;
 
-namespace PictureLibrary.Application.Test.Command
+namespace PictureLibrary.Application.Test.Command;
+
+public class UpdateTagHandlerTest
 {
-    public class UpdateTagHandlerTest
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<ITagRepository> _tagRepositoryMock;
+    private readonly Mock<ILibraryRepository> _libraryRepositoryMock;
+
+    private readonly UpdateTagHandler _handler;
+
+    public UpdateTagHandlerTest()
     {
-        private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<ITagRepository> _tagRepositoryMock;
-        private readonly Mock<ILibraryRepository> _libraryRepositoryMock;
+        _mapperMock = new Mock<IMapper>(MockBehavior.Strict);
+        _tagRepositoryMock = new Mock<ITagRepository>(MockBehavior.Strict);
+        _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
 
-        private readonly UpdateTagHandler _handler;
+        _handler = new UpdateTagHandler(_mapperMock.Object, _tagRepositoryMock.Object, _libraryRepositoryMock.Object);
+    }
 
-        public UpdateTagHandlerTest()
-        {
-            _mapperMock = new Mock<IMapper>(MockBehavior.Strict);
-            _tagRepositoryMock = new Mock<ITagRepository>(MockBehavior.Strict);
-            _libraryRepositoryMock = new Mock<ILibraryRepository>(MockBehavior.Strict);
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_User_Doesnt_Own_The_Library()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var libraryId = ObjectId.GenerateNewId();
+        var command = new UpdateTagCommand(userId.ToString(), libraryId.ToString(), new UpdateTagDtoFaker().Generate());
+        var tag = new TagFaker().Generate();
 
-            _handler = new UpdateTagHandler(_mapperMock.Object, _tagRepositoryMock.Object, _libraryRepositoryMock.Object);
-        }
+        _tagRepositoryMock.Setup(x => x.FindById(It.IsAny<ObjectId>()))
+            .Returns(tag);
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_User_Doesnt_Own_The_Library()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var libraryId = ObjectId.GenerateNewId();
-            var command = new UpdateTagCommand(userId.ToString(), libraryId.ToString(), new UpdateTagDtoFaker().Generate());
-            var tag = new TagFaker().Generate();
+        _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
+            .ReturnsAsync(false)
+            .Verifiable();
 
-            _tagRepositoryMock.Setup(x => x.FindById(It.IsAny<ObjectId>()))
-                .Returns(tag);
+        await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
 
-            _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
-                .ReturnsAsync(false)
-                .Verifiable();
+        _libraryRepositoryMock.Verify();
+    }
 
-            await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
+    [Fact]
+    public async Task Handle_Should_Throw_NotFoundException_When_Tag_Doesnt_Exist()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var libraryId = ObjectId.GenerateNewId();
+        var command = new UpdateTagCommand(userId.ToString(), libraryId.ToString(), new UpdateTagDtoFaker().Generate());
 
-            _libraryRepositoryMock.Verify();
-        }
+        _tagRepositoryMock.Setup(x => x.FindById(It.IsAny<ObjectId>()))
+            .Returns((Tag?)null)
+            .Verifiable();
 
-        [Fact]
-        public async Task Handle_Should_Throw_NotFoundException_When_Tag_Doesnt_Exist()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var libraryId = ObjectId.GenerateNewId();
-            var command = new UpdateTagCommand(userId.ToString(), libraryId.ToString(), new UpdateTagDtoFaker().Generate());
+        await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
 
-            _tagRepositoryMock.Setup(x => x.FindById(It.IsAny<ObjectId>()))
-                .Returns((Tag?)null)
-                .Verifiable();
+        _tagRepositoryMock.Verify();
+    }
 
-            await Assert.ThrowsAsync<NotFoundException>(async () => await _handler.Handle(command, CancellationToken.None));
-
-            _tagRepositoryMock.Verify();
-        }
-
-        [Fact]
-        public async Task Handle_Should_Update_Tag()
-        {
-            var userId = ObjectId.GenerateNewId();
-            var tagId = ObjectId.GenerateNewId();
+    [Fact]
+    public async Task Handle_Should_Update_Tag()
+    {
+        var userId = ObjectId.GenerateNewId();
+        var tagId = ObjectId.GenerateNewId();
             
-            var tag = new TagFaker().Generate();
-            var command = new UpdateTagCommand(userId.ToString(), tagId.ToString(), new UpdateTagDtoFaker().Generate());
+        var tag = new TagFaker().Generate();
+        var command = new UpdateTagCommand(userId.ToString(), tagId.ToString(), new UpdateTagDtoFaker().Generate());
 
-            var tagDto = new TagDtoFaker().Generate();
+        var tagDto = new TagDtoFaker().Generate();
 
-            _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
-                .ReturnsAsync(true)
-                .Verifiable();
+        _libraryRepositoryMock.Setup(x => x.IsOwner(userId, tag.LibraryId))
+            .ReturnsAsync(true)
+            .Verifiable();
 
-            _tagRepositoryMock.Setup(x => x.FindById(tagId))
-                .Returns(tag)
-                .Verifiable();
+        _tagRepositoryMock.Setup(x => x.FindById(tagId))
+            .Returns(tag)
+            .Verifiable();
 
-            _tagRepositoryMock.Setup(x => x.Update(It.IsAny<Tag>()))
-                .Callback<Tag>(x =>
-                {
-                    x.Id.Should().Be(tag.Id);
-                    x.LibraryId.Should().Be(tag.LibraryId);
-                    x.Name.Should().Be(command.UpdateTagDto.Name);
-                    x.ColorHex.Should().Be(command.UpdateTagDto.ColorHex);
-                })
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+        _tagRepositoryMock.Setup(x => x.Update(It.IsAny<Tag>()))
+            .Callback<Tag>(x =>
+            {
+                x.Id.Should().Be(tag.Id);
+                x.LibraryId.Should().Be(tag.LibraryId);
+                x.Name.Should().Be(command.UpdateTagDto.Name);
+                x.ColorHex.Should().Be(command.UpdateTagDto.ColorHex);
+            })
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
-            _mapperMock.Setup(x => x.MapToDto(tag))
-                .Returns(tagDto)
-                .Verifiable();
+        _mapperMock.Setup(x => x.MapToDto(tag))
+            .Returns(tagDto)
+            .Verifiable();
 
-            var result = await _handler.Handle(command, CancellationToken.None);
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-            result.Should().NotBeNull();
-            result.Should().Be(tagDto);
+        result.Should().NotBeNull();
+        result.Should().Be(tagDto);
 
-            _mapperMock.Verify();
-            _tagRepositoryMock.Verify();
-            _libraryRepositoryMock.Verify();
-        }
+        _mapperMock.Verify();
+        _tagRepositoryMock.Verify();
+        _libraryRepositoryMock.Verify();
     }
 }

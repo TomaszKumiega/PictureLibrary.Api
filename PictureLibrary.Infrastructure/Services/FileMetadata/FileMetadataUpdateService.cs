@@ -1,26 +1,25 @@
 ﻿using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Services;
 
-namespace PictureLibrary.Infrastructure.Services
+namespace PictureLibrary.Infrastructure.Services;
+
+public class FileMetadataUpdateService : IFileMetadataUpdateService
 {
-    public class FileMetadataUpdateService : IFileMetadataUpdateService
+    private readonly IFileService _fileService;
+
+    public FileMetadataUpdateService(IFileService fileService)
     {
-        private readonly IFileService _fileService;
+        _fileService = fileService;
+    }
 
-        public FileMetadataUpdateService(IFileService fileService)
-        {
-            _fileService = fileService;
-        }
+    public FileMetadata UpdateFileName(FileMetadata fileMetadata, string newFileName)
+    {
+        ArgumentNullException.ThrowIfNull(fileMetadata);
+        ArgumentException.ThrowIfNullOrWhiteSpace(newFileName);
 
-        public FileMetadata UpdateFileName(FileMetadata fileMetadata, string newFileName)
-        {
-            ArgumentNullException.ThrowIfNull(fileMetadata);
-            ArgumentException.ThrowIfNullOrWhiteSpace(newFileName);
+        fileMetadata.FilePath = _fileService.ChangeFileName(fileMetadata.FilePath, newFileName);
+        fileMetadata.FileName = newFileName;
 
-            fileMetadata.FilePath = _fileService.ChangeFileName(fileMetadata.FilePath, newFileName);
-            fileMetadata.FileName = newFileName;
-
-            return fileMetadata;
-        }
+        return fileMetadata;
     }
 }

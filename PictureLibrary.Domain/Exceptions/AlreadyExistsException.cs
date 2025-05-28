@@ -1,13 +1,12 @@
-﻿namespace PictureLibrary.Domain.Exceptions
-{
-    public class AlreadyExistsException : Exception
-    {
-        public AlreadyExistsException() : base()
-        {
-        }
+﻿namespace PictureLibrary.Domain.Exceptions;
 
-        public AlreadyExistsException(string message) : base(message)
-        {
-        }
+public class AlreadyExistsException : Exception
+{
+    public AlreadyExistsException() : base()
+    {
+    }
+
+    public AlreadyExistsException(string message) : base(message)
+    {
     }
 }

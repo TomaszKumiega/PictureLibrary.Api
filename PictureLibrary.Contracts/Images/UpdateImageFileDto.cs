@@ -1,9 +1,8 @@
-﻿namespace PictureLibrary.Contracts
+﻿namespace PictureLibrary.Contracts;
+
+public class UpdateImageFileDto
 {
-    public class UpdateImageFileDto
-    {
-        public string? FileName { get; set; }
-        public string? LibraryId { get; set; }
-        public IEnumerable<string>? TagIds { get; set; }
-    }
+    public string? FileName { get; set; }
+    public string? LibraryId { get; set; }
+    public IEnumerable<string>? TagIds { get; set; }
 }

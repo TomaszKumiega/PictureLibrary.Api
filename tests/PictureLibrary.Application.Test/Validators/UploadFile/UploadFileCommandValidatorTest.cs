@@ -3,18 +3,17 @@ using MongoDB.Bson;
 using PictureLibrary.Application.Command;
 using System.Net.Http.Headers;
 
-namespace PictureLibrary.Application.Test.Validators.UploadFile
+namespace PictureLibrary.Application.Test.Validators.UploadFile;
+
+public class UploadFileCommandValidatorTest
 {
-    public class UploadFileCommandValidatorTest
+    private readonly UploadFileCommandValidator _validator;
+
+    public UploadFileCommandValidatorTest()
     {
-        private readonly UploadFileCommandValidator _validator;
-
-        public UploadFileCommandValidatorTest()
-        {
-            _validator = new UploadFileCommandValidator();
-        }
-
-        //TODO: Add tests
-
+        _validator = new UploadFileCommandValidator();
     }
+
+    //TODO: Add tests
+
 }

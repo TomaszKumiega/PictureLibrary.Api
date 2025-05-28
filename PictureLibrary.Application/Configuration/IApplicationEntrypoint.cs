@@ -1,6 +1,5 @@
-﻿namespace PictureLibrary.Application.Configuration
+﻿namespace PictureLibrary.Application.Configuration;
+
+public interface IApplicationEntrypoint
 {
-    public interface IApplicationEntrypoint
-    {
-    }
 }

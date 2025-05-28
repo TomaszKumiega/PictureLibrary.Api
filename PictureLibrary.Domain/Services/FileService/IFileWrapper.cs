@@ -1,9 +1,8 @@
-﻿namespace PictureLibrary.Domain.Services
+﻿namespace PictureLibrary.Domain.Services;
+
+public interface IFileWrapper
 {
-    public interface IFileWrapper
-    {
-        Stream Open(string path, FileMode mode);
-        void Delete(string path);
-        void Copy(string sourcePath, string destinationPath);
-    }
+    Stream Open(string path, FileMode mode);
+    void Delete(string path);
+    void Copy(string sourcePath, string destinationPath);
 }

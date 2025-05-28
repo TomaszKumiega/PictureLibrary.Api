@@ -6,34 +6,33 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command
+namespace PictureLibrary.Application.Command;
+
+public class UpdateUserHandler(
+    IMapper mapper,
+    IUserRepository userRepository) : IRequestHandler<UpdateUserCommand, UserDto>
 {
-    public class UpdateUserHandler(
-        IMapper mapper,
-        IUserRepository userRepository) : IRequestHandler<UpdateUserCommand, UserDto>
+    private readonly IMapper _mapper = mapper;
+    private readonly IUserRepository _userRepository = userRepository;
+
+    public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        private readonly IMapper _mapper = mapper;
-        private readonly IUserRepository _userRepository = userRepository;
+        ObjectId userId = ObjectId.Parse(request.UserId);
 
-        public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
-        {
-            ObjectId userId = ObjectId.Parse(request.UserId);
+        User user = _userRepository.FindById(userId) ?? throw new NotFoundException();
 
-            User user = _userRepository.FindById(userId) ?? throw new NotFoundException();
+        user = UpdateUser(user, request.UserDto);
 
-            user = UpdateUser(user, request.UserDto);
+        await _userRepository.Update(user);
 
-            await _userRepository.Update(user);
+        return _mapper.MapToDto(user);
+    }
 
-            return _mapper.MapToDto(user);
-        }
+    private static User UpdateUser(User user, UpdateUserDto userDto)
+    {
+        user.Email = userDto.Email;
+        user.Username = userDto.Username;
 
-        private static User UpdateUser(User user, UpdateUserDto userDto)
-        {
-            user.Email = userDto.Email;
-            user.Username = userDto.Username;
-
-            return user;
-        }
+        return user;
     }
 }
