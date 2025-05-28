@@ -1,10 +1,12 @@
 ﻿using PictureLibrary.Client.Authorization;
 using PictureLibrary.Client.BaseClient;
 using PictureLibrary.Client.Clients.Authorization;
+using PictureLibrary.Client.Clients.Images;
 using PictureLibrary.Client.Clients.Libraries;
 using PictureLibrary.Client.Clients.Tags;
 using PictureLibrary.Client.Clients.Users;
 using PictureLibrary.Client.ErrorHandling;
+using PictureLibrary.Client.FileUpload;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Client;
@@ -13,6 +15,7 @@ internal class PictureLibraryApiClient : IPictureLibraryApiClient
 {
     private readonly ITagsClient _tagsClient;
     private readonly IUsersClient _usersClient;
+    private readonly IImagesClient _imagesClient;
     private readonly ILibrariesClient _librariesClient;
     private readonly IAuthorizationClient _authorizationClient;
 
@@ -30,10 +33,12 @@ internal class PictureLibraryApiClient : IPictureLibraryApiClient
         _usersClient = new UsersClient(apiHttpClient);
         _tagsClient = new TagsClient(apiHttpClient);
         _librariesClient = new LibrariesClient(apiHttpClient);
+        _imagesClient = new ImagesClient(apiHttpClient, new ImageFileUpload());
     }
         
     public IAuthorizationClient Authorization() => _authorizationClient;
     public IUsersClient Users() => _usersClient;
     public ITagsClient Tags() => _tagsClient;
     public ILibrariesClient Libraries() => _librariesClient;
+    public IImagesClient Images() => _imagesClient;
 }
