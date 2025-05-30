@@ -1,9 +1,9 @@
-﻿using MediatR;
+﻿using System.Net.Http.Headers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
 using PictureLibrary.Application.Query;
 using PictureLibrary.Contracts;
-using System.Net.Http.Headers;
 
 namespace PictureLibrary.Api.Controllers;
 
@@ -13,7 +13,7 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
 {
     [HttpPost("createUploadSession")]
     public async Task<IActionResult> CreateUploadSession(
-        [FromBody] CreateImageUploadSessionDto createUploadSessionDto)
+        [FromBody] CreateImageUploadSessionDto? createUploadSessionDto)
     {
         string? userId = GetUserId();
 
@@ -22,9 +22,14 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
             return Unauthorized();
         }
 
+        if (createUploadSessionDto == null)
+        {
+            return BadRequest();
+        }
+        
         var command = new CreateImageUploadSessionCommand(userId, createUploadSessionDto);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Ok(result);
     }
@@ -50,7 +55,7 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new UploadFileCommand(userId, uploadSessionId, contentRange, Request.Body);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return result.IsUploadFinished
             ? Created("/image/get", result.Value)
@@ -74,7 +79,7 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new DeleteImageFileCommand(userId, imageFileId);
 
-        await _mediator.Send(command);
+        await Mediator.Send(command);
 
         return Ok();
     }
@@ -82,7 +87,7 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
     [HttpPatch("update")]
     public async Task<IActionResult> Update(
         [FromQuery] string imageFileId,
-        [FromBody] UpdateImageFileDto updateImageFileDto)
+        [FromBody] UpdateImageFileDto? updateImageFileDto)
     {
         string? userId = GetUserId();
 
@@ -91,9 +96,14 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
             return Unauthorized();
         }
 
+        if (updateImageFileDto == null || string.IsNullOrEmpty(imageFileId))
+        {
+            return BadRequest();
+        }
+        
         var command = new UpdateImageFileCommand(userId, imageFileId, updateImageFileDto);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Ok(result);
     }
@@ -108,9 +118,14 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
             return Unauthorized();
         }
 
+        if (string.IsNullOrEmpty(libraryId))
+        {
+            return BadRequest();
+        }
+
         var command = new GetAllImageFilesQuery(userId, libraryId);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Ok(result);
     }
@@ -125,9 +140,14 @@ public class ImageController(IMediator mediator) : ControllerBase(mediator)
             return Unauthorized();
         }
 
+        if (string.IsNullOrEmpty(imageFileId))
+        {
+            return BadRequest();
+        }
+        
         var command = new GetImageFileContentQuery(userId, imageFileId);
             
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return File(result.Content, result.ContentType);
     }

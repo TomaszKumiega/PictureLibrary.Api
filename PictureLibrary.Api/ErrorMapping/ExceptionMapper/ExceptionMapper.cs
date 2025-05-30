@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using PictureLibrary.Domain.Exceptions;
 
-namespace PictureLibrary.Api.ErrorMapping;
+namespace PictureLibrary.Api.ErrorMapping.ExceptionMapper;
 
 public class ExceptionMapper : IExceptionMapper
 {

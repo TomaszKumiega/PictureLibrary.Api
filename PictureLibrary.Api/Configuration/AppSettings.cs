@@ -2,20 +2,11 @@
 
 namespace PictureLibrary.Api.Configuration;
 
-public class AppSettings : IAppSettings
+public class AppSettings(IConfiguration configuration) : IAppSettings
 {
-    public AppSettings(IConfiguration configuration)
-    {
-        DatabaseName = configuration["DatabaseName"] ?? string.Empty;
-        TokenPrivateKey = configuration["TokenPrivateKey"] ?? string.Empty;
-        JwtIssuer = configuration["JwtIssuer"] ?? string.Empty;
-        JwtAudience = configuration["JwtAudience"] ?? string.Empty;
-        VolumePath = configuration["VolumePath"] ?? string.Empty;
-    }
-
-    public required string DatabaseName { get; set; }
-    public required string TokenPrivateKey { get; set; }
-    public required string JwtIssuer { get; set; }
-    public required string JwtAudience { get; set; }
-    public string VolumePath { get; set; }
+    public string DatabaseName => configuration["DatabaseName"] ?? string.Empty;
+    public string TokenPrivateKey => configuration["TokenPrivateKey"] ?? string.Empty;
+    public string JwtIssuer => configuration["JwtIssuer"] ?? string.Empty;
+    public string JwtAudience => configuration["JwtAudience"] ?? string.Empty;
+    public string VolumePath => configuration["VolumePath"] ?? string.Empty;
 }

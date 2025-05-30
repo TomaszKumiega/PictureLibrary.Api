@@ -28,7 +28,7 @@ public class LibraryController(IMediator mediator) : ControllerBase(mediator)
 
         var query = new GetLibraryQuery(userId, id);
 
-        var result = await _mediator.Send(query);
+        var result = await Mediator.Send(query);
 
         return Ok(result);
     }
@@ -45,13 +45,13 @@ public class LibraryController(IMediator mediator) : ControllerBase(mediator)
 
         var query = new GetAllLibrariesQuery(userId);
 
-        var result = await _mediator.Send(query);
+        var result = await Mediator.Send(query);
 
         return Ok(result);
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Create([FromBody] NewLibraryDto newLibrary)
+    public async Task<IActionResult> Create([FromBody] NewLibraryDto? newLibrary)
     {
         string? userId = GetUserId();
 
@@ -67,7 +67,7 @@ public class LibraryController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new CreateLibraryCommand(userId, newLibrary);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Created("create", result);
     }
@@ -75,7 +75,7 @@ public class LibraryController(IMediator mediator) : ControllerBase(mediator)
     [HttpPatch("update")]
     public async Task<IActionResult> Update(
         [FromQuery] string libraryId,
-        [FromBody] UpdateLibraryDto library)
+        [FromBody] UpdateLibraryDto? library)
     {
         string? userId = GetUserId();
 
@@ -91,7 +91,7 @@ public class LibraryController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new UpdateLibraryCommand(userId, libraryId, library);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Ok(result);
     }
@@ -113,7 +113,7 @@ public class LibraryController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new DeleteLibraryCommand(userId, id);
 
-        await _mediator.Send(command);
+        await Mediator.Send(command);
 
         return Ok();
     }

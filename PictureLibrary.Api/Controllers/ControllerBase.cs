@@ -1,13 +1,13 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Security.Claims;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PictureLibrary.Api.Controllers;
 
 public class ControllerBase(IMediator mediator) : Controller
 {
-    protected readonly IMediator _mediator = mediator;
+    protected IMediator Mediator => mediator;
 
     protected string? GetUserId()
     {

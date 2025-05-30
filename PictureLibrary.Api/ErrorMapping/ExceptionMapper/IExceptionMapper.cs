@@ -1,4 +1,4 @@
-﻿namespace PictureLibrary.Api.ErrorMapping;
+﻿namespace PictureLibrary.Api.ErrorMapping.ExceptionMapper;
 
 public interface IExceptionMapper
 {

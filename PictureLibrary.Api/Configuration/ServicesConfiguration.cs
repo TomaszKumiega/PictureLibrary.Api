@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MongoDB.Driver;
 using PictureLibrary.Api.ErrorMapping;
+using PictureLibrary.Api.ErrorMapping.ExceptionMapper;
 using PictureLibrary.Application.Configuration;
 using PictureLibrary.Application.Mapper;
 using PictureLibrary.Domain.Configuration;
@@ -39,7 +40,7 @@ public static class ServicesConfiguration
             .AddMediatR(new MediatRServiceConfiguration().RegisterServicesFromAssembly(typeof(IApplicationEntrypoint).Assembly))
             .AddValidatorsFromAssembly(typeof(IApplicationEntrypoint).Assembly)
             .AddSingleton<IMapper, MapperlyMapper>()
-            .AddTransient<IMongoClient, MongoClient>((provider) => new MongoClient(configuration.GetConnectionString("MongoDb")))
+            .AddTransient<IMongoClient, MongoClient>((_) => new MongoClient(configuration.GetConnectionString("MongoDb")))
             .AddSingleton<IHashAndSaltService, HashAndSaltService>()
             .AddSingleton<IAuthorizationDataService, AuthorizationDataService>()
             .AddTransient<IMissingRangesParser, MissingRangesParser>()

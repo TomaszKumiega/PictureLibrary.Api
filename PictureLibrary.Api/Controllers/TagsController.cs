@@ -27,7 +27,7 @@ public class TagsController(IMediator mediator) : ControllerBase(mediator)
 
         var query = new GetAllTagsQuery(userId, libraryId);
 
-        var result = await _mediator.Send(query);
+        var result = await Mediator.Send(query);
 
         return Ok(result);
     }
@@ -35,7 +35,7 @@ public class TagsController(IMediator mediator) : ControllerBase(mediator)
     [HttpPost("create")]
     public async Task<IActionResult> Create(
         [FromQuery] string libraryId,
-        [FromBody] NewTagDto newTagDto)
+        [FromBody] NewTagDto? newTagDto)
     {
         string? userId = GetUserId();
 
@@ -52,7 +52,7 @@ public class TagsController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new CreateTagCommand(userId, libraryId, newTagDto);
 
-        var tagDto = await _mediator.Send(command);
+        var tagDto = await Mediator.Send(command);
 
         return Created("create", tagDto);
     }
@@ -60,7 +60,7 @@ public class TagsController(IMediator mediator) : ControllerBase(mediator)
     [HttpPatch("update")]
     public async Task<IActionResult> Update(
         [FromQuery] string tagId,
-        [FromBody] UpdateTagDto tagDto)
+        [FromBody] UpdateTagDto? tagDto)
     {
         string? userId = GetUserId();
 
@@ -77,7 +77,7 @@ public class TagsController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new UpdateTagCommand(userId, tagId, tagDto);
 
-        var response = await _mediator.Send(command);
+        var response = await Mediator.Send(command);
 
         return Ok(response);
     }
@@ -100,7 +100,7 @@ public class TagsController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new DeleteTagCommand(userId, tagId);
 
-        await _mediator.Send(command);
+        await Mediator.Send(command);
 
         return Ok();
     }

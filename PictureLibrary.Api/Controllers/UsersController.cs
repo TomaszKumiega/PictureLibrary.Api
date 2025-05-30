@@ -13,7 +13,7 @@ public class UsersController(IMediator mediator) : ControllerBase(mediator)
 {
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register([FromBody] NewUserDto newUser)
+    public async Task<IActionResult> Register([FromBody] NewUserDto? newUser)
     {
         if (newUser == null)
         {
@@ -22,7 +22,7 @@ public class UsersController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new RegisterUserCommand(newUser);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Ok(result);
     }
@@ -39,13 +39,13 @@ public class UsersController(IMediator mediator) : ControllerBase(mediator)
 
         var query = new GetUserQuery(userId);
 
-        var result = await _mediator.Send(query);
+        var result = await Mediator.Send(query);
 
         return Ok(result);
     }
 
     [HttpPatch("update")]
-    public async Task<IActionResult> Update([FromBody] UpdateUserDto user)
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto? user)
     {
         string? userId = GetUserId();
 
@@ -61,7 +61,7 @@ public class UsersController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new UpdateUserCommand(userId, user);
 
-        var result = await _mediator.Send(command);
+        var result = await Mediator.Send(command);
 
         return Ok(result);
     }
@@ -78,7 +78,7 @@ public class UsersController(IMediator mediator) : ControllerBase(mediator)
 
         var command = new DeleteUserCommand(userId);
 
-        await _mediator.Send(command);
+        await Mediator.Send(command);
 
         return Ok();
     }

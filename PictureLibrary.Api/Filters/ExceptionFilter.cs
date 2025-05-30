@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PictureLibrary.Api.ErrorMapping;
+using PictureLibrary.Api.ErrorMapping.ExceptionMapper;
 
 namespace PictureLibrary.Api.Filters;
 
