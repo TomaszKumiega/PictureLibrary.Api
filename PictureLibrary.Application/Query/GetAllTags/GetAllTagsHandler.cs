@@ -5,7 +5,7 @@ using PictureLibrary.Contracts;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.GetAllTags;
 
 public class GetAllTagsHandler(
     IMapper mapper,

@@ -5,7 +5,7 @@ using PictureLibrary.Contracts;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.GetAllLibraries;
 
 public class GetAllLibrariesHandler(
     IMapper mapper,

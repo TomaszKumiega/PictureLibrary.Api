@@ -1,6 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using MongoDB.Bson;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Application.Query.GetAllTags;
 
 namespace PictureLibrary.Application.Test.Validators.GetAllTags;
 

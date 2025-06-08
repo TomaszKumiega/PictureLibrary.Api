@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
-using PictureLibrary.Contracts;
+using PictureLibrary.Application.DtoValidators;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.UpdateImageFile;
 
 public class UpdateImageFileCommandValidator : AbstractValidator<UpdateImageFileCommand>
 {

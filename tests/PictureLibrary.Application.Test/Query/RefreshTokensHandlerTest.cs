@@ -2,6 +2,7 @@
 using Moq;
 using PictureLibrary.Application.Mapper;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Application.Query.RefreshTokens;
 using PictureLibrary.Application.Test.Fakers;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;

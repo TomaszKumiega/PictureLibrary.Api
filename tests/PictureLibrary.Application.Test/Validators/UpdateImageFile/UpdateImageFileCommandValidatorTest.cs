@@ -1,6 +1,8 @@
 ﻿using FluentValidation.TestHelper;
 using MongoDB.Bson;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.UpdateImageFile;
+using PictureLibrary.Application.DtoValidators;
 
 namespace PictureLibrary.Application.Test.Validators.UpdateImageFile;
 

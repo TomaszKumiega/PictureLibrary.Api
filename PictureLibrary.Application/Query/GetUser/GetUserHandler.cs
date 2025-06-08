@@ -6,7 +6,7 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.GetUser;
 
 public class GetUserHandler(
     IMapper mapper,

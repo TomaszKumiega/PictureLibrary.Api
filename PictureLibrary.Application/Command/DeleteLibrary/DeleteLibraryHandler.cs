@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.DeleteLibrary;
 
 public class DeleteLibraryHandler(ILibraryRepository libraryRepository) : IRequestHandler<DeleteLibraryCommand>
 {

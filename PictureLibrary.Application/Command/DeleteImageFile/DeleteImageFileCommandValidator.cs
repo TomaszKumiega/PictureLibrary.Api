@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.DeleteImageFile;
 
 public class DeleteImageFileCommandValidator : AbstractValidator<DeleteImageFileCommand>
 {

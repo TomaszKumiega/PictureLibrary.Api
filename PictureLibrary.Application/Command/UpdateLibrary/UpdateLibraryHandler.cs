@@ -6,7 +6,7 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.UpdateLibrary;
 
 public class UpdateLibraryHandler(
     IMapper mapper,

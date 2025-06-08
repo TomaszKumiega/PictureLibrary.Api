@@ -5,7 +5,7 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.RefreshTokens;
 
 public class RefreshTokensHandler(
     IMapper mapper, 

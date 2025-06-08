@@ -1,6 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using MongoDB.Bson;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.UpdateUser;
 using PictureLibrary.Application.DtoValidators;
 using PictureLibrary.Application.Test.Fakers;
 

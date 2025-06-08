@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.DeleteLibrary;
 
 public class DeleteLibraryCommandValidator : AbstractValidator<DeleteLibraryCommand>
 {

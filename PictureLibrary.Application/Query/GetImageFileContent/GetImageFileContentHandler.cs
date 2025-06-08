@@ -5,7 +5,7 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.GetImageFileContent;
 
 public class GetImageFileContentHandler(
     IFileService fileService,

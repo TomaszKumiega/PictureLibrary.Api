@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.LoginUser;
 using PictureLibrary.Application.DtoValidators;
 using PictureLibrary.Application.Test.Fakers;
 

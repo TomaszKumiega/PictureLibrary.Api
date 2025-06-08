@@ -1,6 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using PictureLibrary.Application.DtoValidators;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Application.Query.RefreshTokens;
 using PictureLibrary.Application.Test.Fakers;
 
 namespace PictureLibrary.Application.Test.Validators;

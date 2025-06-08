@@ -7,7 +7,7 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.RegsiterUser;
 
 public class RegisterUserHandler(
     IMapper mapper,

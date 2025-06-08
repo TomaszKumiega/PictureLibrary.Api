@@ -8,6 +8,7 @@ using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;
 using System.Text;
+using PictureLibrary.Application.Command.RegsiterUser;
 
 namespace PictureLibrary.Application.Test.Command;
 

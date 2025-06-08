@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Moq;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.LoginUser;
 using PictureLibrary.Application.Test.Fakers;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;

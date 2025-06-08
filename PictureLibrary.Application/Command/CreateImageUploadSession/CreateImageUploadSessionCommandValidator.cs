@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using PictureLibrary.Application.DtoValidators;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.CreateImageUploadSession;
 
 public class CreateImageUploadSessionCommandValidator : AbstractValidator<CreateImageUploadSessionCommand>
 {

@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Moq;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.DeleteLibrary;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;

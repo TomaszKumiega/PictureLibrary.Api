@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using MongoDB.Bson;
+using PictureLibrary.Application.DtoValidators;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Application.Test.Validators.UpdateImageFile;

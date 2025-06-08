@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.UpdateImageFile;
 
 public record UpdateImageFileCommand(
     string UserId, 

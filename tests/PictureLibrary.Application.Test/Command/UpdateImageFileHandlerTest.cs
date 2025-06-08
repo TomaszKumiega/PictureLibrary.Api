@@ -10,6 +10,7 @@ using PictureLibrary.Domain.Repositories;
 using PictureLibrary.Domain.Services;
 using PictureLibrary.TestTools.Fakers;
 using System.Text;
+using PictureLibrary.Application.Command.UpdateImageFile;
 
 namespace PictureLibrary.Application.Test.Command;
 

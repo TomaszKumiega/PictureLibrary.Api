@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application;
+namespace PictureLibrary.Application.DtoValidators;
 
 public class UpdateImageFileDtoValidator : AbstractValidator<UpdateImageFileDto>
 {

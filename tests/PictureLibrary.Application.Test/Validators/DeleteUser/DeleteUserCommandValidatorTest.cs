@@ -1,6 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using MongoDB.Bson;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.DeleteUser;
 
 namespace PictureLibrary.Application.Test.Validators.DeleteUser;
 

@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
 using PictureLibrary.Application.DtoValidators;
-using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.LoginUser;
 
 public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {

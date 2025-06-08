@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using PictureLibrary.Application.DtoValidators;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.RegsiterUser;
 
 public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {

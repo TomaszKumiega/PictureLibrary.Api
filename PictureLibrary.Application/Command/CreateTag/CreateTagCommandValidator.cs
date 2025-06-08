@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 using PictureLibrary.Application.DtoValidators;
-using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.CreateTag;
 
 public class CreateTagCommandValidator : AbstractValidator<CreateTagCommand>
 {

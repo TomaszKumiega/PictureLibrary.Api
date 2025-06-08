@@ -5,7 +5,7 @@ using PictureLibrary.Contracts;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.UpdateTag;
 
 public class UpdateTagHandler(
     IMapper mapper,

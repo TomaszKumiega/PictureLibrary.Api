@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MongoDB.Bson;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.GetAllTags;
 
 public class GetAllTagsQueryValidator : AbstractValidator<GetAllTagsQuery>
 {

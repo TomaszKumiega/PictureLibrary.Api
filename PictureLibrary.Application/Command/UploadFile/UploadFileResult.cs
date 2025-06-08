@@ -1,6 +1,6 @@
 ﻿using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.UploadFile;
 
 public class UploadFileResult
 {

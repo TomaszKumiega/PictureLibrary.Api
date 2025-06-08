@@ -4,7 +4,7 @@ using PictureLibrary.Contracts.Results;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Command;
+namespace PictureLibrary.Application.Command.CreateImageUploadSession;
 
 public class CreateImageUploadSessionHandler(
     IImageFileRepository imageFileRepository,

@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
 using PictureLibrary.Application.DtoValidators;
-using PictureLibrary.Contracts;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.RefreshTokens;
 
 public class RefreshTokensQueryValidator : AbstractValidator<RefreshTokensQuery>
 {

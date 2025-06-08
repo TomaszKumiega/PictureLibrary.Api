@@ -7,7 +7,7 @@ using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;
 
-namespace PictureLibrary.Application.Query;
+namespace PictureLibrary.Application.Query.GetAllImageFiles;
 
 public class GetAllImageFilesHandler(
     IMapper mapper,

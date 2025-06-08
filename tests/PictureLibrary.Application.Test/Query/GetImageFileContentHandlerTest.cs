@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Moq;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Application.Query.GetImageFileContent;
 using PictureLibrary.Domain.Entities;
 using PictureLibrary.Domain.Exceptions;
 using PictureLibrary.Domain.Repositories;

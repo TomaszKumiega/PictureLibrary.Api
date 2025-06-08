@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.DeleteUser;
+using PictureLibrary.Application.Command.RegsiterUser;
+using PictureLibrary.Application.Command.UpdateUser;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Application.Query.GetUser;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Api.Controllers;

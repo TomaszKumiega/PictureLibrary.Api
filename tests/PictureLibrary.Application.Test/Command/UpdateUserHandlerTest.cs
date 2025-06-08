@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Moq;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.UpdateUser;
 using PictureLibrary.Application.Mapper;
 using PictureLibrary.Application.Test.Fakers;
 using PictureLibrary.Domain.Entities;

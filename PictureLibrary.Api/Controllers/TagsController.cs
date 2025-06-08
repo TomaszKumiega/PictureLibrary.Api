@@ -1,7 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PictureLibrary.Application.Command;
+using PictureLibrary.Application.Command.CreateTag;
+using PictureLibrary.Application.Command.DeleteTag;
+using PictureLibrary.Application.Command.UpdateTag;
 using PictureLibrary.Application.Query;
+using PictureLibrary.Application.Query.GetAllTags;
 using PictureLibrary.Contracts;
 
 namespace PictureLibrary.Api.Controllers;
